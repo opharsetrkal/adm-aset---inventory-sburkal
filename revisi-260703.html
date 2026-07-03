@@ -874,7 +874,7 @@ html,body   { height:100%; overflow:hidden; }
               <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Service ID</th>
               <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">PA Number</th>
               <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">KP</th>
-              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Customer (Matjas)</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Customer</th>
               <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">PTL</th>
               <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Vendor/Mitra</th>
               <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Terminating</th>
@@ -947,7 +947,6 @@ html,body   { height:100%; overflow:hidden; }
                 <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer select-none hover:text-[#00288e]" onclick="doktekSortBy('service_id')">Service ID <span id="doktek-sort-service_id" class="text-gray-300">↕</span></th>
                 <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer select-none hover:text-[#00288e]" onclick="doktekSortBy('pa_number')">PA Number <span id="doktek-sort-pa_number" class="text-gray-300">↕</span></th>
                 <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer select-none hover:text-[#00288e]" onclick="doktekSortBy('customer')">Customer <span id="doktek-sort-customer" class="text-gray-300">↕</span></th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer select-none hover:text-[#00288e]" onclick="doktekSortBy('customerMatjas')">Customer (Matjas) <span id="doktek-sort-customerMatjas" class="text-gray-300">↕</span></th>
                 <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer select-none hover:text-[#00288e]" onclick="doktekSortBy('namaKP')">KP <span id="doktek-sort-namaKP" class="text-gray-300">↕</span></th>
                 <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer select-none hover:text-[#00288e]" onclick="doktekSortBy('namaPTL')">PTL <span id="doktek-sort-namaPTL" class="text-gray-300">↕</span></th>
                 <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer select-none hover:text-[#00288e]" onclick="doktekSortBy('vendor')">Vendor/Mitra <span id="doktek-sort-vendor" class="text-gray-300">↕</span></th>
@@ -959,7 +958,7 @@ html,body   { height:100%; overflow:hidden; }
               </tr>
             </thead>
             <tbody id="doktek-tblBody">
-              <tr><td colspan="13" class="p-10 text-center text-gray-400 text-xs">Memuat data…</td></tr>
+              <tr><td colspan="12" class="p-10 text-center text-gray-400 text-xs">Memuat data…</td></tr>
             </tbody>
           </table>
         </div>
@@ -3776,7 +3775,7 @@ async function doktekLoadData(tab) {
     loaded.doktek = true;
   } catch(err) {
     document.getElementById('doktek-tblBody').innerHTML =
-      `<tr><td colspan="13" class="p-8 text-center text-red-500 text-sm">&#9888; ${err.message}</td></tr>`;
+      `<tr><td colspan="12" class="p-8 text-center text-red-500 text-sm">&#9888; ${err.message}</td></tr>`;
     const el = document.getElementById('doktek-resume');
     if(el) el.innerHTML = `<div class="p-4 text-red-500 text-sm text-center">&#9888; ${err.message}</div>`;
   } finally {
@@ -3888,7 +3887,7 @@ function doktekRenderPriority(rows) {
   if(!tbody) return;
   var top10 = rows.filter(function(r){ return r.aging !== null && r.aging !== undefined; })
     .sort(function(a,b){ return (b.aging||0) - (a.aging||0); }).slice(0,10);
-  if(!top10.length){ tbody.innerHTML = '<tr><td colspan="6" class="p-6 text-center text-gray-400 text-xs">Tidak ada data aging</td></tr>'; return; }
+  if(!top10.length){ tbody.innerHTML = '<tr><td colspan="10" class="p-6 text-center text-gray-400 text-xs">Tidak ada data aging</td></tr>'; return; }
   tbody.innerHTML = top10.map(function(r){
     var sc = SLA_COLOR[r.slaStatus] || SLA_COLOR['—'];
     var badge = '<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold '+sc.badge+'">'+(r.slaStatus||'—')+'</span>';
@@ -3896,7 +3895,7 @@ function doktekRenderPriority(rows) {
       +'<td class="p-2.5 text-xs font-mono">'+(r.service_id||'—')+'</td>'
       +'<td class="p-2.5 text-xs font-semibold text-[#00288e]">'+(r.pa_number||'—')+'</td>'
       +'<td class="p-2.5 text-xs whitespace-nowrap">'+(r.namaKP||'—')+'</td>'
-      +'<td class="p-2.5 text-xs max-w-[160px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+(r.customerMatjas||'')+'">'+(r.customerMatjas||'—')+'</td>'
+      +'<td class="p-2.5 text-xs max-w-[160px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+(r.customer||'')+(r.customerSource?' (via '+r.customerSource+')':'')+'">'+(r.customer||'—')+'</td>'
       +'<td class="p-2.5 text-xs whitespace-nowrap">'+(r.namaPTL||'—')+'</td>'
       +'<td class="p-2.5 text-xs max-w-[140px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+(r.vendor||'')+'">'+(r.vendor||'—')+'</td>'
       +'<td class="p-2.5 text-xs whitespace-nowrap">'+(r.terminating||'—')+'</td>'
@@ -3962,7 +3961,7 @@ function doktekApplyFilter() {
 
 // ── Sort kolom Detail table ─────────────────────────────────────────────
 let doktekSortKey = null, doktekSortDir = 1; // 1 = asc, -1 = desc
-const DOKTEK_SORTABLE_KEYS = ['service_id','pa_number','customer','customerMatjas','namaKP','namaPTL','vendor','terminating','created_at','aging','acluan','slaStatus'];
+const DOKTEK_SORTABLE_KEYS = ['service_id','pa_number','customer','namaKP','namaPTL','vendor','terminating','created_at','aging','acluan','slaStatus'];
 
 function doktekCompareVal(a, b, key, dir) {
   var av = a[key], bv = b[key];
@@ -4055,7 +4054,7 @@ function doktekRenderTable() {
   const paged = DOKTEK_FILTERED.slice(start, start+DOKTEK_PAGE_SIZE);
   const tbody = document.getElementById('doktek-tblBody');
   if(!paged.length) {
-    tbody.innerHTML = `<tr><td colspan="13" class="p-8 text-center text-gray-400 text-xs">Tidak ada data</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="12" class="p-8 text-center text-gray-400 text-xs">Tidak ada data</td></tr>`;
     buildPagination('doktek-pgBtns', doktekPage, DOKTEK_FILTERED.length, DOKTEK_PAGE_SIZE, 'doktekGoPage');
     const ri = document.getElementById('doktek-rangeInfo'), ti = document.getElementById('doktek-totalInfo');
     if(ri) ri.textContent='0'; if(ti) ti.textContent='0';
@@ -4064,6 +4063,7 @@ function doktekRenderTable() {
   tbody.innerHTML = paged.map((r,i) => {
     const sc = SLA_COLOR[r.slaStatus] || SLA_COLOR['—'];
     const agingTxt = r.aging !== null && r.aging !== undefined ? r.aging+' hari' : '—';
+    const custTitle = (r.customer||'') + (r.customerSource ? ' (via '+r.customerSource+')' : '');
     const badge = r.slaStatus && r.slaStatus!=='—'
       ? `<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold ${sc.badge}">${r.slaStatus}</span>`
       : '<span class="text-[9px] text-gray-300">—</span>';
@@ -4071,8 +4071,7 @@ function doktekRenderTable() {
       <td class="p-3 text-[9px] text-gray-300">${start+i+1}</td>
       <td class="p-3 text-xs font-mono">${r.service_id||'—'}</td>
       <td class="p-3 text-xs font-semibold text-[#00288e]">${r.pa_number||'—'}</td>
-      <td class="p-3 text-xs max-w-[160px] overflow-hidden text-ellipsis whitespace-nowrap" title="${r.customer||''}">${r.customer||'—'}</td>
-      <td class="p-3 text-xs max-w-[160px] overflow-hidden text-ellipsis whitespace-nowrap" title="${r.customerMatjas||''}">${r.customerMatjas||'—'}</td>
+      <td class="p-3 text-xs max-w-[180px] overflow-hidden text-ellipsis whitespace-nowrap" title="${custTitle}">${r.customer||'—'}</td>
       <td class="p-3 text-xs whitespace-nowrap">${r.namaKP||'—'}</td>
       <td class="p-3 text-xs whitespace-nowrap">${r.namaPTL||'—'}</td>
       <td class="p-3 text-xs max-w-[160px] overflow-hidden text-ellipsis whitespace-nowrap" title="${r.vendor||''}">${r.vendor||'—'}</td>
@@ -4111,8 +4110,8 @@ function doktekClearCacheAndReload() {
 }
 
 function doktekExportCSV() {
-  const cols = ['service_id','pa_number','customer','customerMatjas','namaKP','namaPTL','vendor','terminating','created_at','aging','acluan','slaStatus'];
-  const hdrs = ['Service ID','PA Number','Customer','Customer (Matjas)','KP','PTL','Vendor/Mitra','Terminating','Created At','Aging (hari)','Keterangan','SLA'];
+  const cols = ['service_id','pa_number','customer','namaKP','namaPTL','vendor','terminating','created_at','aging','acluan','slaStatus'];
+  const hdrs = ['Service ID','PA Number','Customer','KP','PTL','Vendor/Mitra','Terminating','Created At','Aging (hari)','Keterangan','SLA'];
   const rows = [hdrs.join(',')];
   DOKTEK_FILTERED.forEach(r => rows.push(cols.map(c=>`"${String(r[c]||'').replace(/"/g,'""')}"`).join(',')));
   const a = document.createElement('a');
