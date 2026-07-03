@@ -810,48 +810,68 @@ html,body   { height:100%; overflow:hidden; }
       <!-- Resume -->
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100">
-          <p class="text-sm font-bold text-[#131b2e]">Resume</p>
-          <p class="text-[10px] text-gray-400">Ringkasan kondisi kendala dokumen teknis saat ini.</p>
+          <p class="text-sm font-bold text-[#131b2e]">Resume Kendala Doktek</p>
+          <p class="text-[10px] text-gray-400">Ringkasan kondisi kendala dokumen teknis saat ini · Segmen Corporate.</p>
         </div>
-        <div class="p-4 grid grid-cols-2 lg:grid-cols-4 gap-3" id="doktek-resume"></div>
+        <div class="p-4 grid grid-cols-2 lg:grid-cols-5 gap-3" id="doktek-resume"></div>
       </section>
 
-      <!-- Health -->
-      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div class="px-4 py-3 border-b border-gray-100">
-          <p class="text-sm font-bold text-[#131b2e]">Health</p>
-          <p class="text-[10px] text-gray-400">Distribusi aging kendala — klik bar untuk filter.</p>
-        </div>
-        <div class="p-4">
-          <div class="flex items-center gap-4 mb-3">
-            <p class="text-xs font-bold flex-1" id="doktek-chart-title">Distribusi SLA per KP</p>
-            <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-green-500"></span>Normal ≤12hr</span>
-            <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-orange-400"></span>Perhatian 13-30hr</span>
-            <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-red-500"></span>Kritis ≥31hr</span>
+      <!-- Aging Kendala + Breakdown Wilayah + Breakdown PTL + Analisis Penyebab (sejajar) -->
+      <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+
+        <!-- Aging Kendala -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+          <div class="px-4 py-3 border-b border-gray-100">
+            <p class="text-sm font-bold text-[#131b2e]">Aging Kendala</p>
+            <p class="text-[10px] text-gray-400">Distribusi umur kendala.</p>
           </div>
-          <div style="position:relative;height:240px"><canvas id="doktek-kpChart"></canvas></div>
+          <div class="p-4">
+            <div class="flex flex-col items-center gap-1 mb-2">
+              <p class="text-2xl font-black text-[#131b2e]" id="doktek-agingTotalNum">0</p>
+              <p class="text-[9px] text-gray-400 uppercase tracking-wide">Total</p>
+            </div>
+            <div style="position:relative;height:190px"><canvas id="doktek-agingDonut"></canvas></div>
+            <div class="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 mt-2">
+              <span class="flex items-center gap-1 text-[9px] text-gray-500"><span class="w-2.5 h-2.5 rounded-sm inline-block bg-green-500"></span>Normal ≤12h</span>
+              <span class="flex items-center gap-1 text-[9px] text-gray-500"><span class="w-2.5 h-2.5 rounded-sm inline-block bg-orange-400"></span>Perhatian 13-30h</span>
+              <span class="flex items-center gap-1 text-[9px] text-gray-500"><span class="w-2.5 h-2.5 rounded-sm inline-block bg-red-500"></span>Kritis ≥31h</span>
+              <span class="flex items-center gap-1 text-[9px] text-gray-500"><span class="w-2.5 h-2.5 rounded-sm inline-block bg-gray-300"></span>Belum ada tanggal</span>
+            </div>
+          </div>
         </div>
+
+        <!-- Breakdown Wilayah -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+          <div class="px-4 py-3 border-b border-gray-100">
+            <p class="text-sm font-bold text-[#131b2e]">Breakdown per Wilayah (KP)</p>
+            <p class="text-[10px] text-gray-400">Klik bar untuk filter.</p>
+          </div>
+          <div class="p-4">
+            <div style="position:relative;height:260px"><canvas id="doktek-kpChart"></canvas></div>
+          </div>
+        </div>
+
+        <!-- Breakdown PTL -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+          <div class="px-4 py-3 border-b border-gray-100">
+            <p class="text-sm font-bold text-[#131b2e]">Breakdown per PTL</p>
+            <p class="text-[10px] text-gray-400">Top 10 PTL kendala terbanyak · klik untuk filter.</p>
+          </div>
+          <div id="doktek-ptlBreakdown" class="p-4 space-y-2.5 max-h-[300px] overflow-y-auto custom-scrollbar"></div>
+        </div>
+
+        <!-- Analisis Penyebab -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+          <div class="px-4 py-3 border-b border-gray-100">
+            <p class="text-sm font-bold text-[#131b2e]">Analisis Penyebab</p>
+            <p class="text-[10px] text-gray-400">Berdasarkan Keterangan · klik untuk filter.</p>
+          </div>
+          <div id="doktek-pareto" class="p-4 space-y-2.5 max-h-[300px] overflow-y-auto custom-scrollbar"></div>
+        </div>
+
       </section>
 
-      <!-- Analysis -->
-      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div class="px-4 py-3 border-b border-gray-100">
-          <p class="text-sm font-bold text-[#131b2e]">Analysis</p>
-          <p class="text-[10px] text-gray-400">Penyebab kendala terbanyak dan KP dengan kendala terbanyak.</p>
-        </div>
-        <div class="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <div class="border border-gray-100 rounded-xl overflow-hidden">
-            <div class="px-3 py-2 bg-gray-50 border-b border-gray-100"><p class="text-xs font-bold">Pareto Penyebab Kendala</p><p class="text-[9px] text-gray-400">Berdasarkan kolom Keterangan · klik untuk filter</p></div>
-            <div id="doktek-pareto" class="p-3 space-y-2.5 max-h-64 overflow-y-auto custom-scrollbar"></div>
-          </div>
-          <div class="border border-gray-100 rounded-xl overflow-hidden">
-            <div class="px-3 py-2 bg-gray-50 border-b border-gray-100"><p class="text-xs font-bold">Top KP</p><p class="text-[9px] text-gray-400">KP dengan kendala terbanyak · klik untuk filter</p></div>
-            <div id="doktek-topKP" class="p-3 space-y-2.5 max-h-64 overflow-y-auto custom-scrollbar"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Action -->
+      <!-- Priority Action -->
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100">
           <p class="text-sm font-bold text-[#131b2e]">Priority Action <span class="text-[10px] font-normal text-gray-400">(Top 10)</span></p>
@@ -863,6 +883,10 @@ html,body   { height:100%; overflow:hidden; }
               <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Service ID</th>
               <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">PA Number</th>
               <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">KP</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Customer</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">PTL</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Vendor/Mitra</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Terminating</th>
               <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Keterangan</th>
               <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Aging</th>
               <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">SLA</th>
@@ -881,9 +905,15 @@ html,body   { height:100%; overflow:hidden; }
         <div class="flex flex-wrap gap-1.5 items-center">
           <div class="ms-wrap relative" id="ms-d-kp">
             <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="doktekToggleMs('kp')">
-              <span id="ms-d-kp-label">KP</span><span class="material-symbols-outlined text-[12px]">expand_more</span>
+              <span id="ms-d-kp-label">Wilayah (KP)</span><span class="material-symbols-outlined text-[12px]">expand_more</span>
             </button>
             <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-d-kp-menu"></div>
+          </div>
+          <div class="ms-wrap relative" id="ms-d-ptl">
+            <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="doktekToggleMs('ptl')">
+              <span id="ms-d-ptl-label">PTL</span><span class="material-symbols-outlined text-[12px]">expand_more</span>
+            </button>
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-d-ptl-menu"></div>
           </div>
           <div class="ms-wrap relative" id="ms-d-keterangan">
             <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="doktekToggleMs('keterangan')">
@@ -895,10 +925,11 @@ html,body   { height:100%; overflow:hidden; }
             <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="doktekToggleMs('sla')">
               <span id="ms-d-sla-label">SLA</span><span class="material-symbols-outlined text-[12px]">expand_more</span>
             </button>
-            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-d-sla-menu">
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-d-sla-menu">
               <label class="ms-item"><input type="checkbox" value="Normal" onchange="doktekMsChange('sla')">🟢 Normal (≤12 hari)</label>
               <label class="ms-item"><input type="checkbox" value="Perhatian" onchange="doktekMsChange('sla')">🟡 Perhatian (13-30 hari)</label>
               <label class="ms-item"><input type="checkbox" value="Kritis" onchange="doktekMsChange('sla')">🔴 Kritis (≥31 hari)</label>
+              <label class="ms-item"><input type="checkbox" value="—" onchange="doktekMsChange('sla')">⚪ Belum ada tanggal</label>
             </div>
           </div>
           <div class="ms-wrap relative" id="ms-d-tahun">
@@ -916,7 +947,7 @@ html,body   { height:100%; overflow:hidden; }
       <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div class="p-3 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
           <div>
-            <p class="text-sm font-bold">Data Detail Kendala Doktek</p>
+            <p class="text-sm font-bold">Detail Kendala Doktek</p>
             <p class="text-[10px] text-gray-400" id="doktek-filterLabel">Menampilkan semua data</p>
           </div>
           <button onclick="doktekExportCSV()" class="flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-semibold border border-gray-200 rounded hover:bg-gray-50 no-print">
@@ -924,22 +955,25 @@ html,body   { height:100%; overflow:hidden; }
           </button>
         </div>
         <div class="overflow-x-auto custom-scrollbar">
-          <table class="w-full text-left border-collapse" style="min-width:900px">
+          <table class="w-full text-left border-collapse" style="min-width:1400px">
             <thead class="bg-gray-50 sticky top-0">
               <tr>
                 <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">#</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Service ID</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">PA Number</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Customer</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">KP</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Created At</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Aging</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Keterangan</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">SLA</th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer select-none hover:text-[#00288e]" onclick="doktekSortBy('service_id')">Service ID <span id="doktek-sort-service_id" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer select-none hover:text-[#00288e]" onclick="doktekSortBy('pa_number')">PA Number <span id="doktek-sort-pa_number" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer select-none hover:text-[#00288e]" onclick="doktekSortBy('customer')">Customer <span id="doktek-sort-customer" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer select-none hover:text-[#00288e]" onclick="doktekSortBy('namaKP')">KP <span id="doktek-sort-namaKP" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer select-none hover:text-[#00288e]" onclick="doktekSortBy('namaPTL')">PTL <span id="doktek-sort-namaPTL" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer select-none hover:text-[#00288e]" onclick="doktekSortBy('vendor')">Vendor/Mitra <span id="doktek-sort-vendor" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer select-none hover:text-[#00288e]" onclick="doktekSortBy('terminating')">Terminating <span id="doktek-sort-terminating" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer select-none hover:text-[#00288e]" onclick="doktekSortBy('created_at')">Created At <span id="doktek-sort-created_at" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center cursor-pointer select-none hover:text-[#00288e]" onclick="doktekSortBy('aging')">Aging <span id="doktek-sort-aging" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer select-none hover:text-[#00288e]" onclick="doktekSortBy('acluan')">Keterangan <span id="doktek-sort-acluan" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center cursor-pointer select-none hover:text-[#00288e]" onclick="doktekSortBy('slaStatus')">SLA <span id="doktek-sort-slaStatus" class="text-gray-300">↕</span></th>
               </tr>
             </thead>
             <tbody id="doktek-tblBody">
-              <tr><td colspan="9" class="p-10 text-center text-gray-400 text-xs">Memuat data…</td></tr>
+              <tr><td colspan="12" class="p-10 text-center text-gray-400 text-xs">Memuat data…</td></tr>
             </tbody>
           </table>
         </div>
@@ -1527,12 +1561,12 @@ html,body   { height:100%; overflow:hidden; }
           <p class="text-[10px] text-gray-400">LM dengan statusMinggu Off Track — progress target minggu berjalan per KP.</p>
         </div>
         <div class="overflow-x-auto custom-scrollbar">
-          <table class="w-full text-left border-collapse" style="min-width:1400px">
+          <table class="w-full text-left border-collapse" style="min-width:980px">
             <thead class="bg-gray-50 sticky top-0">
-              <tr><th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap">WIG</th><th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap">LM</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">BPN</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalBar</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalSel</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalTeng</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalTim</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50" colspan="3">SBU Total</th></tr>
-              <tr><th class="p-2 border-b border-gray-200"></th><th class="p-2 border-b border-gray-200"></th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">%</th></tr>
+              <tr><th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap">WIG</th><th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap">LM</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40">BPN</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40">KalBar</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40">KalSel</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40">KalTeng</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40">KalTim</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50">SBU Total</th></tr>
+              <tr><th class="p-2 border-b border-gray-200"></th><th class="p-2 border-b border-gray-200"></th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target Minggu</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target Minggu</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target Minggu</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target Minggu</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target Minggu</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">Target Minggu</th></tr>
             </thead>
-            <tbody id="wig-priorityBody"></tbody>
+            <tbody id="wig-priorityBody"><tr><td colspan="8" class="p-6 text-center text-gray-400 text-xs">Memuat data…</td></tr></tbody>
           </table>
         </div>
       </section>
@@ -1661,7 +1695,7 @@ const API_KEUANGAN = 'https://script.google.com/macros/s/AKfycbyMoRpWmo4_ZfiH4Vb
 const API_STOK       = 'https://script.google.com/macros/s/AKfycbzXaoPT2xyoBv8GJp0ot5vtS_gF9t44VFyRH7hE4aDbRkpk0ylBfEXbpT7GGrOmHpayxQ/exec';
 const API_PENYERAPAN = 'https://script.google.com/macros/s/AKfycbyRq05rCzpFN3XH0wA26kn60vlyZbkh8ypwhoacB1QyhLhBGcyl9XnxIPs45_ThfhOI/exec';
 const API_WIG        = 'https://script.google.com/macros/s/AKfycbybrSp-zH5IyWY1bSjyq5SaYprpm-Lw_qn-VlU0eXX87ZpopQ-LatSjWc58vBMPvKhX/exec';
-const API_DOKTEK     = 'https://script.google.com/macros/s/AKfycby_oVspb0je_rrkhzPNpDH0KK2xrr1UJwOXLShP68v9qPoGhMEP2r-gIsd1bKlv99Ol/exec';
+const API_DOKTEK     = 'https://script.google.com/macros/s/AKfycbyUHsGvXf_7rHIOD-QBLppNURS2sGd2uAFe6acr-2f6uf-9EPytNt1dwDs-BBUpaTgE/exec';
 const API_PMISP      = 'https://script.google.com/macros/s/AKfycbxEIBqNWqVSgfsolqpIkszJajTcn2ljPS6q1pzqzA7_Ko_fGvDB9f8acUl6_kZcNxFm/exec';
 const API_HAR      = 'https://script.google.com/macros/s/AKfycbxRCZSsvrhw0HB9wJleABO42Xpx83lXgatV2wRQlt35Hxl_Zyjj0vYAPPBd-X6NTxsOwA/exec';
 const API_PMOSP      = 'https://script.google.com/macros/s/AKfycby2-5gU-v_7A0Vpl1SKhmQjkC0Ooaa0tYoLUMNOOHyQD0HWh_W6ai7E62_XOGmoQgrwfQ/exec';
@@ -1678,7 +1712,7 @@ const PAGE_CONFIG = {
   wig:        { title:'WIG Penguatan Aset',     icon:'military_tech'   },
   pm_isp:     { title:'Laporan PM ISP / OSP',    icon:'construction'    },
   pm_osp:     { title:'PM OSP',                 icon:'cable'           },
-  doktek:     { title:'Kendala Doktek',           icon:'folder_open'     },
+  doktek:     { title:'Kendala Doktek (Corporate)', icon:'folder_open'    },
   sid_bb:     { title:'SID Backbone',            icon:'hub'             },
   uplink_olt: { title:'Uplink OLT',              icon:'router'          },
   // INVENTORY
@@ -3532,7 +3566,7 @@ function wigRenderProgressCompare(lms){
 }
 
 function wigKpCols(kpData, useWeekly){
-  // useWeekly=true -> targetMinggu, realMinggu, % minggu
+  // useWeekly=true -> targetMingguKP saja
   // useWeekly=false -> target, real, pct semester
   var cols='';
   var kpMap={};
@@ -3541,13 +3575,8 @@ function wigKpCols(kpData, useWeekly){
   KPS.forEach(function(kpName){
     var kp=kpMap[kpName];
     if(useWeekly){
-      var tM=kp?kp.targetMinggu:0, rM=kp?kp.realMinggu:0;
-      var hasTarget=tM>0;
-      var pM=hasTarget?(rM/tM*100).toFixed(1):'—';
-      var pCls=!hasTarget?'text-gray-300':parseFloat(pM)>=100?'text-green-600':parseFloat(pM)>=80?'text-orange-500':'text-red-600';
-      cols+='<td class="p-2 text-[9px] text-right bg-blue-50/20">'+(hasTarget?tM.toLocaleString('id-ID'):'—')+'</td>';
-      cols+='<td class="p-2 text-[9px] text-right bg-blue-50/20 font-semibold">'+(kp&&kp.realMinggu?rM.toLocaleString('id-ID'):'0')+'</td>';
-      cols+='<td class="p-2 text-[9px] text-right bg-blue-50/20 font-bold '+pCls+'">'+pM+(hasTarget?'%':'')+'</td>';
+      var tM=kp?kp.targetMingguKP:0;
+      cols+='<td class="p-2 text-[9px] text-right bg-blue-50/20 font-semibold">'+(tM?tM.toLocaleString('id-ID'):'—')+'</td>';
     } else {
       var t=kp?kp.target:0, r=kp?kp.real:0;
       var p=t>0?(r/t*100).toFixed(1):'—';
@@ -3562,13 +3591,9 @@ function wigKpCols(kpData, useWeekly){
 
 function wigSbuTotal(lm, useWeekly){
   if(useWeekly){
-    var tSbu=0, rSbu=0;
-    (lm.kpData||[]).forEach(function(kp){tSbu+=kp.targetMinggu||0; rSbu+=kp.realMinggu||0;});
-    var pSbu=tSbu>0?(rSbu/tSbu*100).toFixed(1):'—';
-    var pC=tSbu>0?(parseFloat(pSbu)>=100?'text-green-600':parseFloat(pSbu)>=80?'text-orange-500':'text-red-600'):'text-gray-300';
-    return '<td class="p-2 text-[9px] text-right bg-blue-50 font-semibold">'+(tSbu?tSbu.toLocaleString('id-ID'):'—')+'</td>'
-      +'<td class="p-2 text-[9px] text-right bg-blue-50 font-semibold">'+rSbu.toLocaleString('id-ID')+'</td>'
-      +'<td class="p-2 text-[9px] text-right bg-blue-50 font-bold '+pC+'">'+pSbu+(tSbu?'%':'')+'</td>';
+    var tSbu=0;
+    (lm.kpData||[]).forEach(function(kp){tSbu+=kp.targetMingguKP||0;});
+    return '<td class="p-2 text-[9px] text-right bg-blue-50 font-semibold">'+(tSbu?tSbu.toLocaleString('id-ID'):'—')+'</td>';
   } else {
     var t=lm.totalTarget||0, r=lm.totalReal||0;
     var p=t>0?(r/t*100).toFixed(1):'—';
@@ -3584,7 +3609,7 @@ function wigRenderPriority(lms){
   if(!tbody)return;
   const offMinggu=lms.filter(function(l){return l.statusMinggu==='❌';})
     .sort(function(a,b){return (a.pctMinggu||0)-(b.pctMinggu||0);});
-  if(!offMinggu.length){tbody.innerHTML='<tr><td colspan="18" class="p-6 text-center text-gray-400 text-xs">Semua LM memenuhi target minggu berjalan</td></tr>';return;}
+  if(!offMinggu.length){tbody.innerHTML='<tr><td colspan="8" class="p-6 text-center text-gray-400 text-xs">Semua LM memenuhi target minggu berjalan</td></tr>';return;}
   tbody.innerHTML=offMinggu.map(function(l){
     return '<tr class="hover:bg-[#f2f3ff] border-b border-gray-50">'
       +'<td class="p-2 text-[9px] text-gray-500 max-w-[120px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+l.wigNama+'">'+l.wigNama.replace(/WIG \d+ — /,'')+'</td>'
@@ -3665,7 +3690,7 @@ function wigSelectLm(wigNo,lmNo){
         +'<td class="px-3 py-2 text-xs text-right">'+Math.round(kp.target).toLocaleString('id-ID')+'</td>'
         +'<td class="px-3 py-2 text-xs text-right font-semibold">'+Math.round(kp.real).toLocaleString('id-ID')+'</td>'
         +'<td class="px-3 py-2 text-xs text-right font-bold '+c+'">'+p+'%</td>'
-        +'<td class="px-3 py-2 text-xs text-right text-gray-400">'+Math.round(kp.targetMinggu).toLocaleString('id-ID')+'</td></tr>';
+        +'<td class="px-3 py-2 text-xs text-right text-gray-400">'+Math.round(kp.targetMingguKP||kp.targetMinggu||0).toLocaleString('id-ID')+'</td></tr>';
     }).join('');
   }else{tbody.innerHTML='<tr><td colspan="5" class="px-3 py-4 text-center text-gray-400 text-xs">Data KP tidak tersedia</td></tr>';}
 
@@ -3697,13 +3722,31 @@ let DOKTEK_ROWS = [], DOKTEK_FILTERED = [], doktekPage = 1;
 let DOKTEK_TAB = 'backlog';
 const DOKTEK_CACHE = {}; // cache per tab: { backlog: {rows, json}, berjalan: {...} }
 const DOKTEK_PAGE_SIZE = 15;
-const DF = { kp:[], keterangan:[], sla:[], tahun:[], search:'' };
+const DF = { kp:[], ptl:[], keterangan:[], sla:[], tahun:[], search:'' };
 const SLA_COLOR = {
   'Normal':    { row:'',            badge:'bg-green-100 text-green-700',  text:'text-green-600' },
   'Perhatian': { row:'bg-orange-50/40', badge:'bg-orange-100 text-orange-700', text:'text-orange-500' },
   'Kritis':    { row:'bg-red-50',   badge:'bg-red-100 text-red-700',     text:'text-red-600' },
-  '—':         { row:'',            badge:'bg-gray-100 text-gray-400',   text:'text-gray-400' },
+  '—':         { row:'',            badge:'bg-gray-100 text-gray-500',   text:'text-gray-400' },
 };
+
+// Field 'tahun' tidak dikirim per-baris oleh API (cuma tahunOptions agregat) —
+// dihitung sekali di sisi client saat data masuk, disimpan ke cache supaya
+// tidak dihitung ulang tiap filter berubah.
+function doktekNormalizeRows(rows) {
+  return (rows || []).map(function(r) {
+    r.tahun = r.created_at ? r.created_at.slice(0, 4) : null;
+    return r;
+  });
+}
+
+function doktekTabInfoText(json) {
+  var txt = `Total PA: ${json.totalPA||0}`;
+  if (json.excludedTerinput) {
+    txt += ` · ${json.excludedTerinput.toLocaleString('id-ID')} kasus sudah Terinput (di luar tampilan)`;
+  }
+  return txt;
+}
 
 async function doktekLoadData(tab) {
   tab = tab || DOKTEK_TAB;
@@ -3716,8 +3759,7 @@ async function doktekLoadData(tab) {
     DOKTEK_ROWS = rows;
     doktekBuildFilters(json);
     const info = document.getElementById('doktek-tab-info');
-    if(info) info.textContent = `Total PA: ${json.totalPA||DOKTEK_ROWS.length}`;
-    // Reset filter saat ganti tab
+    if(info) info.textContent = doktekTabInfoText(json);
     Object.keys(DF).forEach(k => { DF[k] = Array.isArray(DF[k]) ? [] : ''; });
     document.querySelectorAll('[id^="ms-d-"] input[type=checkbox]').forEach(cb => cb.checked = false);
     document.querySelectorAll('[id^="ms-d-"]').forEach(w => w.classList.remove('ms-active'));
@@ -3737,17 +3779,18 @@ async function doktekLoadData(tab) {
     const res  = await fetch(API_DOKTEK + '?tab=' + tab);
     const json = await res.json();
     if(!json.ok) throw new Error(json.error || 'Gagal memuat data');
+    const normalized = doktekNormalizeRows(json.rows || []);
     // Simpan ke cache
-    DOKTEK_CACHE[tab] = { rows: json.rows || [], json };
-    DOKTEK_ROWS = json.rows || [];
+    DOKTEK_CACHE[tab] = { rows: normalized, json };
+    DOKTEK_ROWS = normalized;
     doktekBuildFilters(json);
     const info = document.getElementById('doktek-tab-info');
-    if(info) info.textContent = `Total PA: ${json.totalPA||DOKTEK_ROWS.length}`;
+    if(info) info.textContent = doktekTabInfoText(json);
     doktekApplyFilter();
     loaded.doktek = true;
   } catch(err) {
     document.getElementById('doktek-tblBody').innerHTML =
-      `<tr><td colspan="9" class="p-8 text-center text-red-500 text-sm">&#9888; ${err.message}</td></tr>`;
+      `<tr><td colspan="12" class="p-8 text-center text-red-500 text-sm">&#9888; ${err.message}</td></tr>`;
     const el = document.getElementById('doktek-resume');
     if(el) el.innerHTML = `<div class="p-4 text-red-500 text-sm text-center">&#9888; ${err.message}</div>`;
   } finally {
@@ -3760,6 +3803,9 @@ function doktekBuildFilters(json) {
   const kpMenu = document.getElementById('ms-d-kp-menu');
   if(kpMenu) kpMenu.innerHTML = (json.kpOptions||[]).map(v =>
     `<label class="ms-item"><input type="checkbox" value="${v}" onchange="doktekMsChange('kp')">${v}</label>`).join('');
+  const ptlMenu = document.getElementById('ms-d-ptl-menu');
+  if(ptlMenu) ptlMenu.innerHTML = (json.ptlOptions||[]).map(v =>
+    `<label class="ms-item"><input type="checkbox" value="${v}" onchange="doktekMsChange('ptl')">${v||'(kosong)'}</label>`).join('');
   const ketMenu = document.getElementById('ms-d-keterangan-menu');
   const excludeKet = ['TERINPUT','EXCLUDE','ON PROGRESS','ONPROGRESS'];
   if(ketMenu) ketMenu.innerHTML = (json.keteranganOptions||[])
@@ -3771,28 +3817,45 @@ function doktekBuildFilters(json) {
 }
 
 function doktekCompute(rows) {
-  var slaNormal=0, slaPerhatian=0, slaKritis=0;
-  var byKet={}, byKP={};
+  var slaNormal=0, slaPerhatian=0, slaKritis=0, slaNull=0;
+  var byKet={}, byKP={}, byPTL={};
+  var agingSum=0, agingCount=0;
   rows.forEach(function(r){
-    if(r.slaStatus==='Normal') slaNormal++;
-    else if(r.slaStatus==='Perhatian') slaPerhatian++;
-    else if(r.slaStatus==='Kritis') slaKritis++;
+    if(r.slaStatus==='Normal')         { slaNormal++;    agingSum += r.aging; agingCount++; }
+    else if(r.slaStatus==='Perhatian') { slaPerhatian++; agingSum += r.aging; agingCount++; }
+    else if(r.slaStatus==='Kritis')    { slaKritis++;    agingSum += r.aging; agingCount++; }
+    else                                { slaNull++; }
     var ket = r.acluan || '(kosong)';
     byKet[ket] = (byKet[ket]||0) + 1;
     var kp = r.namaKP || '—';
     byKP[kp] = (byKP[kp]||0) + 1;
+    var ptl = r.namaPTL || '(kosong)';
+    byPTL[ptl] = (byPTL[ptl]||0) + 1;
   });
-  return { total: rows.length, slaNormal:slaNormal, slaPerhatian:slaPerhatian, slaKritis:slaKritis, byKet:byKet, byKP:byKP };
+  var validTotal = slaNormal + slaPerhatian + slaKritis;
+  var slaCompliance = validTotal ? Math.round((slaNormal+slaPerhatian)/validTotal*100) : null;
+  var avgAging = agingCount ? Math.round(agingSum/agingCount) : null;
+  return {
+    total: rows.length, slaNormal:slaNormal, slaPerhatian:slaPerhatian, slaKritis:slaKritis, slaNull:slaNull,
+    byKet:byKet, byKP:byKP, byPTL:byPTL, avgAging:avgAging, agingCount:agingCount, slaCompliance:slaCompliance
+  };
 }
 
 function doktekRenderResume(agg) {
   var el = document.getElementById('doktek-resume');
   if(!el) return;
+  var pct = function(n){ return agg.total ? Math.round(n/agg.total*100) : 0; };
   var cards = [
-    { icon:'folder_open', label:'Total Belum Doktek', val:agg.total.toLocaleString('id-ID'), caption:'Perlu tindak lanjut', cls:'bg-red-50 border-red-200 text-red-700', iconCls:'bg-red-100 text-red-600' },
-    { icon:'error', label:'Kritis (≥31 hari)', val:agg.slaKritis.toLocaleString('id-ID'), caption: (agg.total?Math.round(agg.slaKritis/agg.total*100):0)+'% dari total', cls:'bg-red-50 border-red-300 text-red-700', iconCls:'bg-red-100 text-red-600' },
-    { icon:'warning', label:'Perhatian (13-30 hari)', val:agg.slaPerhatian.toLocaleString('id-ID'), caption: (agg.total?Math.round(agg.slaPerhatian/agg.total*100):0)+'% dari total', cls:'bg-orange-50 border-orange-200 text-orange-700', iconCls:'bg-orange-100 text-orange-600' },
-    { icon:'check_circle', label:'Normal (≤12 hari)', val:agg.slaNormal.toLocaleString('id-ID'), caption: (agg.total?Math.round(agg.slaNormal/agg.total*100):0)+'% dari total', cls:'bg-green-50 border-green-200 text-green-700', iconCls:'bg-green-100 text-green-600' }
+    { icon:'folder_open', label:'Total Kendala', val:agg.total.toLocaleString('id-ID'),
+      caption:'item backlog', cls:'bg-blue-50 border-blue-200 text-blue-700', iconCls:'bg-blue-100 text-blue-600' },
+    { icon:'error', label:'Kritis (≥31 hari)', val:agg.slaKritis.toLocaleString('id-ID'),
+      caption: pct(agg.slaKritis)+'% dari total', cls:'bg-red-50 border-red-300 text-red-700', iconCls:'bg-red-100 text-red-600' },
+    { icon:'verified', label:'SLA Compliance', val: agg.slaCompliance!=null ? agg.slaCompliance+'%' : '—',
+      caption: 'Normal+Perhatian dari '+agg.agingCount+' data bertanggal', cls:'bg-green-50 border-green-200 text-green-700', iconCls:'bg-green-100 text-green-600' },
+    { icon:'hourglass_top', label:'Rata-rata Aging', val: agg.avgAging!=null ? agg.avgAging+' hari' : '—',
+      caption: 'dari '+agg.agingCount+' data bertanggal', cls:'bg-orange-50 border-orange-200 text-orange-700', iconCls:'bg-orange-100 text-orange-600' },
+    { icon:'help', label:'Belum Ada Tanggal', val:agg.slaNull.toLocaleString('id-ID'),
+      caption: pct(agg.slaNull)+'% dari total — created_at kosong', cls:'bg-gray-50 border-gray-200 text-gray-600', iconCls:'bg-gray-100 text-gray-500' }
   ];
   el.innerHTML = cards.map(function(c){
     return '<div class="rounded-xl border p-3 '+c.cls+'">'
@@ -3801,6 +3864,26 @@ function doktekRenderResume(agg) {
       +'<p class="text-lg font-black mb-0.5">'+c.val+'</p>'
       +'<p class="text-[9px] opacity-60">'+c.caption+'</p></div>';
   }).join('');
+}
+
+function doktekRenderAgingDonut(agg) {
+  var totalEl = document.getElementById('doktek-agingTotalNum');
+  if(totalEl) totalEl.textContent = agg.total.toLocaleString('id-ID');
+  rebuildChart('doktek-agingDonut', {
+    type:'doughnut',
+    data:{
+      labels:['Normal','Perhatian','Kritis','Belum ada tanggal'],
+      datasets:[{
+        data:[agg.slaNormal, agg.slaPerhatian, agg.slaKritis, agg.slaNull],
+        backgroundColor:['#22c55e','#f97316','#ef4444','#d1d5db'],
+        borderWidth:0
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false, cutout:'62%',
+      plugins:{ legend:{ display:false } }
+    }
+  });
 }
 
 function doktekRenderPareto(agg) {
@@ -3819,29 +3902,29 @@ function doktekRenderPareto(agg) {
   }).join('');
 }
 
-function doktekRenderTopKP(agg) {
-  var el = document.getElementById('doktek-topKP');
+function doktekRenderPTL(agg) {
+  var el = document.getElementById('doktek-ptlBreakdown');
   if(!el) return;
-  var entries = Object.entries(agg.byKP).sort(function(a,b){ return b[1]-a[1]; });
+  var entries = Object.entries(agg.byPTL).sort(function(a,b){ return b[1]-a[1]; }).slice(0,10);
   if(!entries.length){ el.innerHTML = '<p class="text-[10px] text-gray-400">Tidak ada data</p>'; return; }
   var max = entries[0][1] || 1;
   el.innerHTML = entries.map(function(e){
     var pct = Math.round(e[1]/max*100);
-    var isOn = DF.kp.includes(e[0]);
-    return '<div class="cf rounded-lg '+(isOn?'bg-[#eaedff] outline outline-2 outline-[#00288e] p-1.5':'')+'" onclick="doktekToggleKP(\''+e[0].replace(/'/g,"\\'")+'\')">'
+    var isOn = DF.ptl.includes(e[0]);
+    return '<div class="cf rounded-lg '+(isOn?'bg-[#eaedff] outline outline-2 outline-[#00288e] p-1.5':'')+'" onclick="doktekTogglePTL(\''+e[0].replace(/'/g,"\\'")+'\')">'
       +'<div class="flex justify-between mb-0.5"><span class="text-[10px] font-medium truncate" title="'+e[0]+'">'+e[0]+'</span><span class="text-[10px] font-bold text-[#00288e]">'+e[1]+'</span></div>'
-      +'<div class="w-full bg-gray-100 rounded-full h-1.5"><div class="h-1.5 rounded-full bg-[#1D9E75]" style="width:'+pct+'%"></div></div></div>';
+      +'<div class="w-full bg-gray-100 rounded-full h-1.5"><div class="h-1.5 rounded-full bg-[#8B5CF6]" style="width:'+pct+'%"></div></div></div>';
   }).join('');
 }
 
-function doktekToggleKP(kp) {
-  DF.kp = DF.kp.includes(kp) ? DF.kp.filter(function(k){return k!==kp;}) : [...DF.kp, kp];
-  var menu = document.getElementById('ms-d-kp-menu');
-  if(menu) menu.querySelectorAll('input').forEach(function(cb){ cb.checked = DF.kp.includes(cb.value); });
-  var lbl = document.getElementById('ms-d-kp-label');
-  if(lbl) lbl.textContent = DF.kp.length ? 'KP ('+DF.kp.length+')' : 'KP';
-  var wrap = document.getElementById('ms-d-kp');
-  if(wrap) wrap.classList.toggle('ms-active', DF.kp.length > 0);
+function doktekTogglePTL(ptl) {
+  DF.ptl = DF.ptl.includes(ptl) ? DF.ptl.filter(function(p){return p!==ptl;}) : [...DF.ptl, ptl];
+  var menu = document.getElementById('ms-d-ptl-menu');
+  if(menu) menu.querySelectorAll('input').forEach(function(cb){ cb.checked = DF.ptl.includes(cb.value); });
+  var lbl = document.getElementById('ms-d-ptl-label');
+  if(lbl) lbl.textContent = DF.ptl.length ? 'PTL ('+DF.ptl.length+')' : 'PTL';
+  var wrap = document.getElementById('ms-d-ptl');
+  if(wrap) wrap.classList.toggle('ms-active', DF.ptl.length > 0);
   doktekApplyFilter();
 }
 
@@ -3850,14 +3933,18 @@ function doktekRenderPriority(rows) {
   if(!tbody) return;
   var top10 = rows.filter(function(r){ return r.aging !== null && r.aging !== undefined; })
     .sort(function(a,b){ return (b.aging||0) - (a.aging||0); }).slice(0,10);
-  if(!top10.length){ tbody.innerHTML = '<tr><td colspan="6" class="p-6 text-center text-gray-400 text-xs">Tidak ada data aging</td></tr>'; return; }
+  if(!top10.length){ tbody.innerHTML = '<tr><td colspan="10" class="p-6 text-center text-gray-400 text-xs">Tidak ada data aging</td></tr>'; return; }
   tbody.innerHTML = top10.map(function(r){
     var sc = SLA_COLOR[r.slaStatus] || SLA_COLOR['—'];
     var badge = '<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold '+sc.badge+'">'+(r.slaStatus||'—')+'</span>';
     return '<tr class="hover:bg-[#f2f3ff] border-b border-gray-50">'
       +'<td class="p-2.5 text-xs font-mono">'+(r.service_id||'—')+'</td>'
-      +'<td class="p-2.5 text-xs font-semibold text-[#00288e]">'+(r.pa_number||'—')+'</td>'
+      +'<td class="p-2.5 text-xs font-semibold text-[#00288e]" title="'+(r.pa_numberSource?'via '+r.pa_numberSource:'')+'">'+(r.pa_number||'—')+'</td>'
       +'<td class="p-2.5 text-xs whitespace-nowrap">'+(r.namaKP||'—')+'</td>'
+      +'<td class="p-2.5 text-xs max-w-[160px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+(r.customer||'')+(r.customerSource?' (via '+r.customerSource+')':'')+'">'+(r.customer||'—')+'</td>'
+      +'<td class="p-2.5 text-xs whitespace-nowrap">'+(r.namaPTL||'—')+'</td>'
+      +'<td class="p-2.5 text-xs max-w-[140px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+(r.vendor||'')+'">'+(r.vendor||'—')+'</td>'
+      +'<td class="p-2.5 text-xs whitespace-nowrap">'+(r.terminating||'—')+'</td>'
       +'<td class="p-2.5 text-xs max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+(r.acluan||'')+'">'+(r.acluan||'(kosong)')+'</td>'
       +'<td class="p-2.5 text-xs text-center font-bold '+sc.text+'">'+(r.aging!=null?r.aging+' hari':'—')+'</td>'
       +'<td class="p-2.5 text-center">'+badge+'</td></tr>';
@@ -3878,7 +3965,7 @@ function doktekMsChange(key) {
   DF[key] = [...menu.querySelectorAll('input:checked')].map(el => el.value);
   const lbl  = document.getElementById('ms-d-'+key+'-label');
   const wrap = document.getElementById('ms-d-'+key);
-  const labels = { kp:'KP', keterangan:'Keterangan', sla:'SLA', tahun:'Tahun' };
+  const labels = { kp:'Wilayah (KP)', ptl:'PTL', keterangan:'Keterangan', sla:'SLA', tahun:'Tahun' };
   if(lbl)  lbl.textContent  = DF[key].length ? labels[key]+' ('+DF[key].length+')' : labels[key];
   if(wrap) wrap.classList.toggle('ms-active', DF[key].length > 0);
   doktekApplyFilter();
@@ -3900,19 +3987,57 @@ function doktekApplyFilter() {
   const chk = (arr, val) => !arr.length || arr.includes(val);
   DOKTEK_FILTERED = DOKTEK_ROWS.filter(r => {
     if(!chk(DF.kp,         r.namaKP))    return false;
+    if(!chk(DF.ptl,        r.namaPTL))   return false;
     if(!chk(DF.keterangan, r.acluan))    return false;
     if(!chk(DF.sla,        r.slaStatus)) return false;
     if(!chk(DF.tahun,      r.tahun))     return false;
     if(DF.search && !JSON.stringify(r).toLowerCase().includes(DF.search)) return false;
     return true;
   });
+  doktekApplySort();
   const agg = doktekCompute(DOKTEK_FILTERED);
   doktekRenderResume(agg);
+  doktekRenderAgingDonut(agg);
   doktekRenderPareto(agg);
-  doktekRenderTopKP(agg);
+  doktekRenderPTL(agg);
   doktekRenderPriority(DOKTEK_FILTERED);
   doktekRenderChart();
   doktekUpdateLabel();
+  doktekPage = 1;
+  doktekRenderTable();
+}
+
+// ── Sort kolom Detail table ─────────────────────────────────────────────
+let doktekSortKey = null, doktekSortDir = 1; // 1 = asc, -1 = desc
+const DOKTEK_SORTABLE_KEYS = ['service_id','pa_number','customer','namaKP','namaPTL','vendor','terminating','created_at','aging','acluan','slaStatus'];
+
+function doktekCompareVal(a, b, key, dir) {
+  var av = a[key], bv = b[key];
+  var aEmpty = (av === null || av === undefined || av === '');
+  var bEmpty = (bv === null || bv === undefined || bv === '');
+  if (aEmpty && bEmpty) return 0;
+  if (aEmpty) return 1;   // kosong selalu di akhir, terlepas arah sort
+  if (bEmpty) return -1;
+  if (typeof av === 'number' && typeof bv === 'number') return dir * (av - bv);
+  return dir * String(av).localeCompare(String(bv), 'id', { numeric:true, sensitivity:'base' });
+}
+
+function doktekApplySort() {
+  if (!doktekSortKey) return;
+  DOKTEK_FILTERED.sort(function(a,b){ return doktekCompareVal(a, b, doktekSortKey, doktekSortDir); });
+}
+
+function doktekSortBy(key) {
+  if (!DOKTEK_SORTABLE_KEYS.includes(key)) return;
+  if (doktekSortKey === key) { doktekSortDir = -doktekSortDir; }
+  else { doktekSortKey = key; doktekSortDir = 1; }
+  doktekApplySort();
+  DOKTEK_SORTABLE_KEYS.forEach(function(k){
+    var el = document.getElementById('doktek-sort-'+k);
+    if(!el) return;
+    el.textContent = (k === doktekSortKey) ? (doktekSortDir === 1 ? '▲' : '▼') : '↕';
+    el.className = (k === doktekSortKey) ? 'text-[#00288e]' : 'text-gray-300';
+  });
   doktekPage = 1;
   doktekRenderTable();
 }
@@ -3921,9 +4046,9 @@ function doktekResetFilter() {
   Object.keys(DF).forEach(k => { DF[k] = Array.isArray(DF[k]) ? [] : ''; });
   document.querySelectorAll('[id^="ms-d-"] input[type=checkbox]').forEach(cb => cb.checked = false);
   document.querySelectorAll('[id^="ms-d-"]').forEach(w => w.classList.remove('ms-active'));
-  ['ms-d-kp-label','ms-d-keterangan-label','ms-d-sla-label','ms-d-tahun-label'].forEach((id,i) => {
+  ['ms-d-kp-label','ms-d-ptl-label','ms-d-keterangan-label','ms-d-sla-label','ms-d-tahun-label'].forEach((id,i) => {
     const el = document.getElementById(id);
-    if(el) el.textContent = ['KP','Keterangan','SLA','Tahun'][i];
+    if(el) el.textContent = ['Wilayah (KP)','PTL','Keterangan','SLA','Tahun'][i];
   });
   const si = document.getElementById('doktek-search'); if(si) si.value = '';
   doktekApplyFilter();
@@ -3940,21 +4065,21 @@ function doktekRenderChart() {
     else                                byKP[kp].tanpaAging++;
   });
   const sorted = Object.entries(byKP).sort((a,b) =>
-    (b[1].normal+b[1].perhatian+b[1].kritis) - (a[1].normal+a[1].perhatian+a[1].kritis));
+    (b[1].normal+b[1].perhatian+b[1].kritis+b[1].tanpaAging) - (a[1].normal+a[1].perhatian+a[1].kritis+a[1].tanpaAging));
   const labels = sorted.map(e => e[0]);
   rebuildChart('doktek-kpChart', {
     type:'bar',
     data:{labels, datasets:[
-      {label:'Normal',     data:sorted.map(e=>e[1].normal),     backgroundColor:'#22c55e', borderRadius:3, stack:'s'},
-      {label:'Perhatian',  data:sorted.map(e=>e[1].perhatian),  backgroundColor:'#f97316', borderRadius:3, stack:'s'},
-      {label:'Kritis',     data:sorted.map(e=>e[1].kritis),     backgroundColor:'#ef4444', borderRadius:3, stack:'s'},
-      {label:'Tanpa Aging',data:sorted.map(e=>e[1].tanpaAging), backgroundColor:'#d1d5db', borderRadius:3, stack:'s'},
+      {label:'Normal',           data:sorted.map(e=>e[1].normal),     backgroundColor:'#22c55e', borderRadius:3, stack:'s'},
+      {label:'Perhatian',        data:sorted.map(e=>e[1].perhatian),  backgroundColor:'#f97316', borderRadius:3, stack:'s'},
+      {label:'Kritis',           data:sorted.map(e=>e[1].kritis),     backgroundColor:'#ef4444', borderRadius:3, stack:'s'},
+      {label:'Belum Ada Tanggal',data:sorted.map(e=>e[1].tanpaAging), backgroundColor:'#d1d5db', borderRadius:3, stack:'s'},
     ]},
-    options:{responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
+    options:{responsive:true, maintainAspectRatio:false, indexAxis:'y',
+      plugins:{legend:{position:'bottom', labels:{font:{size:8}, boxWidth:8, padding:6}}},
       scales:{
-        x:{stacked:true, grid:{display:false}, ticks:{font:{size:9}}},
-        y:{stacked:true, beginAtZero:true, ticks:{font:{size:9}}}
+        x:{stacked:true, beginAtZero:true, ticks:{font:{size:8}}},
+        y:{stacked:true, grid:{display:false}, ticks:{font:{size:9}}}
       },
       onClick(evt,els){
         if(!els.length) return;
@@ -3963,7 +4088,7 @@ function doktekRenderChart() {
         const menu = document.getElementById('ms-d-kp-menu');
         if(menu) menu.querySelectorAll('input').forEach(cb => { cb.checked = DF.kp.includes(cb.value); });
         const lbl = document.getElementById('ms-d-kp-label');
-        if(lbl) lbl.textContent = DF.kp.length ? 'KP ('+DF.kp.length+')' : 'KP';
+        if(lbl) lbl.textContent = DF.kp.length ? 'Wilayah (KP) ('+DF.kp.length+')' : 'Wilayah (KP)';
         const wrap = document.getElementById('ms-d-kp');
         if(wrap) wrap.classList.toggle('ms-active', DF.kp.length > 0);
         doktekApplyFilter();
@@ -3977,7 +4102,7 @@ function doktekRenderTable() {
   const paged = DOKTEK_FILTERED.slice(start, start+DOKTEK_PAGE_SIZE);
   const tbody = document.getElementById('doktek-tblBody');
   if(!paged.length) {
-    tbody.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-gray-400 text-xs">Tidak ada data</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="12" class="p-8 text-center text-gray-400 text-xs">Tidak ada data</td></tr>`;
     buildPagination('doktek-pgBtns', doktekPage, DOKTEK_FILTERED.length, DOKTEK_PAGE_SIZE, 'doktekGoPage');
     const ri = document.getElementById('doktek-rangeInfo'), ti = document.getElementById('doktek-totalInfo');
     if(ri) ri.textContent='0'; if(ti) ti.textContent='0';
@@ -3986,18 +4111,22 @@ function doktekRenderTable() {
   tbody.innerHTML = paged.map((r,i) => {
     const sc = SLA_COLOR[r.slaStatus] || SLA_COLOR['—'];
     const agingTxt = r.aging !== null && r.aging !== undefined ? r.aging+' hari' : '—';
+    const custTitle = (r.customer||'') + (r.customerSource ? ' (via '+r.customerSource+')' : '');
     const badge = r.slaStatus && r.slaStatus!=='—'
       ? `<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold ${sc.badge}">${r.slaStatus}</span>`
       : '<span class="text-[9px] text-gray-300">—</span>';
     return `<tr class="hover:bg-[#f2f3ff] transition-colors border-b border-gray-50 ${sc.row}">
       <td class="p-3 text-[9px] text-gray-300">${start+i+1}</td>
       <td class="p-3 text-xs font-mono">${r.service_id||'—'}</td>
-      <td class="p-3 text-xs font-semibold text-[#00288e]">${r.pa_number||'—'}</td>
-      <td class="p-3 text-xs max-w-[180px] overflow-hidden text-ellipsis whitespace-nowrap" title="${r.customer||''}">${r.customer||'—'}</td>
+      <td class="p-3 text-xs font-semibold text-[#00288e]" title="${r.pa_numberSource?'via '+r.pa_numberSource:''}">${r.pa_number||'—'}</td>
+      <td class="p-3 text-xs max-w-[180px] overflow-hidden text-ellipsis whitespace-nowrap" title="${custTitle}">${r.customer||'—'}</td>
       <td class="p-3 text-xs whitespace-nowrap">${r.namaKP||'—'}</td>
+      <td class="p-3 text-xs whitespace-nowrap">${r.namaPTL||'—'}</td>
+      <td class="p-3 text-xs max-w-[160px] overflow-hidden text-ellipsis whitespace-nowrap" title="${r.vendor||''}">${r.vendor||'—'}</td>
+      <td class="p-3 text-xs whitespace-nowrap">${r.terminating||'—'}</td>
       <td class="p-3 text-xs whitespace-nowrap">${r.created_at||'—'}</td>
       <td class="p-3 text-xs text-center font-bold ${sc.text}">${agingTxt}</td>
-      <td class="p-3 text-xs">${r.acluan||'(kosong)'}</td>
+      <td class="p-3 text-xs max-w-[220px] overflow-hidden text-ellipsis whitespace-nowrap" title="${r.acluan||''}">${r.acluan||'(kosong)'}</td>
       <td class="p-3 text-center">${badge}</td>
     </tr>`;
   }).join('');
@@ -4013,13 +4142,14 @@ function doktekGoPage(p) {
 
 function doktekUpdateLabel() {
   const parts = [];
-  if(DF.kp.length)         parts.push('KP('+DF.kp.length+')');
+  if(DF.kp.length)         parts.push('Wilayah('+DF.kp.length+')');
+  if(DF.ptl.length)        parts.push('PTL('+DF.ptl.length+')');
   if(DF.keterangan.length) parts.push('Ket('+DF.keterangan.length+')');
   if(DF.sla.length)        parts.push('SLA: '+DF.sla.join(', '));
   if(DF.tahun.length)      parts.push('Tahun('+DF.tahun.length+')');
   if(DF.search)            parts.push('"'+DF.search+'"');
   const el = document.getElementById('doktek-filterLabel');
-  if(el) el.textContent = parts.length ? 'Filter: '+parts.join(' · ') : 'Scope: belum ada doktek';
+  if(el) el.textContent = parts.length ? 'Filter: '+parts.join(' · ') : 'Menampilkan semua data';
 }
 
 function doktekClearCacheAndReload() {
@@ -4029,8 +4159,8 @@ function doktekClearCacheAndReload() {
 }
 
 function doktekExportCSV() {
-  const cols = ['service_id','pa_number','customer','namaKP','created_at','aging','acluan','slaStatus'];
-  const hdrs = ['Service ID','PA Number','Customer','KP','Created At','Aging (hari)','Keterangan','SLA'];
+  const cols = ['service_id','pa_number','customer','namaKP','namaPTL','vendor','terminating','created_at','aging','acluan','slaStatus'];
+  const hdrs = ['Service ID','PA Number','Customer','KP','PTL','Vendor/Mitra','Terminating','Created At','Aging (hari)','Keterangan','SLA'];
   const rows = [hdrs.join(',')];
   DOKTEK_FILTERED.forEach(r => rows.push(cols.map(c=>`"${String(r[c]||'').replace(/"/g,'""')}"`).join(',')));
   const a = document.createElement('a');
