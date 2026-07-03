@@ -3726,6 +3726,14 @@ function doktekNormalizeRows(rows) {
   });
 }
 
+function doktekTabInfoText(json) {
+  var txt = `Total PA: ${json.totalPA||0}`;
+  if (json.excludedTerinput) {
+    txt += ` · ${json.excludedTerinput.toLocaleString('id-ID')} kasus sudah Terinput (di luar tampilan)`;
+  }
+  return txt;
+}
+
 async function doktekLoadData(tab) {
   tab = tab || DOKTEK_TAB;
   DOKTEK_TAB = tab;
@@ -3737,8 +3745,7 @@ async function doktekLoadData(tab) {
     DOKTEK_ROWS = rows;
     doktekBuildFilters(json);
     const info = document.getElementById('doktek-tab-info');
-    if(info) info.textContent = `Total PA: ${json.totalPA||DOKTEK_ROWS.length}`;
-    // Reset filter saat ganti tab
+    if(info) info.textContent = doktekTabInfoText(json);
     Object.keys(DF).forEach(k => { DF[k] = Array.isArray(DF[k]) ? [] : ''; });
     document.querySelectorAll('[id^="ms-d-"] input[type=checkbox]').forEach(cb => cb.checked = false);
     document.querySelectorAll('[id^="ms-d-"]').forEach(w => w.classList.remove('ms-active'));
@@ -3764,7 +3771,7 @@ async function doktekLoadData(tab) {
     DOKTEK_ROWS = normalized;
     doktekBuildFilters(json);
     const info = document.getElementById('doktek-tab-info');
-    if(info) info.textContent = `Total PA: ${json.totalPA||DOKTEK_ROWS.length}`;
+    if(info) info.textContent = doktekTabInfoText(json);
     doktekApplyFilter();
     loaded.doktek = true;
   } catch(err) {
