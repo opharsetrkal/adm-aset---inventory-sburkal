@@ -628,7 +628,7 @@ html,body   { height:100%; overflow:hidden; }
     <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
 
       <!-- Tab Toggle -->
-      <div class="flex gap-2 items-center">
+      <div class="flex gap-2 items-center flex-wrap">
         <div class="flex gap-1 border border-gray-200 rounded-lg p-0.5 bg-gray-50 no-print">
           <button class="pm-tab-btn px-3 py-1.5 text-[10px] font-bold rounded bg-[#00288e] text-white" data-tab="isp">PM ISP</button>
           <button class="pm-tab-btn px-3 py-1.5 text-[10px] font-bold rounded text-gray-500 hover:bg-white" data-tab="osp">PM OSP</button>
@@ -636,45 +636,95 @@ html,body   { height:100%; overflow:hidden; }
         <p class="text-[9px] text-gray-400" id="pm-tab-info">—</p>
       </div>
 
-      <!-- ── KONTEN ISP ── -->
+      <!-- ══════════════════ KONTEN ISP ══════════════════ -->
       <div id="pm-content-isp">
-        <!-- Resume ISP -->
+
+        <!-- 1. RESUME PM ISP -->
         <section class="mb-4">
           <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
-            <span class="material-symbols-outlined text-[12px]">construction</span> Resume PM ISP
+            <span class="material-symbols-outlined text-[12px]">construction</span> 1. Resume PM ISP
           </p>
-          <div id="pmisp-resume" class="space-y-3">
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
-              <div class="skeleton rounded-xl h-20"></div><div class="skeleton rounded-xl h-20"></div>
-              <div class="skeleton rounded-xl h-20"></div><div class="skeleton rounded-xl h-20"></div>
-            </div>
+          <div id="pmisp-kpi" class="grid grid-cols-2 lg:grid-cols-5 gap-2">
+            <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
+            <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
+            <div class="skeleton rounded-xl h-24"></div>
           </div>
         </section>
-        <!-- Chart ISP -->
-        <section class="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-4">
+
+        <!-- 2-3-4. COMPLIANCE / KETEPATAN / PER KP -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-3 mb-4">
           <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-            <p class="text-xs font-bold mb-1">Status PM per KP</p>
-            <p class="text-[9px] text-gray-400 mb-3">Sudah vs Belum Terlaksana · klik bar untuk filter</p>
-            <div style="position:relative;height:220px"><canvas id="pmisp-statusChart"></canvas></div>
+            <p class="text-xs font-bold mb-1 flex items-center gap-1"><span class="text-gray-300">2.</span> Compliance PM ISP</p>
+            <p class="text-[9px] text-gray-400 mb-3">Selesai Tepat Waktu vs Terlambat vs Belum PM</p>
+            <div class="relative" style="height:190px">
+              <canvas id="pmisp-complianceDonut"></canvas>
+              <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <p class="text-xl font-black text-[#131b2e]" id="pmisp-donutTotal">—</p>
+                <p class="text-[8px] text-gray-400">Total POP</p>
+              </div>
+            </div>
+            <div class="space-y-1 mt-3" id="pmisp-complianceLegend"></div>
           </div>
           <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-            <p class="text-xs font-bold mb-1">Ketepatan Waktu per KP</p>
-            <p class="text-[9px] text-gray-400 mb-3">Dari yang Sudah Terlaksana</p>
-            <div class="flex items-center gap-3 mb-2">
-              <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-green-500"></span>Maju</span>
-              <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-blue-400"></span>Tepat</span>
-              <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-red-400"></span>Lewat</span>
+            <p class="text-xs font-bold mb-1 flex items-center gap-1"><span class="text-gray-300">3.</span> Aging Keterlambatan</p>
+            <p class="text-[9px] text-gray-400 mb-3">Sebaran hari terlambat (Tgl Real − Tgl Plan)</p>
+            <div class="relative" style="height:190px">
+              <canvas id="pmisp-agingDonut"></canvas>
+              <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <p class="text-xl font-black text-[#131b2e]" id="pmisp-agingTotal">—</p>
+                <p class="text-[8px] text-gray-400">Total Terlambat</p>
+              </div>
             </div>
-            <div style="position:relative;height:200px"><canvas id="pmisp-ketepatanChart"></canvas></div>
+            <div class="space-y-1 mt-3" id="pmisp-agingLegend"></div>
+          </div>
+          <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+            <p class="text-xs font-bold mb-1 flex items-center gap-1"><span class="text-gray-300">4.</span> Compliance per KP</p>
+            <p class="text-[9px] text-gray-400 mb-3">Bar = Total POP · Garis = Compliance (%) · klik bar untuk filter</p>
+            <div style="position:relative;height:220px"><canvas id="pmisp-kpChart"></canvas></div>
           </div>
         </section>
+
+        <!-- 5-6-7. TREND / PRIORITY / BREAKDOWN -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-3 mb-4">
+          <div class="lg:col-span-4 bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+            <p class="text-xs font-bold mb-1 flex items-center gap-1"><span class="text-gray-300">5.</span> Trend PM Compliance (%)</p>
+            <p class="text-[9px] text-gray-400 mb-3">Per bulan, dari Tgl Real (data historis)</p>
+            <div style="position:relative;height:190px"><canvas id="pmisp-trendChart"></canvas></div>
+          </div>
+          <div class="lg:col-span-4 bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col">
+            <div class="p-3 border-b border-gray-100">
+              <p class="text-xs font-bold flex items-center gap-1"><span class="text-gray-300">6.</span> Priority Action (Top 5)</p>
+              <p class="text-[9px] text-gray-400">Belum PM, paling lewat dari Tgl Plan</p>
+            </div>
+            <div class="overflow-x-auto custom-scrollbar flex-1">
+              <table class="w-full text-left border-collapse" style="min-width:380px">
+                <thead class="bg-gray-50"><tr>
+                  <th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100">#</th>
+                  <th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100">POP</th>
+                  <th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100">KP</th>
+                  <th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Lewat</th>
+                  <th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Status</th>
+                </tr></thead>
+                <tbody id="pmisp-priorityBody"><tr><td colspan="5" class="p-6 text-center text-gray-400 text-[10px]">Memuat…</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="lg:col-span-4 bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+            <p class="text-xs font-bold mb-1 flex items-center gap-1"><span class="text-gray-300">7.</span> PM by Kategori POP</p>
+            <p class="text-[9px] text-gray-400 mb-3">Breakdown dari pop_type (fallback kategori lokasi)</p>
+            <div id="pmisp-jenisBreakdown" class="space-y-2"></div>
+          </div>
+        </section>
+
         <!-- Filter ISP -->
         <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-3 mb-4">
           <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
             <span class="material-symbols-outlined text-[12px]">filter_alt</span> Filter PM ISP
           </p>
           <div class="flex flex-wrap gap-1.5 items-center">
-            <div class="ms-wrap relative" id="ms-pi-kp"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="pmIspToggleMs('kp')"><span id="ms-pi-kp-label">KP</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-pi-kp-menu"></div></div>
+            <div class="ms-wrap relative" id="ms-pi-bulan"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="pmIspToggleMs('bulan')"><span id="ms-pi-bulan-label">Bulan (Tgl Real)</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px] max-h-48 overflow-y-auto" id="ms-pi-bulan-menu"></div></div>
+            <div class="ms-wrap relative" id="ms-pi-kp"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="pmIspToggleMs('kp')"><span id="ms-pi-kp-label">KP (Regional)</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-pi-kp-menu"></div></div>
+            <div class="ms-wrap relative" id="ms-pi-pic"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="pmIspToggleMs('pic')"><span id="ms-pi-pic-label">PIC Laporan</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-pi-pic-menu"></div></div>
             <div class="ms-wrap relative" id="ms-pi-statusPM"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="pmIspToggleMs('statusPM')"><span id="ms-pi-statusPM-label">Status PM</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-pi-statusPM-menu"></div></div>
             <div class="ms-wrap relative" id="ms-pi-statusLap"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="pmIspToggleMs('statusLap')"><span id="ms-pi-statusLap-label">Status Laporan</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-pi-statusLap-menu"></div></div>
             <div class="ms-wrap relative" id="ms-pi-ketepatan"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="pmIspToggleMs('ketepatan')"><span id="ms-pi-ketepatan-label">Ketepatan</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[200px] max-h-48 overflow-y-auto" id="ms-pi-ketepatan-menu"><label class="ms-item"><input type="checkbox" value="Maju dari Jadwal" onchange="pmIspMsChange('ketepatan')">🟢 Maju dari Jadwal</label><label class="ms-item"><input type="checkbox" value="Tepat Waktu" onchange="pmIspMsChange('ketepatan')">🟡 Tepat Waktu</label><label class="ms-item"><input type="checkbox" value="Lewat dari Jadwal" onchange="pmIspMsChange('ketepatan')">🔴 Lewat dari Jadwal</label></div></div>
@@ -682,10 +732,11 @@ html,body   { height:100%; overflow:hidden; }
             <input type="text" id="pmisp-search" oninput="pmIspApplyFilter()" placeholder="Cari POP ID/Nama…" class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 w-36 md:w-44">
           </div>
         </section>
-        <!-- Tabel ISP -->
+
+        <!-- 8. Tabel ISP -->
         <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div class="p-3 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
-            <div><p class="text-sm font-bold">Data Detail PM ISP</p><p class="text-[10px] text-gray-400" id="pmisp-filterLabel">Menampilkan semua data</p></div>
+            <div><p class="text-sm font-bold">8. Detail Laporan PM ISP</p><p class="text-[10px] text-gray-400" id="pmisp-filterLabel">Menampilkan semua data</p></div>
             <button onclick="pmIspExportCSV()" class="flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-semibold border border-gray-200 rounded hover:bg-gray-50 no-print"><span class="material-symbols-outlined text-[13px]">download</span> Ekspor CSV</button>
           </div>
           <div class="overflow-x-auto custom-scrollbar">
@@ -713,55 +764,105 @@ html,body   { height:100%; overflow:hidden; }
         </section>
       </div>
 
-      <!-- ── KONTEN OSP ── -->
+      <!-- ══════════════════ KONTEN OSP ══════════════════ -->
       <div id="pm-content-osp" class="hidden">
-        <!-- Resume OSP -->
+
+        <!-- 1. RESUME PM OSP -->
         <section class="mb-4">
           <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
-            <span class="material-symbols-outlined text-[12px]">cable</span> Resume PM OSP
+            <span class="material-symbols-outlined text-[12px]">cable</span> 1. Resume PM OSP
           </p>
-          <div id="pmosp-resume" class="space-y-3">
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
-              <div class="skeleton rounded-xl h-20"></div><div class="skeleton rounded-xl h-20"></div>
-              <div class="skeleton rounded-xl h-20"></div><div class="skeleton rounded-xl h-20"></div>
-            </div>
+          <div id="pmosp-kpi" class="grid grid-cols-2 lg:grid-cols-5 gap-2">
+            <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
+            <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
+            <div class="skeleton rounded-xl h-24"></div>
           </div>
         </section>
-        <!-- Chart OSP -->
-        <section class="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-4">
+
+        <!-- 2-3-4. COMPLIANCE / AGING / PER WILAYAH -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-3 mb-4">
           <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-            <p class="text-xs font-bold mb-1">Status WO per Wilayah</p>
-            <p class="text-[9px] text-gray-400 mb-3">Close / Open / Progres · klik untuk filter</p>
-            <div style="position:relative;height:220px"><canvas id="pmosp-statusChart"></canvas></div>
+            <p class="text-xs font-bold mb-1 flex items-center gap-1"><span class="text-gray-300">2.</span> Compliance PM OSP</p>
+            <p class="text-[9px] text-gray-400 mb-3">Close vs Progres vs Open</p>
+            <div class="relative" style="height:190px">
+              <canvas id="pmosp-complianceDonut"></canvas>
+              <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <p class="text-xl font-black text-[#131b2e]" id="pmosp-donutTotal">—</p>
+                <p class="text-[8px] text-gray-400">Total WO</p>
+              </div>
+            </div>
+            <div class="space-y-1 mt-3" id="pmosp-complianceLegend"></div>
           </div>
           <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-            <p class="text-xs font-bold mb-1">Aging Laporan per Wilayah</p>
-            <p class="text-[9px] text-gray-400 mb-3">Tgl Dok − Tgl PM</p>
-            <div class="flex items-center gap-3 mb-2">
-              <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-green-500"></span>Cepat ≤7hr</span>
-              <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-blue-400"></span>Normal 8-14hr</span>
-              <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-red-400"></span>Lambat >14hr</span>
+            <p class="text-xs font-bold mb-1 flex items-center gap-1"><span class="text-gray-300">3.</span> Aging Laporan</p>
+            <p class="text-[9px] text-gray-400 mb-3">Sebaran hari (Tgl Dok − Tgl PM), WO dengan Tgl Dok terisi</p>
+            <div class="relative" style="height:190px">
+              <canvas id="pmosp-agingDonut"></canvas>
+              <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <p class="text-xl font-black text-[#131b2e]" id="pmosp-agingTotal">—</p>
+                <p class="text-[8px] text-gray-400">WO Ada Dok</p>
+              </div>
             </div>
-            <div style="position:relative;height:200px"><canvas id="pmosp-agingChart"></canvas></div>
+            <div class="space-y-1 mt-3" id="pmosp-agingLegend"></div>
+          </div>
+          <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+            <p class="text-xs font-bold mb-1 flex items-center gap-1"><span class="text-gray-300">4.</span> Compliance per Wilayah</p>
+            <p class="text-[9px] text-gray-400 mb-3">Bar = Total WO · Garis = Compliance (%) · klik bar untuk filter</p>
+            <div style="position:relative;height:220px"><canvas id="pmosp-wilayahChart"></canvas></div>
           </div>
         </section>
+
+        <!-- 5-6-7. TREND / PRIORITY / BREAKDOWN -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-3 mb-4">
+          <div class="lg:col-span-4 bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+            <p class="text-xs font-bold mb-1 flex items-center gap-1"><span class="text-gray-300">5.</span> Trend PM Compliance (%)</p>
+            <p class="text-[9px] text-gray-400 mb-3">Per bulan (field Bulan/Tahun)</p>
+            <div style="position:relative;height:190px"><canvas id="pmosp-trendChart"></canvas></div>
+          </div>
+          <div class="lg:col-span-4 bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col">
+            <div class="p-3 border-b border-gray-100">
+              <p class="text-xs font-bold flex items-center gap-1"><span class="text-gray-300">6.</span> Priority Action (Top 5)</p>
+              <p class="text-[9px] text-gray-400">Status Open/Progres, paling lama sejak Tgl PM</p>
+            </div>
+            <div class="overflow-x-auto custom-scrollbar flex-1">
+              <table class="w-full text-left border-collapse" style="min-width:380px">
+                <thead class="bg-gray-50"><tr>
+                  <th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100">#</th>
+                  <th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100">No. WO</th>
+                  <th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100">Wilayah</th>
+                  <th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Umur</th>
+                  <th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Status</th>
+                </tr></thead>
+                <tbody id="pmosp-priorityBody"><tr><td colspan="5" class="p-6 text-center text-gray-400 text-[10px]">Memuat…</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="lg:col-span-4 bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+            <p class="text-xs font-bold mb-1 flex items-center gap-1"><span class="text-gray-300">7.</span> PM by Tim Pelaksana</p>
+            <p class="text-[9px] text-gray-400 mb-3">Substitusi "Jenis Pekerjaan" — field tsb tidak tersedia di data OSP</p>
+            <div id="pmosp-jenisBreakdown" class="space-y-2"></div>
+          </div>
+        </section>
+
         <!-- Filter OSP -->
         <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-3 mb-4">
           <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
             <span class="material-symbols-outlined text-[12px]">filter_alt</span> Filter PM OSP
           </p>
           <div class="flex flex-wrap gap-1.5 items-center">
-            <div class="ms-wrap relative" id="ms-po-wilayah"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="pmOspToggleMs('wilayah')"><span id="ms-po-wilayah-label">Wilayah</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-po-wilayah-menu"></div></div>
-            <div class="ms-wrap relative" id="ms-po-status"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="pmOspToggleMs('status')"><span id="ms-po-status-label">Status</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[140px] max-h-48 overflow-y-auto" id="ms-po-status-menu"></div></div>
-            <div class="ms-wrap relative" id="ms-po-aging"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="pmOspToggleMs('aging')"><span id="ms-po-aging-label">Aging</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-po-aging-menu"><label class="ms-item"><input type="checkbox" value="Cepat" onchange="pmOspMsChange('aging')">🟢 Cepat (≤7 hari)</label><label class="ms-item"><input type="checkbox" value="Normal" onchange="pmOspMsChange('aging')">🟡 Normal (8-14 hari)</label><label class="ms-item"><input type="checkbox" value="Lambat" onchange="pmOspMsChange('aging')">🔴 Lambat (>14 hari)</label><label class="ms-item"><input type="checkbox" value="Belum Tersedia" onchange="pmOspMsChange('aging')">⚪ Belum Tersedia</label></div></div>
             <div class="ms-wrap relative" id="ms-po-bulan"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="pmOspToggleMs('bulan')"><span id="ms-po-bulan-label">Bulan</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[140px] max-h-48 overflow-y-auto" id="ms-po-bulan-menu"></div></div>
+            <div class="ms-wrap relative" id="ms-po-wilayah"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="pmOspToggleMs('wilayah')"><span id="ms-po-wilayah-label">Wilayah (Regional)</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-po-wilayah-menu"></div></div>
+            <div class="ms-wrap relative" id="ms-po-pic"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="pmOspToggleMs('pic')"><span id="ms-po-pic-label">Petugas (PIC)</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-po-pic-menu"></div></div>
+            <div class="ms-wrap relative" id="ms-po-status"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="pmOspToggleMs('status')"><span id="ms-po-status-label">Status</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[140px] max-h-48 overflow-y-auto" id="ms-po-status-menu"></div></div>
+            <div class="ms-wrap relative" id="ms-po-aging"><button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="pmOspToggleMs('aging')"><span id="ms-po-aging-label">Aging</span><span class="material-symbols-outlined text-[12px]">expand_more</span></button><div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-po-aging-menu"><label class="ms-item"><input type="checkbox" value="Cepat" onchange="pmOspMsChange('aging')">🟢 Cepat (≤7 hari)</label><label class="ms-item"><input type="checkbox" value="Normal" onchange="pmOspMsChange('aging')">🟡 Normal (8-14 hari)</label><label class="ms-item"><input type="checkbox" value="Lambat" onchange="pmOspMsChange('aging')">🔴 Lambat (&gt;14 hari)</label><label class="ms-item"><input type="checkbox" value="Belum Tersedia" onchange="pmOspMsChange('aging')">⚪ Belum Tersedia</label></div></div>
             <input type="text" id="pmosp-search" oninput="pmOspApplyFilter()" placeholder="Cari No. WO / POP…" class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 w-36 md:w-44">
           </div>
         </section>
-        <!-- Tabel OSP -->
+
+        <!-- 8. Tabel OSP -->
         <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div class="p-3 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
-            <div><p class="text-sm font-bold">Data Detail PM OSP</p><p class="text-[10px] text-gray-400" id="pmosp-filterLabel">Menampilkan semua data</p></div>
+            <div><p class="text-sm font-bold">8. Detail Laporan PM OSP</p><p class="text-[10px] text-gray-400" id="pmosp-filterLabel">Menampilkan semua data</p></div>
             <button onclick="pmOspExportCSV()" class="flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-semibold border border-gray-200 rounded hover:bg-gray-50 no-print"><span class="material-symbols-outlined text-[13px]">download</span> Ekspor CSV</button>
           </div>
           <div class="overflow-x-auto custom-scrollbar">
@@ -1841,10 +1942,10 @@ function updateTopnav(page) {
     bar2.innerHTML = `
       <p class="text-xs md:text-sm font-bold text-[#131b2e] whitespace-nowrap">${cfg.title}</p>
       <div class="flex items-center gap-1.5 no-print">
-        <button onclick="pmIspResetFilter()" class="flex items-center gap-1 px-2 py-1 border border-gray-200 rounded text-[10px] font-semibold text-gray-500 hover:bg-[#f2f3ff] whitespace-nowrap">
+        <button onclick="pmActiveResetFilter()" class="flex items-center gap-1 px-2 py-1 border border-gray-200 rounded text-[10px] font-semibold text-gray-500 hover:bg-[#f2f3ff] whitespace-nowrap">
           <span class="material-symbols-outlined text-[13px]">filter_alt_off</span><span class="hidden md:inline">Reset Filter</span>
         </button>
-        <button onclick="pmIspClearCacheAndReload()" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
+        <button onclick="pmActiveClearCacheAndReload()" class="p-1 text-gray-400 hover:bg-[#f2f3ff] rounded-full" title="Refresh">
           <span class="material-symbols-outlined text-[16px]" id="pmisp-refreshIcon">sync</span>
         </button>
       </div>`;
@@ -4189,10 +4290,13 @@ document.addEventListener('DOMContentLoaded', () => {
 // MODULE: PM ISP (prefix: pmIsp)
 // ══════════════════════════════════════════════════════════
 
+// ══════════════════════════════════════════════════════════
+// MODULE: PM ISP (prefix: pmIsp)
+// ══════════════════════════════════════════════════════════
 let PMISP_ROWS = [], PMISP_FILTERED = [], pmIspPage = 1;
 let PMISP_CACHE = null;
 const PMISP_PAGE_SIZE = 15;
-const PIF = { kp:[], statusPM:[], statusLap:[], ketepatan:[], pmKe:[], search:'' };
+const PIF = { bulan:[], kp:[], pic:[], statusPM:[], statusLap:[], ketepatan:[], pmKe:[], search:'' };
 
 const PMISP_KET_COLOR = {
   'Maju dari Jadwal':  { badge:'bg-green-100 text-green-700', row:'' },
@@ -4201,13 +4305,17 @@ const PMISP_KET_COLOR = {
   '—':                 { badge:'bg-gray-100 text-gray-400',   row:'' },
 };
 
+// Derived bulan (Tgl Real → fallback Tgl Plan) — field 'Bulan' tidak tersedia di source PM ISP
+function pmIspRowMonthKey(r) {
+  return monthKey(r.tglReal) || monthKey(r.tglPlan);
+}
+
 // ── LOAD ─────────────────────────────────────────────────
 async function pmIspLoadData() {
   if(loading.pm_isp) return;
   if(PMISP_CACHE) {
     PMISP_ROWS = PMISP_CACHE.rows;
     pmIspBuildFilters(PMISP_CACHE);
-    pmIspRenderResume(PMISP_CACHE);
     pmIspApplyFilter();
     return;
   }
@@ -4221,14 +4329,13 @@ async function pmIspLoadData() {
     PMISP_CACHE = json;
     PMISP_ROWS  = json.rows || [];
     pmIspBuildFilters(json);
-    pmIspRenderResume(json);
     pmIspApplyFilter();
     loaded.pm_isp = true;
   } catch(err) {
     document.getElementById('pmisp-tblBody').innerHTML =
       `<tr><td colspan="11" class="p-8 text-center text-red-500 text-sm">&#9888; ${err.message}</td></tr>`;
-    const el = document.getElementById('pmisp-resume');
-    if(el) el.innerHTML = `<div class="p-4 text-red-500 text-sm text-center">&#9888; ${err.message}</div>`;
+    const el = document.getElementById('pmisp-kpi');
+    if(el) el.innerHTML = `<div class="col-span-full p-4 text-red-500 text-sm text-center">&#9888; ${err.message}</div>`;
   } finally {
     loading.pm_isp = false;
     if(icon) icon.classList.remove('spin');
@@ -4252,91 +4359,223 @@ function pmIspBuildFilters(json) {
   build('ms-pi-kp-menu',       json.kpOptions    || [], 'kp');
   build('ms-pi-statusPM-menu', json.statusPMOpts || [], 'statusPM');
   build('ms-pi-statusLap-menu',json.statusLapOpts|| [], 'statusLap');
-  build('ms-pi-pmKe-menu',     (json.pmKeOptions || []).map(v => 'PM ke-'+v), 'pmKe');
-  // pmKe options — raw values
+
+  // PIC — dari picLaporan, dihitung client-side (belum ada di ringkasan API)
+  const picOpts = [...new Set(PMISP_ROWS.map(r => r.picLaporan).filter(Boolean))].sort();
+  build('ms-pi-pic-menu', picOpts, 'pic');
+
+  // Bulan — derived dari Tgl Real/Tgl Plan, bukan field asli
+  const bulanKeys = [...new Set(PMISP_ROWS.map(pmIspRowMonthKey).filter(Boolean))].sort();
+  const bEl = document.getElementById('ms-pi-bulan-menu');
+  if(bEl) bEl.innerHTML = bulanKeys.map(k =>
+    `<label class="ms-item"><input type="checkbox" value="${k}" onchange="pmIspMsChange('bulan')">${monthLabel(k)}</label>`
+  ).join('');
+
   const pmKeEl = document.getElementById('ms-pi-pmKe-menu');
   if(pmKeEl) pmKeEl.innerHTML = (json.pmKeOptions||[]).map(v =>
     `<label class="ms-item"><input type="checkbox" value="${v}" onchange="pmIspMsChange('pmKe')">PM ke-${v}</label>`
   ).join('');
 }
 
-// ── RENDER RESUME ─────────────────────────────────────────
-function pmIspRenderResume(json) {
-  const el = document.getElementById('pmisp-resume');
+// ── RENDER KPI (5 cards, ala referensi) ────────────────────
+function pmIspRenderKPI() {
+  const el = document.getElementById('pmisp-kpi');
   if(!el) return;
-  const pctSudah = json.totalPOP > 0 ? Math.round(json.sudahPM / json.totalPOP * 100) : 0;
+  const rows = PMISP_FILTERED;
+  const total       = rows.length;
+  const sudahRows   = rows.filter(r => r.statusPM === 'Sudah Terlaksana');
+  const tepatWaktu  = sudahRows.filter(r => r.ketepatanWaktu === 'Maju dari Jadwal' || r.ketepatanWaktu === 'Tepat Waktu').length;
+  const terlambat   = sudahRows.filter(r => r.ketepatanWaktu === 'Lewat dari Jadwal').length;
+  const belumPM     = rows.filter(r => r.statusPM !== 'Sudah Terlaksana').length;
+  const compliance  = total > 0 ? (tepatWaktu / total * 100) : 0;
+
   el.innerHTML = `
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-2">
-      <div class="rounded-xl border p-4 shadow-sm bg-white border-gray-200">
-        <p class="text-[9px] font-bold uppercase mb-1 text-gray-500">Total POP</p>
-        <p class="text-2xl font-black text-[#131b2e]">${json.totalPOP.toLocaleString('id-ID')}</p>
-        <p class="text-[9px] mt-0.5 text-gray-400">Seluruh POP terdaftar</p>
-      </div>
-      <div class="rounded-xl border p-4 shadow-sm bg-green-50 border-green-200">
-        <p class="text-[9px] font-bold uppercase mb-1 text-green-600">Sudah PM</p>
-        <p class="text-2xl font-black text-green-700">${json.sudahPM.toLocaleString('id-ID')}</p>
-        <p class="text-[9px] mt-0.5 text-green-500">${pctSudah}% dari total</p>
-      </div>
-      <div class="rounded-xl border p-4 shadow-sm bg-orange-50 border-orange-200">
-        <p class="text-[9px] font-bold uppercase mb-1 text-orange-600">Belum PM</p>
-        <p class="text-2xl font-black text-orange-700">${json.belumPM.toLocaleString('id-ID')}</p>
-        <p class="text-[9px] mt-0.5 text-orange-400">${100-pctSudah}% dari total</p>
-      </div>
-      <div class="rounded-xl border p-4 shadow-sm bg-blue-50 border-blue-200">
-        <p class="text-[9px] font-bold uppercase mb-1 text-blue-600">Laporan Ready</p>
-        <p class="text-2xl font-black text-blue-700">${json.laporanReady.toLocaleString('id-ID')}</p>
-        <p class="text-[9px] mt-0.5 text-blue-400">Sudah tersedia</p>
-      </div>
+    <div class="rounded-xl border p-4 shadow-sm bg-white border-gray-200">
+      <p class="text-[9px] font-bold uppercase mb-1 text-gray-500 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">event_note</span>Total PM Plan</p>
+      <p class="text-2xl font-black text-[#131b2e]">${total.toLocaleString('id-ID')}</p>
+      <p class="text-[9px] mt-0.5 text-gray-400">POP</p>
     </div>
-    <div class="grid grid-cols-2 lg:grid-cols-3 gap-2">
-      <div class="rounded-xl border p-3 shadow-sm bg-white border-gray-100">
-        <p class="text-[9px] font-bold text-gray-400 uppercase mb-2">Ketepatan Waktu (Sudah PM)</p>
-        <div class="flex gap-3">
-          <div class="text-center flex-1">
-            <p class="text-lg font-black text-green-600">${json.maju}</p>
-            <p class="text-[9px] text-gray-400">Maju</p>
-          </div>
-          <div class="text-center flex-1">
-            <p class="text-lg font-black text-blue-500">${json.tepat}</p>
-            <p class="text-[9px] text-gray-400">Tepat</p>
-          </div>
-          <div class="text-center flex-1">
-            <p class="text-lg font-black text-red-500">${json.lewat}</p>
-            <p class="text-[9px] text-gray-400">Lewat</p>
-          </div>
-        </div>
-      </div>
-      <div class="rounded-xl border p-3 shadow-sm bg-white border-gray-100">
-        <p class="text-[9px] font-bold text-gray-400 uppercase mb-2">Status Belum PM</p>
-        <div class="flex gap-3">
-          <div class="text-center flex-1">
-            <p class="text-lg font-black text-blue-500">${json.belumMendatang}</p>
-            <p class="text-[9px] text-gray-400">Mendatang</p>
-          </div>
-          <div class="text-center flex-1">
-            <p class="text-lg font-black text-orange-500">${json.belumLewat}</p>
-            <p class="text-[9px] text-gray-400">Lewat Plan</p>
-          </div>
-          <div class="text-center flex-1">
-            <p class="text-lg font-black text-gray-400">${json.belumTanpaPlan}</p>
-            <p class="text-[9px] text-gray-400">Tanpa Plan</p>
-          </div>
-        </div>
-      </div>
-      <div class="rounded-xl border p-3 shadow-sm bg-white border-gray-100 col-span-2 lg:col-span-1">
-        <p class="text-[9px] font-bold text-gray-400 uppercase mb-2">Status Laporan</p>
-        <div class="flex gap-3">
-          <div class="text-center flex-1">
-            <p class="text-lg font-black text-green-600">${json.laporanReady}</p>
-            <p class="text-[9px] text-gray-400">Sudah Tersedia</p>
-          </div>
-          <div class="text-center flex-1">
-            <p class="text-lg font-black text-gray-500">${json.laporanBelum}</p>
-            <p class="text-[9px] text-gray-400">Belum Tersedia</p>
-          </div>
-        </div>
-      </div>
+    <div class="rounded-xl border p-4 shadow-sm bg-green-50 border-green-200">
+      <p class="text-[9px] font-bold uppercase mb-1 text-green-600 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">check_circle</span>Selesai Tepat Waktu</p>
+      <p class="text-2xl font-black text-green-700">${tepatWaktu.toLocaleString('id-ID')}</p>
+      <p class="text-[9px] mt-0.5 text-green-500">${total?Math.round(tepatWaktu/total*100):0}%</p>
+    </div>
+    <div class="rounded-xl border p-4 shadow-sm bg-orange-50 border-orange-200">
+      <p class="text-[9px] font-bold uppercase mb-1 text-orange-600 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">schedule</span>Selesai Terlambat</p>
+      <p class="text-2xl font-black text-orange-700">${terlambat.toLocaleString('id-ID')}</p>
+      <p class="text-[9px] mt-0.5 text-orange-400">${total?Math.round(terlambat/total*100):0}%</p>
+    </div>
+    <div class="rounded-xl border p-4 shadow-sm bg-red-50 border-red-200">
+      <p class="text-[9px] font-bold uppercase mb-1 text-red-600 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">cancel</span>Belum PM</p>
+      <p class="text-2xl font-black text-red-700">${belumPM.toLocaleString('id-ID')}</p>
+      <p class="text-[9px] mt-0.5 text-red-400">${total?Math.round(belumPM/total*100):0}%</p>
+    </div>
+    <div class="rounded-xl border p-4 shadow-sm bg-blue-50 border-blue-200">
+      <p class="text-[9px] font-bold uppercase mb-1 text-blue-600 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">trending_up</span>PM Compliance</p>
+      <p class="text-2xl font-black text-blue-700">${compliance.toFixed(1)}%</p>
+      <p class="text-[9px] mt-0.5 text-blue-400">Target ≥ 80%</p>
     </div>`;
+}
+
+// ── DONUT: COMPLIANCE (Tepat / Terlambat / Belum PM) ───────
+function pmIspRenderComplianceDonut() {
+  const rows = PMISP_FILTERED;
+  const total = rows.length;
+  const sudahRows  = rows.filter(r => r.statusPM === 'Sudah Terlaksana');
+  const tepat      = sudahRows.filter(r => r.ketepatanWaktu === 'Maju dari Jadwal' || r.ketepatanWaktu === 'Tepat Waktu').length;
+  const terlambat  = sudahRows.filter(r => r.ketepatanWaktu === 'Lewat dari Jadwal').length;
+  const belum      = rows.filter(r => r.statusPM !== 'Sudah Terlaksana').length;
+
+  const totalEl = document.getElementById('pmisp-donutTotal');
+  if(totalEl) totalEl.textContent = total.toLocaleString('id-ID');
+
+  rebuildChart('pmisp-complianceDonut', {
+    type:'doughnut',
+    data:{ labels:['Selesai Tepat Waktu','Selesai Terlambat','Belum PM'],
+      datasets:[{ data:[tepat,terlambat,belum], backgroundColor:['#22c55e','#f59e0b','#ef4444'], borderWidth:2, borderColor:'#fff' }] },
+    options:{ responsive:true, maintainAspectRatio:false, cutout:'68%', plugins:{ legend:{ display:false },
+      tooltip:{ callbacks:{ label:(ctx)=>` ${ctx.label}: ${ctx.parsed} (${total?Math.round(ctx.parsed/total*100):0}%)` } } } }
+  });
+
+  const legEl = document.getElementById('pmisp-complianceLegend');
+  if(legEl) legEl.innerHTML = [
+    {l:'Selesai Tepat Waktu', v:tepat,     c:'#22c55e'},
+    {l:'Selesai Terlambat',   v:terlambat, c:'#f59e0b'},
+    {l:'Belum PM',            v:belum,     c:'#ef4444'},
+  ].map(it => `<div class="flex items-center justify-between text-[10px]"><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm inline-block" style="background:${it.c}"></span>${it.l}</span><span class="font-bold">${it.v} (${total?Math.round(it.v/total*100):0}%)</span></div>`).join('');
+}
+
+// ── DONUT: AGING KETERLAMBATAN (bucket hari, dari selisihHari yg Lewat) ──
+function pmIspRenderAgingDonut() {
+  const lateRows = PMISP_FILTERED.filter(r => r.ketepatanWaktu === 'Lewat dari Jadwal' && r.selisihHari !== null);
+  const b = { d1_7:0, d8_14:0, d15_30:0, dOver30:0 };
+  lateRows.forEach(r => {
+    const d = r.selisihHari;
+    if(d <= 7) b.d1_7++;
+    else if(d <= 14) b.d8_14++;
+    else if(d <= 30) b.d15_30++;
+    else b.dOver30++;
+  });
+  const total = lateRows.length;
+
+  const totalEl = document.getElementById('pmisp-agingTotal');
+  if(totalEl) totalEl.textContent = total.toLocaleString('id-ID');
+
+  rebuildChart('pmisp-agingDonut', {
+    type:'doughnut',
+    data:{ labels:['1-7 hari','8-14 hari','15-30 hari','>30 hari'],
+      datasets:[{ data:[b.d1_7,b.d8_14,b.d15_30,b.dOver30], backgroundColor:['#22c55e','#eab308','#f97316','#ef4444'], borderWidth:2, borderColor:'#fff' }] },
+    options:{ responsive:true, maintainAspectRatio:false, cutout:'68%', plugins:{ legend:{ display:false },
+      tooltip:{ callbacks:{ label:(ctx)=>` ${ctx.label}: ${ctx.parsed} (${total?Math.round(ctx.parsed/total*100):0}%)` } } } }
+  });
+
+  const legEl = document.getElementById('pmisp-agingLegend');
+  if(legEl) legEl.innerHTML = [
+    {l:'1-7 hari',   v:b.d1_7,    c:'#22c55e'},
+    {l:'8-14 hari',  v:b.d8_14,   c:'#eab308'},
+    {l:'15-30 hari', v:b.d15_30,  c:'#f97316'},
+    {l:'>30 hari',   v:b.dOver30, c:'#ef4444'},
+  ].map(it => `<div class="flex items-center justify-between text-[10px]"><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm inline-block" style="background:${it.c}"></span>${it.l}</span><span class="font-bold">${it.v} (${total?Math.round(it.v/total*100):0}%)</span></div>`).join('');
+}
+
+// ── COMBO: COMPLIANCE PER KP (bar total + line compliance%) ──
+function pmIspRenderKPChart() {
+  const byKP = {};
+  PMISP_FILTERED.forEach(r => {
+    const kp = r.namaKP || '—';
+    if(!byKP[kp]) byKP[kp] = { total:0, tepat:0 };
+    byKP[kp].total++;
+    if(r.ketepatanWaktu === 'Maju dari Jadwal' || r.ketepatanWaktu === 'Tepat Waktu') byKP[kp].tepat++;
+  });
+  const sorted = Object.entries(byKP).sort((a,b)=>b[1].total-a[1].total);
+  const labels = sorted.map(e=>e[0]);
+  rebuildChart('pmisp-kpChart', {
+    data:{ labels, datasets:[
+      { type:'bar',  label:'Total POP',   data:sorted.map(e=>e[1].total), backgroundColor:'rgba(0,40,142,0.75)', borderRadius:3, yAxisID:'y' },
+      { type:'line', label:'Compliance (%)', data:sorted.map(e=>e[1].total?Math.round(e[1].tepat/e[1].total*100):0), borderColor:'#1D9E75', backgroundColor:'transparent', borderWidth:2, pointRadius:4, pointBackgroundColor:'#1D9E75', tension:0.2, yAxisID:'y2' },
+    ]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ position:'top', labels:{ font:{size:9}, usePointStyle:true, pointStyle:'circle' } } },
+      scales:{
+        x:{ grid:{ display:false }, ticks:{ font:{size:9} } },
+        y:{ beginAtZero:true, ticks:{ font:{size:9} } },
+        y2:{ position:'right', beginAtZero:true, max:100, grid:{ display:false }, ticks:{ font:{size:9}, callback:v=>v+'%' } },
+      },
+      onClick(evt,els){
+        if(!els.length) return;
+        const kp = labels[els[0].index];
+        PIF.kp = PIF.kp.includes(kp) ? PIF.kp.filter(k=>k!==kp) : [...PIF.kp, kp];
+        const menu=document.getElementById('ms-pi-kp-menu');
+        if(menu) menu.querySelectorAll('input').forEach(cb => { cb.checked = PIF.kp.includes(cb.value); });
+        const lbl=document.getElementById('ms-pi-kp-label');
+        if(lbl) lbl.textContent = PIF.kp.length ? 'KP ('+PIF.kp.length+')' : 'KP (Regional)';
+        const wrap=document.getElementById('ms-pi-kp');
+        if(wrap) wrap.classList.toggle('ms-active', PIF.kp.length>0);
+        pmIspApplyFilter();
+      }
+    }
+  });
+}
+
+// ── TREND: PM COMPLIANCE (%) PER BULAN (derived dari Tgl Real) ──
+function pmIspRenderTrend() {
+  const byM = {};
+  PMISP_ROWS.filter(r => r.statusPM === 'Sudah Terlaksana').forEach(r => {
+    const k = monthKey(r.tglReal);
+    if(!k) return;
+    if(!byM[k]) byM[k] = { total:0, tepat:0 };
+    byM[k].total++;
+    if(r.ketepatanWaktu === 'Maju dari Jadwal' || r.ketepatanWaktu === 'Tepat Waktu') byM[k].tepat++;
+  });
+  const keys = Object.keys(byM).sort();
+  rebuildChart('pmisp-trendChart', {
+    type:'line',
+    data:{ labels:keys.map(monthLabel), datasets:[
+      { label:'Compliance (%)', data:keys.map(k=>byM[k].total?Math.round(byM[k].tepat/byM[k].total*100):0), borderColor:'#00288e', backgroundColor:'rgba(0,40,142,0.08)', fill:true, tension:0.35, pointRadius:3, pointBackgroundColor:'#00288e' }
+    ]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ display:false }, tooltip:{ callbacks:{ label:(ctx)=>' '+ctx.parsed.y+'%' } } },
+      scales:{ y:{ min:0, max:100, ticks:{ font:{size:9}, callback:v=>v+'%' } }, x:{ ticks:{ font:{size:9} } } }
+    }
+  });
+}
+
+// ── PRIORITY ACTION TOP 5 (belum PM, paling lewat plan) ────
+function pmIspRenderPriority() {
+  const body = document.getElementById('pmisp-priorityBody');
+  if(!body) return;
+  const top5 = PMISP_FILTERED
+    .filter(r => r.statusPM !== 'Sudah Terlaksana' && r.sisaHari !== null && r.sisaHari < 0)
+    .sort((a,b) => a.sisaHari - b.sisaHari)
+    .slice(0,5);
+  if(!top5.length) { body.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-gray-400 text-[10px]">Tidak ada POP lewat plan</td></tr>`; return; }
+  body.innerHTML = top5.map((r,i) => `<tr class="hover:bg-[#f2f3ff] border-b border-gray-50">
+    <td class="p-2 text-[9px] text-gray-300">${i+1}</td>
+    <td class="p-2 text-[10px] max-w-[110px] overflow-hidden text-ellipsis whitespace-nowrap" title="${r.popName||''}">${r.popId||'—'}</td>
+    <td class="p-2 text-[10px] whitespace-nowrap">${r.namaKP||'—'}</td>
+    <td class="p-2 text-[10px] text-center font-bold text-red-600">${Math.abs(r.sisaHari)} hr</td>
+    <td class="p-2 text-center"><span class="px-1.5 py-0.5 rounded-full bg-red-100 text-red-700 text-[9px] font-bold">Terlambat</span></td>
+  </tr>`).join('');
+}
+
+// ── BREAKDOWN: PM by Kategori POP (pop_type, fallback katLokasi) ──
+function pmIspRenderJenisBreakdown() {
+  const el = document.getElementById('pmisp-jenisBreakdown');
+  if(!el) return;
+  const by = {};
+  PMISP_FILTERED.forEach(r => {
+    const k = r.popType || r.katLokasi || 'Lainnya';
+    by[k] = (by[k]||0) + 1;
+  });
+  const total = PMISP_FILTERED.length;
+  const sorted = Object.entries(by).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  if(!sorted.length) { el.innerHTML = '<p class="text-[10px] text-gray-400 text-center py-6">Tidak ada data</p>'; return; }
+  const max = sorted[0][1];
+  el.innerHTML = sorted.map(([k,v]) => `
+    <div>
+      <div class="flex justify-between text-[10px] mb-0.5"><span class="text-gray-600">${k}</span><span class="font-bold text-[#131b2e]">${v} (${total?Math.round(v/total*100):0}%)</span></div>
+      <div class="h-2 rounded-full bg-gray-100 overflow-hidden"><div class="h-full rounded-full bg-[#00288e]" style="width:${max?Math.round(v/max*100):0}%"></div></div>
+    </div>`).join('');
 }
 
 // ── MS DROPDOWN ───────────────────────────────────────────
@@ -4354,7 +4593,7 @@ function pmIspMsChange(key) {
   PIF[key] = [...menu.querySelectorAll('input:checked')].map(el => el.value);
   const lbl  = document.getElementById('ms-pi-'+key+'-label');
   const wrap = document.getElementById('ms-pi-'+key);
-  const labels = { kp:'KP', statusPM:'Status PM', statusLap:'Status Laporan', ketepatan:'Ketepatan', pmKe:'PM ke-' };
+  const labels = { bulan:'Bulan (Tgl Real)', kp:'KP (Regional)', pic:'PIC Laporan', statusPM:'Status PM', statusLap:'Status Laporan', ketepatan:'Ketepatan', pmKe:'PM ke-' };
   if(lbl)  lbl.textContent  = PIF[key].length ? labels[key]+' ('+PIF[key].length+')' : labels[key];
   if(wrap) wrap.classList.toggle('ms-active', PIF[key].length > 0);
   pmIspApplyFilter();
@@ -4365,7 +4604,9 @@ function pmIspApplyFilter() {
   PIF.search = (document.getElementById('pmisp-search')?.value || '').toLowerCase();
   const chk = (arr, val) => !arr.length || arr.includes(val);
   PMISP_FILTERED = PMISP_ROWS.filter(r => {
+    if(!chk(PIF.bulan,     pmIspRowMonthKey(r)))return false;
     if(!chk(PIF.kp,        r.namaKP))          return false;
+    if(!chk(PIF.pic,       r.picLaporan))      return false;
     if(!chk(PIF.statusPM,  r.statusPM))         return false;
     if(!chk(PIF.statusLap, r.statusLaporan))    return false;
     if(!chk(PIF.ketepatan, r.ketepatanWaktu))   return false;
@@ -4373,7 +4614,13 @@ function pmIspApplyFilter() {
     if(PIF.search && !(r.popId+r.popName+r.namaKP+r.statusPM).toLowerCase().includes(PIF.search)) return false;
     return true;
   });
-  pmIspRenderCharts();
+  pmIspRenderKPI();
+  pmIspRenderComplianceDonut();
+  pmIspRenderAgingDonut();
+  pmIspRenderKPChart();
+  pmIspRenderTrend();
+  pmIspRenderPriority();
+  pmIspRenderJenisBreakdown();
   pmIspUpdateLabel();
   pmIspPage = 1;
   pmIspRenderTable();
@@ -4383,77 +4630,10 @@ function pmIspResetFilter() {
   Object.keys(PIF).forEach(k => { PIF[k] = Array.isArray(PIF[k]) ? [] : ''; });
   document.querySelectorAll('[id^="ms-pi-"] input[type=checkbox]').forEach(cb => cb.checked = false);
   document.querySelectorAll('[id^="ms-pi-"]').forEach(w => w.classList.remove('ms-active'));
-  ['ms-pi-kp-label','ms-pi-statusPM-label','ms-pi-statusLap-label','ms-pi-ketepatan-label','ms-pi-pmKe-label']
-    .forEach((id,i)=>{ const el=document.getElementById(id); if(el) el.textContent=['KP','Status PM','Status Laporan','Ketepatan','PM ke-'][i]; });
+  const labels = { bulan:'Bulan (Tgl Real)', kp:'KP (Regional)', pic:'PIC Laporan', statusPM:'Status PM', statusLap:'Status Laporan', ketepatan:'Ketepatan', pmKe:'PM ke-' };
+  Object.keys(labels).forEach(k => { const el=document.getElementById('ms-pi-'+k+'-label'); if(el) el.textContent = labels[k]; });
   const si = document.getElementById('pmisp-search'); if(si) si.value = '';
   pmIspApplyFilter();
-}
-
-// ── RENDER CHARTS ─────────────────────────────────────────
-function pmIspRenderCharts() {
-  // Status PM per KP
-  const byKP = {};
-  PMISP_FILTERED.forEach(r => {
-    const kp = r.namaKP || '—';
-    if(!byKP[kp]) byKP[kp] = { sudah:0, belum:0 };
-    if(r.statusPM === 'Sudah Terlaksana') byKP[kp].sudah++;
-    else byKP[kp].belum++;
-  });
-  const kpSorted = Object.entries(byKP).sort((a,b)=>(b[1].sudah+b[1].belum)-(a[1].sudah+a[1].belum));
-  const kpLabels = kpSorted.map(e=>e[0]);
-
-  rebuildChart('pmisp-statusChart', {
-    type:'bar',
-    data:{ labels:kpLabels, datasets:[
-      {label:'Sudah Terlaksana', data:kpSorted.map(e=>e[1].sudah), backgroundColor:'#1D9E75', borderRadius:3, stack:'s'},
-      {label:'Belum Terlaksana', data:kpSorted.map(e=>e[1].belum), backgroundColor:'#e5e7eb', borderRadius:3, stack:'s'},
-    ]},
-    options:{responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{position:'top',labels:{font:{size:9},usePointStyle:true,pointStyle:'circle'}}},
-      scales:{
-        x:{stacked:true, grid:{display:false}, ticks:{font:{size:9}}},
-        y:{stacked:true, beginAtZero:true, ticks:{font:{size:9}}}
-      },
-      onClick(evt,els){
-        if(!els.length) return;
-        const kp = kpLabels[els[0].index];
-        PIF.kp = PIF.kp.includes(kp) ? PIF.kp.filter(k=>k!==kp) : [...PIF.kp, kp];
-        const menu=document.getElementById('ms-pi-kp-menu');
-        if(menu) menu.querySelectorAll('input').forEach(cb => { cb.checked = PIF.kp.includes(cb.value); });
-        const lbl=document.getElementById('ms-pi-kp-label');
-        if(lbl) lbl.textContent = PIF.kp.length ? 'KP ('+PIF.kp.length+')' : 'KP';
-        const wrap=document.getElementById('ms-pi-kp');
-        if(wrap) wrap.classList.toggle('ms-active', PIF.kp.length>0);
-        pmIspApplyFilter();
-      }
-    }
-  });
-
-  // Ketepatan waktu per KP
-  const byKPKet = {};
-  PMISP_FILTERED.filter(r=>r.statusPM==='Sudah Terlaksana').forEach(r => {
-    const kp = r.namaKP || '—';
-    if(!byKPKet[kp]) byKPKet[kp] = {maju:0, tepat:0, lewat:0};
-    if(r.ketepatanWaktu==='Maju dari Jadwal')   byKPKet[kp].maju++;
-    else if(r.ketepatanWaktu==='Tepat Waktu')    byKPKet[kp].tepat++;
-    else if(r.ketepatanWaktu==='Lewat dari Jadwal') byKPKet[kp].lewat++;
-  });
-  const ketSorted = Object.entries(byKPKet).sort((a,b)=>(b[1].maju+b[1].tepat+b[1].lewat)-(a[1].maju+a[1].tepat+a[1].lewat));
-  rebuildChart('pmisp-ketepatanChart', {
-    type:'bar',
-    data:{ labels:ketSorted.map(e=>e[0]), datasets:[
-      {label:'Maju',  data:ketSorted.map(e=>e[1].maju),  backgroundColor:'#22c55e', borderRadius:3, stack:'s'},
-      {label:'Tepat', data:ketSorted.map(e=>e[1].tepat), backgroundColor:'#60a5fa', borderRadius:3, stack:'s'},
-      {label:'Lewat', data:ketSorted.map(e=>e[1].lewat), backgroundColor:'#ef4444', borderRadius:3, stack:'s'},
-    ]},
-    options:{responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{
-        x:{stacked:true, grid:{display:false}, ticks:{font:{size:9}}},
-        y:{stacked:true, beginAtZero:true, ticks:{stepSize:1, font:{size:9}}}
-      }
-    }
-  });
 }
 
 // ── RENDER TABLE ──────────────────────────────────────────
@@ -4508,7 +4688,9 @@ function pmIspGoPage(p) {
 
 function pmIspUpdateLabel() {
   const parts = [];
+  if(PIF.bulan.length)     parts.push('Bulan('+PIF.bulan.length+')');
   if(PIF.kp.length)        parts.push('KP('+PIF.kp.length+')');
+  if(PIF.pic.length)       parts.push('PIC('+PIF.pic.length+')');
   if(PIF.statusPM.length)  parts.push('Status PM('+PIF.statusPM.length+')');
   if(PIF.statusLap.length) parts.push('Status Lap('+PIF.statusLap.length+')');
   if(PIF.ketepatan.length) parts.push('Ketepatan('+PIF.ketepatan.length+')');
@@ -4537,7 +4719,7 @@ function pmIspExportCSV() {
 let PMOSP_ROWS = [], PMOSP_FILTERED = [], pmOspPage = 1;
 let PMOSP_CACHE = null;
 const PMOSP_PAGE_SIZE = 15;
-const POF = { wilayah:[], status:[], aging:[], bulan:[], search:'' };
+const POF = { bulan:[], wilayah:[], pic:[], status:[], aging:[], search:'' };
 
 const PMOSP_AGING_COLOR = {
   'Cepat':         { badge:'bg-green-100 text-green-700', row:'' },
@@ -4557,7 +4739,6 @@ async function pmOspLoadData() {
   if(PMOSP_CACHE) {
     PMOSP_ROWS = PMOSP_CACHE.rows;
     pmOspBuildFilters(PMOSP_CACHE);
-    pmOspRenderResume(PMOSP_CACHE);
     pmOspApplyFilter();
     return;
   }
@@ -4571,18 +4752,23 @@ async function pmOspLoadData() {
     PMOSP_CACHE = json;
     PMOSP_ROWS  = json.rows || [];
     pmOspBuildFilters(json);
-    pmOspRenderResume(json);
     pmOspApplyFilter();
     loaded.pm_osp = true;
   } catch(err) {
     document.getElementById('pmosp-tblBody').innerHTML =
       `<tr><td colspan="11" class="p-8 text-center text-red-500 text-sm">&#9888; ${err.message}</td></tr>`;
-    const el = document.getElementById('pmosp-resume');
-    if(el) el.innerHTML = `<div class="p-4 text-red-500 text-sm text-center">&#9888; ${err.message}</div>`;
+    const el = document.getElementById('pmosp-kpi');
+    if(el) el.innerHTML = `<div class="col-span-full p-4 text-red-500 text-sm text-center">&#9888; ${err.message}</div>`;
   } finally {
     loading.pm_osp = false;
     if(icon) icon.classList.remove('spin');
   }
+}
+
+function pmOspClearCacheAndReload() {
+  PMOSP_CACHE = null;
+  loaded.pm_osp = false;
+  pmOspLoadData();
 }
 
 function pmOspBuildFilters(json) {
@@ -4595,57 +4781,220 @@ function pmOspBuildFilters(json) {
   build('ms-po-wilayah-menu', json.wilayahOptions || [], 'wilayah');
   build('ms-po-status-menu',  json.statusOptions  || [], 'status');
   build('ms-po-bulan-menu',   json.bulanOptions   || [], 'bulan');
+  // PIC — dari petugas, dihitung client-side
+  const picOpts = [...new Set(PMOSP_ROWS.map(r => r.petugas).filter(Boolean))].sort();
+  build('ms-po-pic-menu', picOpts, 'pic');
 }
 
-function pmOspRenderResume(json) {
-  const el = document.getElementById('pmosp-resume');
+// ── RENDER KPI (5 cards, ala referensi) ────────────────────
+function pmOspRenderKPI() {
+  const el = document.getElementById('pmosp-kpi');
   if(!el) return;
-  const pctClose = json.totalWO > 0 ? Math.round(json.close / json.totalWO * 100) : 0;
+  const rows = PMOSP_FILTERED;
+  const total    = rows.length;
+  const close    = rows.filter(r => r.status === 'CLOSE').length;
+  const progres  = rows.filter(r => r.status === 'PROGRES' || r.status === 'PROGRESS').length;
+  const open     = rows.filter(r => r.status === 'OPEN').length;
+  const compliance = total > 0 ? (close / total * 100) : 0;
+
   el.innerHTML = `
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-2">
-      <div class="rounded-xl border p-4 shadow-sm bg-white border-gray-200">
-        <p class="text-[9px] font-bold uppercase mb-1 text-gray-500">Total WO</p>
-        <p class="text-2xl font-black text-[#131b2e]">${json.totalWO.toLocaleString('id-ID')}</p>
-        <p class="text-[9px] mt-0.5 text-gray-400">Seluruh WO PM OSP</p>
-      </div>
-      <div class="rounded-xl border p-4 shadow-sm bg-green-50 border-green-200">
-        <p class="text-[9px] font-bold uppercase mb-1 text-green-600">Close</p>
-        <p class="text-2xl font-black text-green-700">${json.close.toLocaleString('id-ID')}</p>
-        <p class="text-[9px] mt-0.5 text-green-500">${pctClose}% dari total</p>
-      </div>
-      <div class="rounded-xl border p-4 shadow-sm bg-orange-50 border-orange-200">
-        <p class="text-[9px] font-bold uppercase mb-1 text-orange-600">Open</p>
-        <p class="text-2xl font-black text-orange-700">${json.open.toLocaleString('id-ID')}</p>
-        <p class="text-[9px] mt-0.5 text-orange-400">Belum dikerjakan</p>
-      </div>
-      <div class="rounded-xl border p-4 shadow-sm bg-blue-50 border-blue-200">
-        <p class="text-[9px] font-bold uppercase mb-1 text-blue-600">Progres</p>
-        <p class="text-2xl font-black text-blue-700">${json.progres.toLocaleString('id-ID')}</p>
-        <p class="text-[9px] mt-0.5 text-blue-400">Sedang dikerjakan</p>
-      </div>
+    <div class="rounded-xl border p-4 shadow-sm bg-white border-gray-200">
+      <p class="text-[9px] font-bold uppercase mb-1 text-gray-500 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">event_note</span>Total WO Plan</p>
+      <p class="text-2xl font-black text-[#131b2e]">${total.toLocaleString('id-ID')}</p>
+      <p class="text-[9px] mt-0.5 text-gray-400">WO</p>
     </div>
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
-      <div class="rounded-xl border p-3 bg-green-50 border-green-200 shadow-sm text-center">
-        <p class="text-[9px] font-bold text-green-600 uppercase mb-1">🟢 Cepat</p>
-        <p class="text-xl font-black text-green-700">${json.cepat}</p>
-        <p class="text-[9px] text-green-500">≤7 hari</p>
-      </div>
-      <div class="rounded-xl border p-3 bg-blue-50 border-blue-200 shadow-sm text-center">
-        <p class="text-[9px] font-bold text-blue-600 uppercase mb-1">🟡 Normal</p>
-        <p class="text-xl font-black text-blue-700">${json.normal}</p>
-        <p class="text-[9px] text-blue-500">8-14 hari</p>
-      </div>
-      <div class="rounded-xl border p-3 bg-red-50 border-red-200 shadow-sm text-center">
-        <p class="text-[9px] font-bold text-red-600 uppercase mb-1">🔴 Lambat</p>
-        <p class="text-xl font-black text-red-700">${json.lambat}</p>
-        <p class="text-[9px] text-red-500">&gt;14 hari</p>
-      </div>
-      <div class="rounded-xl border p-3 bg-gray-50 border-gray-200 shadow-sm text-center">
-        <p class="text-[9px] font-bold text-gray-500 uppercase mb-1">⚪ Belum</p>
-        <p class="text-xl font-black text-gray-600">${json.belumTersedia}</p>
-        <p class="text-[9px] text-gray-400">Dok belum ada</p>
-      </div>
+    <div class="rounded-xl border p-4 shadow-sm bg-green-50 border-green-200">
+      <p class="text-[9px] font-bold uppercase mb-1 text-green-600 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">check_circle</span>Close</p>
+      <p class="text-2xl font-black text-green-700">${close.toLocaleString('id-ID')}</p>
+      <p class="text-[9px] mt-0.5 text-green-500">${total?Math.round(close/total*100):0}%</p>
+    </div>
+    <div class="rounded-xl border p-4 shadow-sm bg-blue-50 border-blue-200">
+      <p class="text-[9px] font-bold uppercase mb-1 text-blue-600 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">autorenew</span>Progres</p>
+      <p class="text-2xl font-black text-blue-700">${progres.toLocaleString('id-ID')}</p>
+      <p class="text-[9px] mt-0.5 text-blue-400">${total?Math.round(progres/total*100):0}%</p>
+    </div>
+    <div class="rounded-xl border p-4 shadow-sm bg-red-50 border-red-200">
+      <p class="text-[9px] font-bold uppercase mb-1 text-red-600 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">cancel</span>Open</p>
+      <p class="text-2xl font-black text-red-700">${open.toLocaleString('id-ID')}</p>
+      <p class="text-[9px] mt-0.5 text-red-400">${total?Math.round(open/total*100):0}%</p>
+    </div>
+    <div class="rounded-xl border p-4 shadow-sm bg-blue-50 border-blue-200">
+      <p class="text-[9px] font-bold uppercase mb-1 text-blue-600 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">trending_up</span>PM Compliance</p>
+      <p class="text-2xl font-black text-blue-700">${compliance.toFixed(1)}%</p>
+      <p class="text-[9px] mt-0.5 text-blue-400">Target ≥ 80%</p>
     </div>`;
+}
+
+// ── DONUT: COMPLIANCE (Close / Progres / Open) ─────────────
+function pmOspRenderComplianceDonut() {
+  const rows = PMOSP_FILTERED;
+  const total = rows.length;
+  const close   = rows.filter(r => r.status === 'CLOSE').length;
+  const progres = rows.filter(r => r.status === 'PROGRES' || r.status === 'PROGRESS').length;
+  const open    = rows.filter(r => r.status === 'OPEN').length;
+
+  const totalEl = document.getElementById('pmosp-donutTotal');
+  if(totalEl) totalEl.textContent = total.toLocaleString('id-ID');
+
+  rebuildChart('pmosp-complianceDonut', {
+    type:'doughnut',
+    data:{ labels:['Close','Progres','Open'],
+      datasets:[{ data:[close,progres,open], backgroundColor:['#22c55e','#60a5fa','#ef4444'], borderWidth:2, borderColor:'#fff' }] },
+    options:{ responsive:true, maintainAspectRatio:false, cutout:'68%', plugins:{ legend:{ display:false },
+      tooltip:{ callbacks:{ label:(ctx)=>` ${ctx.label}: ${ctx.parsed} (${total?Math.round(ctx.parsed/total*100):0}%)` } } } }
+  });
+
+  const legEl = document.getElementById('pmosp-complianceLegend');
+  if(legEl) legEl.innerHTML = [
+    {l:'Close',   v:close,   c:'#22c55e'},
+    {l:'Progres', v:progres, c:'#60a5fa'},
+    {l:'Open',    v:open,    c:'#ef4444'},
+  ].map(it => `<div class="flex items-center justify-between text-[10px]"><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm inline-block" style="background:${it.c}"></span>${it.l}</span><span class="font-bold">${it.v} (${total?Math.round(it.v/total*100):0}%)</span></div>`).join('');
+}
+
+// ── DONUT: AGING LAPORAN (bucket hari, dari agingLaporan numeric) ──
+function pmOspRenderAgingDonut() {
+  const withDok = PMOSP_FILTERED.filter(r => r.agingLaporan !== null);
+  const b = { d1_7:0, d8_14:0, d15_30:0, dOver30:0 };
+  withDok.forEach(r => {
+    const d = r.agingLaporan;
+    if(d <= 7) b.d1_7++;
+    else if(d <= 14) b.d8_14++;
+    else if(d <= 30) b.d15_30++;
+    else b.dOver30++;
+  });
+  const total = withDok.length;
+
+  const totalEl = document.getElementById('pmosp-agingTotal');
+  if(totalEl) totalEl.textContent = total.toLocaleString('id-ID');
+
+  rebuildChart('pmosp-agingDonut', {
+    type:'doughnut',
+    data:{ labels:['1-7 hari','8-14 hari','15-30 hari','>30 hari'],
+      datasets:[{ data:[b.d1_7,b.d8_14,b.d15_30,b.dOver30], backgroundColor:['#22c55e','#eab308','#f97316','#ef4444'], borderWidth:2, borderColor:'#fff' }] },
+    options:{ responsive:true, maintainAspectRatio:false, cutout:'68%', plugins:{ legend:{ display:false },
+      tooltip:{ callbacks:{ label:(ctx)=>` ${ctx.label}: ${ctx.parsed} (${total?Math.round(ctx.parsed/total*100):0}%)` } } } }
+  });
+
+  const legEl = document.getElementById('pmosp-agingLegend');
+  if(legEl) legEl.innerHTML = [
+    {l:'1-7 hari',   v:b.d1_7,    c:'#22c55e'},
+    {l:'8-14 hari',  v:b.d8_14,   c:'#eab308'},
+    {l:'15-30 hari', v:b.d15_30,  c:'#f97316'},
+    {l:'>30 hari',   v:b.dOver30, c:'#ef4444'},
+  ].map(it => `<div class="flex items-center justify-between text-[10px]"><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm inline-block" style="background:${it.c}"></span>${it.l}</span><span class="font-bold">${it.v} (${total?Math.round(it.v/total*100):0}%)</span></div>`).join('');
+}
+
+// ── COMBO: COMPLIANCE PER WILAYAH (bar total + line compliance%) ──
+function pmOspRenderWilayahChart() {
+  const byW = {};
+  PMOSP_FILTERED.forEach(r => {
+    const w = r.wilayah || '—';
+    if(!byW[w]) byW[w] = { total:0, close:0 };
+    byW[w].total++;
+    if(r.status === 'CLOSE') byW[w].close++;
+  });
+  const sorted = Object.entries(byW).sort((a,b)=>b[1].total-a[1].total);
+  const labels = sorted.map(e=>e[0]);
+  rebuildChart('pmosp-wilayahChart', {
+    data:{ labels, datasets:[
+      { type:'bar',  label:'Total WO',  data:sorted.map(e=>e[1].total), backgroundColor:'rgba(0,40,142,0.75)', borderRadius:3, yAxisID:'y' },
+      { type:'line', label:'Compliance (%)', data:sorted.map(e=>e[1].total?Math.round(e[1].close/e[1].total*100):0), borderColor:'#1D9E75', backgroundColor:'transparent', borderWidth:2, pointRadius:4, pointBackgroundColor:'#1D9E75', tension:0.2, yAxisID:'y2' },
+    ]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ position:'top', labels:{ font:{size:9}, usePointStyle:true, pointStyle:'circle' } } },
+      scales:{
+        x:{ grid:{ display:false }, ticks:{ font:{size:9} } },
+        y:{ beginAtZero:true, ticks:{ font:{size:9} } },
+        y2:{ position:'right', beginAtZero:true, max:100, grid:{ display:false }, ticks:{ font:{size:9}, callback:v=>v+'%' } },
+      },
+      onClick(evt,els){
+        if(!els.length) return;
+        const w = labels[els[0].index];
+        POF.wilayah = POF.wilayah.includes(w) ? POF.wilayah.filter(x=>x!==w) : [...POF.wilayah, w];
+        const menu=document.getElementById('ms-po-wilayah-menu');
+        if(menu) menu.querySelectorAll('input').forEach(cb => { cb.checked = POF.wilayah.includes(cb.value); });
+        const lbl=document.getElementById('ms-po-wilayah-label');
+        if(lbl) lbl.textContent = POF.wilayah.length ? 'Wilayah ('+POF.wilayah.length+')' : 'Wilayah (Regional)';
+        const wrap=document.getElementById('ms-po-wilayah');
+        if(wrap) wrap.classList.toggle('ms-active', POF.wilayah.length>0);
+        pmOspApplyFilter();
+      }
+    }
+  });
+}
+
+// ── TREND: PM COMPLIANCE (%) PER BULAN (field Bulan/Tahun) ──
+function pmOspRenderTrend() {
+  const byM = {};
+  PMOSP_ROWS.forEach(r => {
+    if(!r.bulan) return;
+    const k = (r.tahun||'') + '-' + r.bulan;
+    if(!byM[k]) byM[k] = { total:0, close:0, tahun:r.tahun||'', bulan:r.bulan };
+    byM[k].total++;
+    if(r.status === 'CLOSE') byM[k].close++;
+  });
+  const bulanOrder = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const keys = Object.keys(byM).sort((a,b) => {
+    const A = byM[a], B = byM[b];
+    if(A.tahun !== B.tahun) return String(A.tahun).localeCompare(String(B.tahun));
+    return bulanOrder.indexOf(A.bulan) - bulanOrder.indexOf(B.bulan);
+  });
+  rebuildChart('pmosp-trendChart', {
+    type:'line',
+    data:{ labels:keys.map(k=>byM[k].bulan+(byM[k].tahun?' '+byM[k].tahun:'')), datasets:[
+      { label:'Compliance (%)', data:keys.map(k=>byM[k].total?Math.round(byM[k].close/byM[k].total*100):0), borderColor:'#00288e', backgroundColor:'rgba(0,40,142,0.08)', fill:true, tension:0.35, pointRadius:3, pointBackgroundColor:'#00288e' }
+    ]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ display:false }, tooltip:{ callbacks:{ label:(ctx)=>' '+ctx.parsed.y+'%' } } },
+      scales:{ y:{ min:0, max:100, ticks:{ font:{size:9}, callback:v=>v+'%' } }, x:{ ticks:{ font:{size:9} } } }
+    }
+  });
+}
+
+// ── PRIORITY ACTION TOP 5 (Open/Progres, tertua sejak Tgl PM) ──
+function pmOspRenderPriority() {
+  const body = document.getElementById('pmosp-priorityBody');
+  if(!body) return;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const outstanding = PMOSP_FILTERED
+    .filter(r => (r.status === 'OPEN' || r.status === 'PROGRES' || r.status === 'PROGRESS') && r.tglPM)
+    .map(r => {
+      const d = new Date(r.tglPM);
+      const umur = isNaN(d) ? null : Math.floor((today - d) / 86400000);
+      return { ...r, umur };
+    })
+    .filter(r => r.umur !== null)
+    .sort((a,b) => b.umur - a.umur)
+    .slice(0,5);
+  if(!outstanding.length) { body.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-gray-400 text-[10px]">Tidak ada WO outstanding</td></tr>`; return; }
+  body.innerHTML = outstanding.map((r,i) => `<tr class="hover:bg-[#f2f3ff] border-b border-gray-50">
+    <td class="p-2 text-[9px] text-gray-300">${i+1}</td>
+    <td class="p-2 text-[10px] font-mono whitespace-nowrap">${r.noWO||'—'}</td>
+    <td class="p-2 text-[10px] whitespace-nowrap">${r.wilayah||'—'}</td>
+    <td class="p-2 text-[10px] text-center font-bold text-red-600">${r.umur} hr</td>
+    <td class="p-2 text-center"><span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold ${PMOSP_STATUS_COLOR[r.status]||'bg-gray-100 text-gray-500'}">${r.status||'—'}</span></td>
+  </tr>`).join('');
+}
+
+// ── BREAKDOWN: PM by Tim Pelaksana (substitusi Jenis Pekerjaan) ──
+function pmOspRenderJenisBreakdown() {
+  const el = document.getElementById('pmosp-jenisBreakdown');
+  if(!el) return;
+  const by = {};
+  PMOSP_FILTERED.forEach(r => {
+    const k = r.tim || r.serpo || 'Lainnya';
+    by[k] = (by[k]||0) + 1;
+  });
+  const total = PMOSP_FILTERED.length;
+  const sorted = Object.entries(by).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  if(!sorted.length) { el.innerHTML = '<p class="text-[10px] text-gray-400 text-center py-6">Tidak ada data</p>'; return; }
+  const max = sorted[0][1];
+  el.innerHTML = sorted.map(([k,v]) => `
+    <div>
+      <div class="flex justify-between text-[10px] mb-0.5"><span class="text-gray-600">${k}</span><span class="font-bold text-[#131b2e]">${v} (${total?Math.round(v/total*100):0}%)</span></div>
+      <div class="h-2 rounded-full bg-gray-100 overflow-hidden"><div class="h-full rounded-full bg-[#00288e]" style="width:${max?Math.round(v/max*100):0}%"></div></div>
+    </div>`).join('');
 }
 
 function pmOspToggleMs(key) {
@@ -4662,7 +5011,7 @@ function pmOspMsChange(key) {
   POF[key] = [...menu.querySelectorAll('input:checked')].map(el => el.value);
   const lbl  = document.getElementById('ms-po-'+key+'-label');
   const wrap = document.getElementById('ms-po-'+key);
-  const labels = { wilayah:'Wilayah', status:'Status', aging:'Aging', bulan:'Bulan' };
+  const labels = { bulan:'Bulan', wilayah:'Wilayah (Regional)', pic:'Petugas (PIC)', status:'Status', aging:'Aging' };
   if(lbl)  lbl.textContent  = POF[key].length ? labels[key]+' ('+POF[key].length+')' : labels[key];
   if(wrap) wrap.classList.toggle('ms-active', POF[key].length > 0);
   pmOspApplyFilter();
@@ -4672,14 +5021,21 @@ function pmOspApplyFilter() {
   POF.search = (document.getElementById('pmosp-search')?.value || '').toLowerCase();
   const chk = (arr, val) => !arr.length || arr.includes(val);
   PMOSP_FILTERED = PMOSP_ROWS.filter(r => {
+    if(!chk(POF.bulan,   r.bulan))        return false;
     if(!chk(POF.wilayah, r.wilayah))      return false;
+    if(!chk(POF.pic,     r.petugas))      return false;
     if(!chk(POF.status,  r.status))       return false;
     if(!chk(POF.aging,   r.agingStatus))  return false;
-    if(!chk(POF.bulan,   r.bulan))        return false;
     if(POF.search && !(r.noWO+r.pop+r.title+r.wilayah).toLowerCase().includes(POF.search)) return false;
     return true;
   });
-  pmOspRenderCharts();
+  pmOspRenderKPI();
+  pmOspRenderComplianceDonut();
+  pmOspRenderAgingDonut();
+  pmOspRenderWilayahChart();
+  pmOspRenderTrend();
+  pmOspRenderPriority();
+  pmOspRenderJenisBreakdown();
   pmOspUpdateLabel();
   pmOspPage = 1;
   pmOspRenderTable();
@@ -4689,79 +5045,10 @@ function pmOspResetFilter() {
   Object.keys(POF).forEach(k => { POF[k] = Array.isArray(POF[k]) ? [] : ''; });
   document.querySelectorAll('[id^="ms-po-"] input[type=checkbox]').forEach(cb => cb.checked = false);
   document.querySelectorAll('[id^="ms-po-"]').forEach(w => w.classList.remove('ms-active'));
-  ['ms-po-wilayah-label','ms-po-status-label','ms-po-aging-label','ms-po-bulan-label']
-    .forEach((id,i)=>{ const el=document.getElementById(id); if(el) el.textContent=['Wilayah','Status','Aging','Bulan'][i]; });
+  const labels = { bulan:'Bulan', wilayah:'Wilayah (Regional)', pic:'Petugas (PIC)', status:'Status', aging:'Aging' };
+  Object.keys(labels).forEach(k => { const el=document.getElementById('ms-po-'+k+'-label'); if(el) el.textContent = labels[k]; });
   const si = document.getElementById('pmosp-search'); if(si) si.value = '';
   pmOspApplyFilter();
-}
-
-function pmOspRenderCharts() {
-  // Status per wilayah
-  const byW = {};
-  PMOSP_FILTERED.forEach(r => {
-    const w = r.wilayah || '—';
-    if(!byW[w]) byW[w] = { close:0, open:0, progres:0 };
-    if(r.status==='CLOSE')   byW[w].close++;
-    else if(r.status==='OPEN')    byW[w].open++;
-    else if(r.status==='PROGRES') byW[w].progres++;
-  });
-  const wSorted = Object.entries(byW).sort((a,b)=>(b[1].close+b[1].open+b[1].progres)-(a[1].close+a[1].open+a[1].progres));
-  const wLabels = wSorted.map(e=>e[0]);
-  rebuildChart('pmosp-statusChart', {
-    type:'bar',
-    data:{ labels:wLabels, datasets:[
-      {label:'Close',   data:wSorted.map(e=>e[1].close),   backgroundColor:'#1D9E75', borderRadius:3, stack:'s'},
-      {label:'Progres', data:wSorted.map(e=>e[1].progres), backgroundColor:'#60a5fa', borderRadius:3, stack:'s'},
-      {label:'Open',    data:wSorted.map(e=>e[1].open),    backgroundColor:'#f97316', borderRadius:3, stack:'s'},
-    ]},
-    options:{responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{position:'top',labels:{font:{size:9},usePointStyle:true,pointStyle:'circle'}}},
-      scales:{
-        x:{stacked:true, grid:{display:false}, ticks:{font:{size:9}}},
-        y:{stacked:true, beginAtZero:true, ticks:{font:{size:9}}}
-      },
-      onClick(evt,els){
-        if(!els.length) return;
-        const w = wLabels[els[0].index];
-        POF.wilayah = POF.wilayah.includes(w) ? POF.wilayah.filter(x=>x!==w) : [...POF.wilayah, w];
-        const menu=document.getElementById('ms-po-wilayah-menu');
-        if(menu) menu.querySelectorAll('input').forEach(cb => { cb.checked = POF.wilayah.includes(cb.value); });
-        const lbl=document.getElementById('ms-po-wilayah-label');
-        if(lbl) lbl.textContent = POF.wilayah.length ? 'Wilayah ('+POF.wilayah.length+')' : 'Wilayah';
-        const wrap=document.getElementById('ms-po-wilayah');
-        if(wrap) wrap.classList.toggle('ms-active', POF.wilayah.length>0);
-        pmOspApplyFilter();
-      }
-    }
-  });
-
-  // Aging laporan per wilayah
-  const byWA = {};
-  PMOSP_FILTERED.forEach(r => {
-    const w = r.wilayah || '—';
-    if(!byWA[w]) byWA[w] = { cepat:0, normal:0, lambat:0, belum:0 };
-    if(r.agingStatus==='Cepat')           byWA[w].cepat++;
-    else if(r.agingStatus==='Normal')     byWA[w].normal++;
-    else if(r.agingStatus==='Lambat')     byWA[w].lambat++;
-    else                                   byWA[w].belum++;
-  });
-  const waSorted = Object.entries(byWA).sort((a,b)=>(b[1].cepat+b[1].normal+b[1].lambat+b[1].belum)-(a[1].cepat+a[1].normal+a[1].lambat+a[1].belum));
-  rebuildChart('pmosp-agingChart', {
-    type:'bar',
-    data:{ labels:waSorted.map(e=>e[0]), datasets:[
-      {label:'Cepat',  data:waSorted.map(e=>e[1].cepat),  backgroundColor:'#22c55e', borderRadius:3, stack:'s'},
-      {label:'Normal', data:waSorted.map(e=>e[1].normal), backgroundColor:'#60a5fa', borderRadius:3, stack:'s'},
-      {label:'Lambat', data:waSorted.map(e=>e[1].lambat), backgroundColor:'#ef4444', borderRadius:3, stack:'s'},
-      {label:'Belum',  data:waSorted.map(e=>e[1].belum),  backgroundColor:'#e5e7eb', borderRadius:3, stack:'s'},
-    ]},
-    options:{responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{
-        x:{stacked:true, grid:{display:false}, ticks:{font:{size:9}}},
-        y:{stacked:true, beginAtZero:true, ticks:{font:{size:9}}}
-      }
-    }
-  });
 }
 
 function pmOspRenderTable() {
@@ -4805,11 +5092,12 @@ function pmOspGoPage(p) {
 
 function pmOspUpdateLabel() {
   const parts = [];
-  if(POF.wilayah.length) parts.push('Wilayah('+POF.wilayah.length+')');
-  if(POF.status.length)  parts.push('Status('+POF.status.length+')');
-  if(POF.aging.length)   parts.push('Aging('+POF.aging.length+')');
-  if(POF.bulan.length)   parts.push('Bulan('+POF.bulan.length+')');
-  if(POF.search)         parts.push('"'+POF.search+'"');
+  if(POF.bulan.length)    parts.push('Bulan('+POF.bulan.length+')');
+  if(POF.wilayah.length)  parts.push('Wilayah('+POF.wilayah.length+')');
+  if(POF.pic.length)      parts.push('PIC('+POF.pic.length+')');
+  if(POF.status.length)   parts.push('Status('+POF.status.length+')');
+  if(POF.aging.length)    parts.push('Aging('+POF.aging.length+')');
+  if(POF.search)          parts.push('"'+POF.search+'"');
   const el = document.getElementById('pmosp-filterLabel');
   if(el) el.textContent = parts.length ? 'Filter: '+parts.join(' · ') : 'Menampilkan semua data';
 }
@@ -4825,11 +5113,22 @@ function pmOspExportCSV() {
   a.click();
 }
 
+
 // ── TAB TOGGLE PM ISP / OSP ───────────────────────────────
+let PM_ACTIVE_TAB = 'isp';
+
+function pmActiveResetFilter() {
+  if(PM_ACTIVE_TAB === 'isp') pmIspResetFilter(); else pmOspResetFilter();
+}
+function pmActiveClearCacheAndReload() {
+  if(PM_ACTIVE_TAB === 'isp') pmIspClearCacheAndReload(); else pmOspClearCacheAndReload();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.pm-tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const tab = btn.dataset.tab;
+      PM_ACTIVE_TAB = tab;
       document.querySelectorAll('.pm-tab-btn').forEach(b => {
         b.className = 'pm-tab-btn px-3 py-1.5 text-[10px] font-bold rounded ' +
           (b===btn ? 'bg-[#00288e] text-white' : 'text-gray-500 hover:bg-white');
