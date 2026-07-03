@@ -816,8 +816,8 @@ html,body   { height:100%; overflow:hidden; }
         <div class="p-4 grid grid-cols-2 lg:grid-cols-5 gap-3" id="doktek-resume"></div>
       </section>
 
-      <!-- Aging Kendala + Breakdown Wilayah + Analisis Penyebab (sejajar) -->
-      <section class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <!-- Aging Kendala + Breakdown Wilayah + Breakdown PTL + Analisis Penyebab (sejajar) -->
+      <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
 
         <!-- Aging Kendala -->
         <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
@@ -849,6 +849,15 @@ html,body   { height:100%; overflow:hidden; }
           <div class="p-4">
             <div style="position:relative;height:260px"><canvas id="doktek-kpChart"></canvas></div>
           </div>
+        </div>
+
+        <!-- Breakdown PTL -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+          <div class="px-4 py-3 border-b border-gray-100">
+            <p class="text-sm font-bold text-[#131b2e]">Breakdown per PTL</p>
+            <p class="text-[10px] text-gray-400">Top 10 PTL kendala terbanyak · klik untuk filter.</p>
+          </div>
+          <div id="doktek-ptlBreakdown" class="p-4 space-y-2.5 max-h-[300px] overflow-y-auto custom-scrollbar"></div>
         </div>
 
         <!-- Analisis Penyebab -->
@@ -899,6 +908,12 @@ html,body   { height:100%; overflow:hidden; }
               <span id="ms-d-kp-label">Wilayah (KP)</span><span class="material-symbols-outlined text-[12px]">expand_more</span>
             </button>
             <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-d-kp-menu"></div>
+          </div>
+          <div class="ms-wrap relative" id="ms-d-ptl">
+            <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="doktekToggleMs('ptl')">
+              <span id="ms-d-ptl-label">PTL</span><span class="material-symbols-outlined text-[12px]">expand_more</span>
+            </button>
+            <div class="ms-menu hidden absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[180px] max-h-48 overflow-y-auto" id="ms-d-ptl-menu"></div>
           </div>
           <div class="ms-wrap relative" id="ms-d-keterangan">
             <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1 hover:border-[#00288e]" onclick="doktekToggleMs('keterangan')">
@@ -3707,7 +3722,7 @@ let DOKTEK_ROWS = [], DOKTEK_FILTERED = [], doktekPage = 1;
 let DOKTEK_TAB = 'backlog';
 const DOKTEK_CACHE = {}; // cache per tab: { backlog: {rows, json}, berjalan: {...} }
 const DOKTEK_PAGE_SIZE = 15;
-const DF = { kp:[], keterangan:[], sla:[], tahun:[], search:'' };
+const DF = { kp:[], ptl:[], keterangan:[], sla:[], tahun:[], search:'' };
 const SLA_COLOR = {
   'Normal':    { row:'',            badge:'bg-green-100 text-green-700',  text:'text-green-600' },
   'Perhatian': { row:'bg-orange-50/40', badge:'bg-orange-100 text-orange-700', text:'text-orange-500' },
@@ -3788,6 +3803,9 @@ function doktekBuildFilters(json) {
   const kpMenu = document.getElementById('ms-d-kp-menu');
   if(kpMenu) kpMenu.innerHTML = (json.kpOptions||[]).map(v =>
     `<label class="ms-item"><input type="checkbox" value="${v}" onchange="doktekMsChange('kp')">${v}</label>`).join('');
+  const ptlMenu = document.getElementById('ms-d-ptl-menu');
+  if(ptlMenu) ptlMenu.innerHTML = (json.ptlOptions||[]).map(v =>
+    `<label class="ms-item"><input type="checkbox" value="${v}" onchange="doktekMsChange('ptl')">${v||'(kosong)'}</label>`).join('');
   const ketMenu = document.getElementById('ms-d-keterangan-menu');
   const excludeKet = ['TERINPUT','EXCLUDE','ON PROGRESS','ONPROGRESS'];
   if(ketMenu) ketMenu.innerHTML = (json.keteranganOptions||[])
@@ -3800,7 +3818,7 @@ function doktekBuildFilters(json) {
 
 function doktekCompute(rows) {
   var slaNormal=0, slaPerhatian=0, slaKritis=0, slaNull=0;
-  var byKet={}, byKP={};
+  var byKet={}, byKP={}, byPTL={};
   var agingSum=0, agingCount=0;
   rows.forEach(function(r){
     if(r.slaStatus==='Normal')         { slaNormal++;    agingSum += r.aging; agingCount++; }
@@ -3811,13 +3829,15 @@ function doktekCompute(rows) {
     byKet[ket] = (byKet[ket]||0) + 1;
     var kp = r.namaKP || '—';
     byKP[kp] = (byKP[kp]||0) + 1;
+    var ptl = r.namaPTL || '(kosong)';
+    byPTL[ptl] = (byPTL[ptl]||0) + 1;
   });
   var validTotal = slaNormal + slaPerhatian + slaKritis;
   var slaCompliance = validTotal ? Math.round((slaNormal+slaPerhatian)/validTotal*100) : null;
   var avgAging = agingCount ? Math.round(agingSum/agingCount) : null;
   return {
     total: rows.length, slaNormal:slaNormal, slaPerhatian:slaPerhatian, slaKritis:slaKritis, slaNull:slaNull,
-    byKet:byKet, byKP:byKP, avgAging:avgAging, agingCount:agingCount, slaCompliance:slaCompliance
+    byKet:byKet, byKP:byKP, byPTL:byPTL, avgAging:avgAging, agingCount:agingCount, slaCompliance:slaCompliance
   };
 }
 
@@ -3882,6 +3902,32 @@ function doktekRenderPareto(agg) {
   }).join('');
 }
 
+function doktekRenderPTL(agg) {
+  var el = document.getElementById('doktek-ptlBreakdown');
+  if(!el) return;
+  var entries = Object.entries(agg.byPTL).sort(function(a,b){ return b[1]-a[1]; }).slice(0,10);
+  if(!entries.length){ el.innerHTML = '<p class="text-[10px] text-gray-400">Tidak ada data</p>'; return; }
+  var max = entries[0][1] || 1;
+  el.innerHTML = entries.map(function(e){
+    var pct = Math.round(e[1]/max*100);
+    var isOn = DF.ptl.includes(e[0]);
+    return '<div class="cf rounded-lg '+(isOn?'bg-[#eaedff] outline outline-2 outline-[#00288e] p-1.5':'')+'" onclick="doktekTogglePTL(\''+e[0].replace(/'/g,"\\'")+'\')">'
+      +'<div class="flex justify-between mb-0.5"><span class="text-[10px] font-medium truncate" title="'+e[0]+'">'+e[0]+'</span><span class="text-[10px] font-bold text-[#00288e]">'+e[1]+'</span></div>'
+      +'<div class="w-full bg-gray-100 rounded-full h-1.5"><div class="h-1.5 rounded-full bg-[#8B5CF6]" style="width:'+pct+'%"></div></div></div>';
+  }).join('');
+}
+
+function doktekTogglePTL(ptl) {
+  DF.ptl = DF.ptl.includes(ptl) ? DF.ptl.filter(function(p){return p!==ptl;}) : [...DF.ptl, ptl];
+  var menu = document.getElementById('ms-d-ptl-menu');
+  if(menu) menu.querySelectorAll('input').forEach(function(cb){ cb.checked = DF.ptl.includes(cb.value); });
+  var lbl = document.getElementById('ms-d-ptl-label');
+  if(lbl) lbl.textContent = DF.ptl.length ? 'PTL ('+DF.ptl.length+')' : 'PTL';
+  var wrap = document.getElementById('ms-d-ptl');
+  if(wrap) wrap.classList.toggle('ms-active', DF.ptl.length > 0);
+  doktekApplyFilter();
+}
+
 function doktekRenderPriority(rows) {
   var tbody = document.getElementById('doktek-priorityBody');
   if(!tbody) return;
@@ -3893,7 +3939,7 @@ function doktekRenderPriority(rows) {
     var badge = '<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold '+sc.badge+'">'+(r.slaStatus||'—')+'</span>';
     return '<tr class="hover:bg-[#f2f3ff] border-b border-gray-50">'
       +'<td class="p-2.5 text-xs font-mono">'+(r.service_id||'—')+'</td>'
-      +'<td class="p-2.5 text-xs font-semibold text-[#00288e]">'+(r.pa_number||'—')+'</td>'
+      +'<td class="p-2.5 text-xs font-semibold text-[#00288e]" title="'+(r.pa_numberSource?'via '+r.pa_numberSource:'')+'">'+(r.pa_number||'—')+'</td>'
       +'<td class="p-2.5 text-xs whitespace-nowrap">'+(r.namaKP||'—')+'</td>'
       +'<td class="p-2.5 text-xs max-w-[160px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+(r.customer||'')+(r.customerSource?' (via '+r.customerSource+')':'')+'">'+(r.customer||'—')+'</td>'
       +'<td class="p-2.5 text-xs whitespace-nowrap">'+(r.namaPTL||'—')+'</td>'
@@ -3919,7 +3965,7 @@ function doktekMsChange(key) {
   DF[key] = [...menu.querySelectorAll('input:checked')].map(el => el.value);
   const lbl  = document.getElementById('ms-d-'+key+'-label');
   const wrap = document.getElementById('ms-d-'+key);
-  const labels = { kp:'Wilayah (KP)', keterangan:'Keterangan', sla:'SLA', tahun:'Tahun' };
+  const labels = { kp:'Wilayah (KP)', ptl:'PTL', keterangan:'Keterangan', sla:'SLA', tahun:'Tahun' };
   if(lbl)  lbl.textContent  = DF[key].length ? labels[key]+' ('+DF[key].length+')' : labels[key];
   if(wrap) wrap.classList.toggle('ms-active', DF[key].length > 0);
   doktekApplyFilter();
@@ -3941,6 +3987,7 @@ function doktekApplyFilter() {
   const chk = (arr, val) => !arr.length || arr.includes(val);
   DOKTEK_FILTERED = DOKTEK_ROWS.filter(r => {
     if(!chk(DF.kp,         r.namaKP))    return false;
+    if(!chk(DF.ptl,        r.namaPTL))   return false;
     if(!chk(DF.keterangan, r.acluan))    return false;
     if(!chk(DF.sla,        r.slaStatus)) return false;
     if(!chk(DF.tahun,      r.tahun))     return false;
@@ -3952,6 +3999,7 @@ function doktekApplyFilter() {
   doktekRenderResume(agg);
   doktekRenderAgingDonut(agg);
   doktekRenderPareto(agg);
+  doktekRenderPTL(agg);
   doktekRenderPriority(DOKTEK_FILTERED);
   doktekRenderChart();
   doktekUpdateLabel();
@@ -3998,9 +4046,9 @@ function doktekResetFilter() {
   Object.keys(DF).forEach(k => { DF[k] = Array.isArray(DF[k]) ? [] : ''; });
   document.querySelectorAll('[id^="ms-d-"] input[type=checkbox]').forEach(cb => cb.checked = false);
   document.querySelectorAll('[id^="ms-d-"]').forEach(w => w.classList.remove('ms-active'));
-  ['ms-d-kp-label','ms-d-keterangan-label','ms-d-sla-label','ms-d-tahun-label'].forEach((id,i) => {
+  ['ms-d-kp-label','ms-d-ptl-label','ms-d-keterangan-label','ms-d-sla-label','ms-d-tahun-label'].forEach((id,i) => {
     const el = document.getElementById(id);
-    if(el) el.textContent = ['Wilayah (KP)','Keterangan','SLA','Tahun'][i];
+    if(el) el.textContent = ['Wilayah (KP)','PTL','Keterangan','SLA','Tahun'][i];
   });
   const si = document.getElementById('doktek-search'); if(si) si.value = '';
   doktekApplyFilter();
@@ -4070,7 +4118,7 @@ function doktekRenderTable() {
     return `<tr class="hover:bg-[#f2f3ff] transition-colors border-b border-gray-50 ${sc.row}">
       <td class="p-3 text-[9px] text-gray-300">${start+i+1}</td>
       <td class="p-3 text-xs font-mono">${r.service_id||'—'}</td>
-      <td class="p-3 text-xs font-semibold text-[#00288e]">${r.pa_number||'—'}</td>
+      <td class="p-3 text-xs font-semibold text-[#00288e]" title="${r.pa_numberSource?'via '+r.pa_numberSource:''}">${r.pa_number||'—'}</td>
       <td class="p-3 text-xs max-w-[180px] overflow-hidden text-ellipsis whitespace-nowrap" title="${custTitle}">${r.customer||'—'}</td>
       <td class="p-3 text-xs whitespace-nowrap">${r.namaKP||'—'}</td>
       <td class="p-3 text-xs whitespace-nowrap">${r.namaPTL||'—'}</td>
@@ -4095,6 +4143,7 @@ function doktekGoPage(p) {
 function doktekUpdateLabel() {
   const parts = [];
   if(DF.kp.length)         parts.push('Wilayah('+DF.kp.length+')');
+  if(DF.ptl.length)        parts.push('PTL('+DF.ptl.length+')');
   if(DF.keterangan.length) parts.push('Ket('+DF.keterangan.length+')');
   if(DF.sla.length)        parts.push('SLA: '+DF.sla.join(', '));
   if(DF.tahun.length)      parts.push('Tahun('+DF.tahun.length+')');
