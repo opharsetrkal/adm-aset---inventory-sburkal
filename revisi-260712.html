@@ -5157,8 +5157,8 @@ let HAR_SPR_ROWS=[],HAR_SPR_FILTERED=[],harSprPage=1;
 let HAR_SPP_ROWS=[],HAR_SPP_FILTERED=[],harSppPage=1;
 let HAR_SPR_CACHE=null,HAR_SPP_CACHE=null;
 const HAR_PAGE_SIZE=15;
-const HSPRF={statusPengadaan:[],statusPenagihan:[],mitra:[],peruntukan:[],search:''};
-const HSPPF={status:[],tipeSPP:[],metodePengadaan:[],jenisPengadaan:[],kategoriPekerjaan:[],kodeAnggaran:[],coa:[],search:''};
+const HSPRF={statusPengadaan:[],statusPenagihan:[],mitra:[],peruntukan:[],search:'',cardFilter:''};
+const HSPPF={status:[],tipeSPP:[],metodePengadaan:[],jenisPengadaan:[],kategoriPekerjaan:[],kodeAnggaran:[],coa:[],search:'',cardFilter:''};
 let HSPR_SORT={col:'tglRilisSPR',dir:-1};
 let HSPP_SORT={col:'tglRilisSP2K',dir:-1};
 
@@ -5296,17 +5296,25 @@ function harSprRenderExec(agg){
   var pctOut=agg.totalSPR?Math.round(agg.outstandingCount/agg.totalSPR*100):0;
   var pctCrit=agg.totalSPR?Math.round(agg.aging45Count/agg.totalSPR*100):0;
   var pctOutVal=agg.totalNominal?Math.round(agg.outstandingValue/agg.totalNominal*100):0;
+  var cf=HSPRF.cardFilter;
   var cards=[
-    {icon:'description',label:'Total SPR',sub:'Pekerjaan',val:(agg.totalSPR||0).toLocaleString('id-ID'),caption:'100% dari total',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600'},
-    {icon:'payments',label:'Total Nilai',sub:'',val:fmtRp(agg.totalNominal||0),caption:'100% dari total',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600'},
-    {icon:'history_toggle_off',label:'Outstanding',sub:'Pekerjaan',val:(agg.outstandingCount||0).toLocaleString('id-ID'),caption:pctOut+'% dari total',cls:'bg-orange-50 border-orange-200 text-orange-700',iconCls:'bg-orange-100 text-orange-600'},
-    {icon:'warning',label:'Critical SLA (>45 hari)',sub:'Pekerjaan',val:(agg.aging45Count||0).toLocaleString('id-ID'),caption:pctCrit+'% dari total',cls:'bg-red-50 border-red-200 text-red-700',iconCls:'bg-red-100 text-red-600'},
-    {icon:'account_balance_wallet',label:'Outstanding Value',sub:'',val:fmtRp(agg.outstandingValue||0),caption:pctOutVal+'% dari total nilai',cls:'bg-orange-50 border-orange-200 text-orange-700',iconCls:'bg-orange-100 text-orange-600'}
+    {icon:'description',label:'Total SPR',sub:'Pekerjaan',val:(agg.totalSPR||0).toLocaleString('id-ID'),caption:'100% dari total',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600',action:'reset'},
+    {icon:'payments',label:'Total Nilai',sub:'',val:fmtRp(agg.totalNominal||0),caption:'100% dari total',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600',action:'reset'},
+    {icon:'history_toggle_off',label:'Outstanding',sub:'Pekerjaan',val:(agg.outstandingCount||0).toLocaleString('id-ID'),caption:pctOut+'% dari total',cls:'bg-orange-50 border-orange-200 text-orange-700',iconCls:'bg-orange-100 text-orange-600',action:'outstanding'},
+    {icon:'warning',label:'Critical SLA (>45 hari)',sub:'Pekerjaan',val:(agg.aging45Count||0).toLocaleString('id-ID'),caption:pctCrit+'% dari total',cls:'bg-red-50 border-red-200 text-red-700',iconCls:'bg-red-100 text-red-600',action:'critical'},
+    {icon:'account_balance_wallet',label:'Outstanding Value',sub:'',val:fmtRp(agg.outstandingValue||0),caption:pctOutVal+'% dari total nilai',cls:'bg-orange-50 border-orange-200 text-orange-700',iconCls:'bg-orange-100 text-orange-600',action:'outstanding'}
   ];
   el.innerHTML=cards.map(function(c){
-    return '<div class="rounded-xl border p-3 '+c.cls+'">'
+    var isActive=(c.action!=='reset'&&cf===c.action);
+    var activeCls=isActive?' ring-2 ring-[#00288e] ring-offset-1':'';
+    var onclick=c.action==='reset'
+      ?'onclick="HSPRF.cardFilter=\'\';harSprApplyFilter()"'
+      :'onclick="harSprCardClick(\''+c.action+'\')"';
+    return '<div class="rounded-xl border p-3 cursor-pointer hover:shadow-md transition-shadow select-none'+activeCls+' '+c.cls+'" '+onclick+'>'
       +'<div class="flex items-center gap-1.5 mb-2"><span class="material-symbols-outlined text-[16px] p-1 rounded-lg '+c.iconCls+'">'+c.icon+'</span>'
-      +'<p class="text-[9px] font-bold uppercase opacity-70">'+c.label+(c.sub?' <span class="opacity-60">'+c.sub+'</span>':'')+'</p></div>'
+      +'<p class="text-[9px] font-bold uppercase opacity-70">'+c.label+(c.sub?' <span class="opacity-60">'+c.sub+'</span>':'')+'</p>'
+      +(isActive?'<span class="ml-auto text-[8px] font-bold text-[#00288e] bg-blue-50 px-1 rounded">aktif</span>':'')
+      +'</div>'
       +'<p class="text-lg font-black mb-0.5">'+c.val+'</p>'
       +'<p class="text-[9px] opacity-60">'+c.caption+'</p></div>';
   }).join('');
@@ -5432,6 +5440,19 @@ function harSprApplyFilter(){
     if(!chk(HSPRF.mitra,r.mitra))return false;
     if(!chk(HSPRF.peruntukan,r.peruntukan))return false;
     if(HSPRF.search&&!JSON.stringify(r).toLowerCase().includes(HSPRF.search))return false;
+    // cardFilter: kondisi komposit yang tidak bisa dimap ke checkbox biasa
+    if(HSPRF.cardFilter==='outstanding'){
+      var sp=(r.statusPengadaan||'').toUpperCase();
+      var st=(r.statusPenagihan||'').toUpperCase();
+      var isOut=sp==='DONE'&&st!=='CANCEL'&&st.indexOf('SUBMIT INVOICE KE PUSAT')===-1;
+      if(!isOut)return false;
+    }
+    if(HSPRF.cardFilter==='critical'){
+      if(r.aging===null||r.aging===undefined||r.aging<=45)return false;
+      var sp2=(r.statusPengadaan||'').toUpperCase();
+      var isDone2=sp2==='DONE',isCancel2=sp2==='CANCEL',isReject2=sp2==='REJECT';
+      if(isDone2||isCancel2||isReject2)return false;
+    }
     return true;
   });
   harSprSortApply();
@@ -5504,13 +5525,25 @@ function harSprRenderTable(){
 function harSprGoPage(p){harSprPage=Math.max(1,Math.min(p,Math.ceil(HAR_SPR_FILTERED.length/HAR_PAGE_SIZE)||1));harSprRenderTable();}
 function harSprUpdateLabel(){
   var parts=[];
+  if(HSPRF.cardFilter)parts.push({outstanding:'Outstanding',critical:'Critical SLA >45hr'}[HSPRF.cardFilter]||HSPRF.cardFilter);
   if(HSPRF.statusPengadaan.length)parts.push('Pengadaan('+HSPRF.statusPengadaan.length+')');
   if(HSPRF.statusPenagihan.length)parts.push('Penagihan('+HSPRF.statusPenagihan.length+')');
   if(HSPRF.mitra.length)parts.push('Mitra('+HSPRF.mitra.length+')');
   if(HSPRF.peruntukan.length)parts.push('Peruntukan('+HSPRF.peruntukan.length+')');
   if(HSPRF.search)parts.push('"'+HSPRF.search+'"');
   var el=document.getElementById('har-spr-filterLabel');
-  if(el)el.textContent=parts.length?'Filter: '+parts.join(' - '):'Menampilkan semua data';
+  if(el)el.textContent=parts.length?'Filter: '+parts.join(' · '):'Menampilkan semua data';
+}
+
+function harSprCardClick(type){
+  // Toggle: klik card yang sama dua kali = reset cardFilter
+  HSPRF.cardFilter = HSPRF.cardFilter===type ? '' : type;
+  // Reset filter lain saat cardFilter aktif — hindari filter ganda yang membingungkan
+  if(HSPRF.cardFilter){
+    HSPRF.statusPengadaan=[];HSPRF.statusPenagihan=[];HSPRF.mitra=[];HSPRF.peruntukan=[];
+    document.querySelectorAll('[id^="hspr-ms-"] input[type=checkbox]').forEach(function(cb){cb.checked=false;});
+  }
+  harSprApplyFilter();
 }
 
 
@@ -5607,17 +5640,25 @@ function harSppRenderExec(agg){
   var pctAktif=agg.totalSPP?Math.round(agg.aktifCount/agg.totalSPP*100):0;
   var pctCrit=agg.totalSPP?Math.round(agg.criticalCount/agg.totalSPP*100):0;
   var pctOutVal=agg.totalNilai?Math.round(agg.outstandingValue/agg.totalNilai*100):0;
+  var cf=HSPPF.cardFilter;
   var cards=[
-    {icon:'description',label:'Total SPP',sub:'',val:(agg.totalSPP||0).toLocaleString('id-ID'),caption:'100% dari total',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600'},
-    {icon:'payments',label:'Total Nilai Pekerjaan',sub:'',val:fmtRp(agg.totalNilai||0),caption:'100% dari total',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600'},
-    {icon:'history_toggle_off',label:'SPP Aktif',sub:'',val:(agg.aktifCount||0).toLocaleString('id-ID'),caption:pctAktif+'% dari total',cls:'bg-orange-50 border-orange-200 text-orange-700',iconCls:'bg-orange-100 text-orange-600'},
-    {icon:'warning',label:'Critical SLA',sub:'',val:(agg.criticalCount||0).toLocaleString('id-ID'),caption:pctCrit+'% dari total',cls:'bg-red-50 border-red-200 text-red-700',iconCls:'bg-red-100 text-red-600'},
-    {icon:'account_balance_wallet',label:'Outstanding Value',sub:'',val:fmtRp(agg.outstandingValue||0),caption:pctOutVal+'% dari total nilai',cls:'bg-orange-50 border-orange-200 text-orange-700',iconCls:'bg-orange-100 text-orange-600'}
+    {icon:'description',label:'Total SPP',sub:'',val:(agg.totalSPP||0).toLocaleString('id-ID'),caption:'100% dari total',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600',action:'reset'},
+    {icon:'payments',label:'Total Nilai Pekerjaan',sub:'',val:fmtRp(agg.totalNilai||0),caption:'100% dari total',cls:'bg-white border-gray-200 text-[#131b2e]',iconCls:'bg-blue-50 text-blue-600',action:'reset'},
+    {icon:'history_toggle_off',label:'SPP Aktif',sub:'',val:(agg.aktifCount||0).toLocaleString('id-ID'),caption:pctAktif+'% dari total',cls:'bg-orange-50 border-orange-200 text-orange-700',iconCls:'bg-orange-100 text-orange-600',action:'aktif'},
+    {icon:'warning',label:'Critical SLA',sub:'',val:(agg.criticalCount||0).toLocaleString('id-ID'),caption:pctCrit+'% dari total',cls:'bg-red-50 border-red-200 text-red-700',iconCls:'bg-red-100 text-red-600',action:'critical'},
+    {icon:'account_balance_wallet',label:'Outstanding Value',sub:'',val:fmtRp(agg.outstandingValue||0),caption:pctOutVal+'% dari total nilai',cls:'bg-orange-50 border-orange-200 text-orange-700',iconCls:'bg-orange-100 text-orange-600',action:'aktif'}
   ];
   el.innerHTML=cards.map(function(c){
-    return '<div class="rounded-xl border p-3 '+c.cls+'">'
+    var isActive=(c.action!=='reset'&&cf===c.action);
+    var activeCls=isActive?' ring-2 ring-[#00288e] ring-offset-1':'';
+    var onclick=c.action==='reset'
+      ?'onclick="HSPPF.cardFilter=\'\';harSppApplyFilter()"'
+      :'onclick="harSppCardClick(\''+c.action+'\')"';
+    return '<div class="rounded-xl border p-3 cursor-pointer hover:shadow-md transition-shadow select-none'+activeCls+' '+c.cls+'" '+onclick+'>'
       +'<div class="flex items-center gap-1.5 mb-2"><span class="material-symbols-outlined text-[16px] p-1 rounded-lg '+c.iconCls+'">'+c.icon+'</span>'
-      +'<p class="text-[9px] font-bold uppercase opacity-70">'+c.label+'</p></div>'
+      +'<p class="text-[9px] font-bold uppercase opacity-70">'+c.label+'</p>'
+      +(isActive?'<span class="ml-auto text-[8px] font-bold text-[#00288e] bg-blue-50 px-1 rounded">aktif</span>':'')
+      +'</div>'
       +'<p class="text-lg font-black mb-0.5">'+c.val+'</p>'
       +'<p class="text-[9px] opacity-60">'+c.caption+'</p></div>';
   }).join('');
@@ -5742,6 +5783,13 @@ function harSppApplyFilter(){
     if(!chk(HSPPF.kodeAnggaran,r.kodeAnggaran))return false;
     if(!chk(HSPPF.coa,r.coa))return false;
     if(HSPPF.search&&!JSON.stringify(r).toLowerCase().includes(HSPPF.search))return false;
+    // cardFilter: kondisi komposit yang tidak bisa dimap ke checkbox biasa
+    if(HSPPF.cardFilter==='aktif'){
+      if(!r.isAktif)return false;
+    }
+    if(HSPPF.cardFilter==='critical'){
+      if(!r.isCritical)return false;
+    }
     return true;
   });
   harSppSortApply();
@@ -5817,6 +5865,7 @@ function harSppRenderTable(){
 function harSppGoPage(p){harSppPage=Math.max(1,Math.min(p,Math.ceil(HAR_SPP_FILTERED.length/HAR_PAGE_SIZE)||1));harSppRenderTable();}
 function harSppUpdateLabel(){
   var parts=[];
+  if(HSPPF.cardFilter)parts.push({aktif:'SPP Aktif',critical:'Critical SLA'}[HSPPF.cardFilter]||HSPPF.cardFilter);
   if(HSPPF.status.length)parts.push('Status('+HSPPF.status.length+')');
   if(HSPPF.tipeSPP.length)parts.push('Tipe('+HSPPF.tipeSPP.length+')');
   if(HSPPF.metodePengadaan.length)parts.push('Metode('+HSPPF.metodePengadaan.length+')');
@@ -5826,7 +5875,17 @@ function harSppUpdateLabel(){
   if(HSPPF.coa.length)parts.push('COA('+HSPPF.coa.length+')');
   if(HSPPF.search)parts.push('"'+HSPPF.search+'"');
   var el=document.getElementById('har-spp-filterLabel');
-  if(el)el.textContent=parts.length?'Filter: '+parts.join(' - '):'Menampilkan semua data';
+  if(el)el.textContent=parts.length?'Filter: '+parts.join(' · '):'Menampilkan semua data';
+}
+
+function harSppCardClick(type){
+  HSPPF.cardFilter = HSPPF.cardFilter===type ? '' : type;
+  if(HSPPF.cardFilter){
+    HSPPF.status=[];HSPPF.tipeSPP=[];HSPPF.metodePengadaan=[];HSPPF.jenisPengadaan=[];
+    HSPPF.kategoriPekerjaan=[];HSPPF.kodeAnggaran=[];HSPPF.coa=[];
+    document.querySelectorAll('[id^="ms-hspp-"] input[type=checkbox]').forEach(function(cb){cb.checked=false;});
+  }
+  harSppApplyFilter();
 }
 
 
@@ -5843,6 +5902,8 @@ function harMsChange(tab,key){
   const filter=tab==='spr'?HSPRF:HSPPF;
   const menu=document.getElementById(pfx+key+'-menu');if(!menu)return;
   filter[key]=[...menu.querySelectorAll('input:checked')].map(function(el){return el.value;});
+  // Reset cardFilter saat user aktifkan filter checkbox — hindari konflik diam-diam
+  filter.cardFilter='';
   const labels={statusPengadaan:'Status Pengadaan',statusPenagihan:'Status Penagihan',mitra:'Mitra',peruntukan:'Peruntukan',status:'Status',tipeSPP:'Tipe SPP',metodePengadaan:'Metode',kategoriPekerjaan:'Kategori'};
   const lbl=document.getElementById(pfx+key+'-label');
   const wE=document.getElementById(pfx+key);
