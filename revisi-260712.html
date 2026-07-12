@@ -640,11 +640,12 @@ html,body   { height:100%; overflow:hidden; }
       <div id="pm-content-isp">
 
         <!-- Resume PM ISP -->
-        <section class="mb-4">
-          <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
-            <span class="material-symbols-outlined text-[12px]">construction</span> 1. Resume PM ISP
-          </p>
-          <div id="pmisp-kpi" class="grid grid-cols-2 lg:grid-cols-5 gap-2">
+        <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden mb-4">
+          <div class="px-4 py-3 border-b border-gray-100">
+            <p class="text-sm font-bold text-[#131b2e]">Resume PM ISP</p>
+            <p class="text-[10px] text-gray-400">Ringkasan pelaksanaan preventif maintenance ISP.</p>
+          </div>
+          <div id="pmisp-kpi" class="p-4 grid grid-cols-2 lg:grid-cols-5 gap-2">
             <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
             <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
             <div class="skeleton rounded-xl h-24"></div>
@@ -743,16 +744,16 @@ html,body   { height:100%; overflow:hidden; }
             <table class="w-full text-left border-collapse" style="min-width:1000px">
               <thead class="bg-gray-50 sticky top-0"><tr>
                 <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">#</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">POP ID</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">POP Name</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">KP</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">PM ke-</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Tgl Plan</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Tgl Real</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Status PM</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Ketepatan</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Status Laporan</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Tim</th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer hover:text-[#00288e]" onclick="pmIspSortBy('popId')">POP ID <span id="pmisp-sort-popId" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer hover:text-[#00288e]" onclick="pmIspSortBy('popName')">POP Name <span id="pmisp-sort-popName" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer hover:text-[#00288e]" onclick="pmIspSortBy('namaKP')">KP <span id="pmisp-sort-namaKP" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer hover:text-[#00288e]" onclick="pmIspSortBy('pmKe')">PM ke- <span id="pmisp-sort-pmKe" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center cursor-pointer hover:text-[#00288e]" onclick="pmIspSortBy('tglPlan')">Tgl Plan <span id="pmisp-sort-tglPlan" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center cursor-pointer hover:text-[#00288e]" onclick="pmIspSortBy('tglReal')">Tgl Real <span id="pmisp-sort-tglReal" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center cursor-pointer hover:text-[#00288e]" onclick="pmIspSortBy('statusPM')">Status PM <span id="pmisp-sort-statusPM" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center cursor-pointer hover:text-[#00288e]" onclick="pmIspSortBy('ketepatanWaktu')">Ketepatan <span id="pmisp-sort-ketepatanWaktu" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center cursor-pointer hover:text-[#00288e]" onclick="pmIspSortBy('statusLaporan')">Status Laporan <span id="pmisp-sort-statusLaporan" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer hover:text-[#00288e]" onclick="pmIspSortBy('picLaporan')">Tim <span id="pmisp-sort-picLaporan" class="text-gray-300">↕</span></th>
               </tr></thead>
               <tbody id="pmisp-tblBody"><tr><td colspan="11" class="p-10 text-center text-gray-400 text-xs">Memuat data…</td></tr></tbody>
             </table>
@@ -768,11 +769,12 @@ html,body   { height:100%; overflow:hidden; }
       <div id="pm-content-osp" class="hidden">
 
         <!-- Resume PM OSP -->
-        <section class="mb-4">
-          <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
-            <span class="material-symbols-outlined text-[12px]">cable</span> 1. Resume PM OSP
-          </p>
-          <div id="pmosp-kpi" class="grid grid-cols-2 lg:grid-cols-5 gap-2">
+        <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden mb-4">
+          <div class="px-4 py-3 border-b border-gray-100">
+            <p class="text-sm font-bold text-[#131b2e]">Resume PM OSP</p>
+            <p class="text-[10px] text-gray-400">Ringkasan pelaksanaan preventif maintenance OSP.</p>
+          </div>
+          <div id="pmosp-kpi" class="p-4 grid grid-cols-2 lg:grid-cols-5 gap-2">
             <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
             <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
             <div class="skeleton rounded-xl h-24"></div>
@@ -869,16 +871,16 @@ html,body   { height:100%; overflow:hidden; }
             <table class="w-full text-left border-collapse" style="min-width:1000px">
               <thead class="bg-gray-50 sticky top-0"><tr>
                 <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">#</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">No. WO</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Title</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">POP</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Wilayah</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Serpo</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Tgl PM</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Tgl Dok</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Aging</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Status</th>
-                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Petugas</th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer hover:text-[#00288e]" onclick="pmOspSortBy('noWO')">No. WO <span id="pmosp-sort-noWO" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer hover:text-[#00288e]" onclick="pmOspSortBy('title')">Title <span id="pmosp-sort-title" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer hover:text-[#00288e]" onclick="pmOspSortBy('pop')">POP <span id="pmosp-sort-pop" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer hover:text-[#00288e]" onclick="pmOspSortBy('wilayah')">Wilayah <span id="pmosp-sort-wilayah" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer hover:text-[#00288e]" onclick="pmOspSortBy('serpo')">Serpo <span id="pmosp-sort-serpo" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center cursor-pointer hover:text-[#00288e]" onclick="pmOspSortBy('tglPM')">Tgl PM <span id="pmosp-sort-tglPM" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center cursor-pointer hover:text-[#00288e]" onclick="pmOspSortBy('tglDok')">Tgl Dok <span id="pmosp-sort-tglDok" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center cursor-pointer hover:text-[#00288e]" onclick="pmOspSortBy('agingLaporan')">Aging <span id="pmosp-sort-agingLaporan" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center cursor-pointer hover:text-[#00288e]" onclick="pmOspSortBy('status')">Status <span id="pmosp-sort-status" class="text-gray-300">↕</span></th>
+                <th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 cursor-pointer hover:text-[#00288e]" onclick="pmOspSortBy('petugas')">Petugas <span id="pmosp-sort-petugas" class="text-gray-300">↕</span></th>
               </tr></thead>
               <tbody id="pmosp-tblBody"><tr><td colspan="11" class="p-10 text-center text-gray-400 text-xs">Memuat data…</td></tr></tbody>
             </table>
@@ -4552,14 +4554,14 @@ function pmIspRenderKPI() {
   const tepatWaktu  = sudahRows.filter(r => r.ketepatanWaktu === 'Maju dari Jadwal' || r.ketepatanWaktu === 'Tepat Waktu').length;
   const terlambat   = sudahRows.filter(r => r.ketepatanWaktu === 'Lewat dari Jadwal').length;
   const belumPM     = rows.filter(r => r.statusPM !== 'Sudah Terlaksana').length;
-  const compliance  = total > 0 ? (tepatWaktu / total * 100) : 0;
+  const adaLaporan  = rows.filter(r => r.statusLaporan && r.statusLaporan !== '—' && r.statusLaporan !== '').length;
   const cf = PIF.cardFilter;
   const cards = [
-    {action:'reset', cls:'bg-white border-gray-200', iCls:'text-gray-500', iClsBg:'', icon:'event_note', label:'Total PM Plan', val:total.toLocaleString('id-ID'), sub:'POP'},
-    {action:'tepat', cls:'bg-green-50 border-green-200', iCls:'text-green-600', iClsBg:'', icon:'check_circle', label:'Selesai Tepat Waktu', val:tepatWaktu.toLocaleString('id-ID'), sub:(total?Math.round(tepatWaktu/total*100):0)+'%'},
-    {action:'terlambat', cls:'bg-orange-50 border-orange-200', iCls:'text-orange-600', iClsBg:'', icon:'schedule', label:'Selesai Terlambat', val:terlambat.toLocaleString('id-ID'), sub:(total?Math.round(terlambat/total*100):0)+'%'},
-    {action:'belum', cls:'bg-red-50 border-red-200', iCls:'text-red-600', iClsBg:'', icon:'cancel', label:'Belum PM', val:belumPM.toLocaleString('id-ID'), sub:(total?Math.round(belumPM/total*100):0)+'%'},
-    {action:'reset', cls:'bg-blue-50 border-blue-200', iCls:'text-blue-600', iClsBg:'', icon:'trending_up', label:'PM Compliance', val:compliance.toFixed(1)+'%', sub:'Target ≥ 80%'}
+    {action:'reset',       cls:'bg-white border-gray-200',     iCls:'text-gray-500',   icon:'event_note',    label:'Total PM Plan',      val:total.toLocaleString('id-ID'),       sub:'POP'},
+    {action:'tepat',       cls:'bg-green-50 border-green-200', iCls:'text-green-600',  icon:'check_circle',  label:'Selesai Tepat Waktu',val:tepatWaktu.toLocaleString('id-ID'),  sub:(total?Math.round(tepatWaktu/total*100):0)+'%'},
+    {action:'terlambat',   cls:'bg-orange-50 border-orange-200',iCls:'text-orange-600',icon:'schedule',      label:'Selesai Terlambat',  val:terlambat.toLocaleString('id-ID'),   sub:(total?Math.round(terlambat/total*100):0)+'%'},
+    {action:'belum',       cls:'bg-red-50 border-red-200',     iCls:'text-red-600',    icon:'cancel',        label:'Belum PM',           val:belumPM.toLocaleString('id-ID'),     sub:(total?Math.round(belumPM/total*100):0)+'%'},
+    {action:'ada-laporan', cls:'bg-blue-50 border-blue-200',   iCls:'text-blue-600',   icon:'description',   label:'Ada Laporan',        val:adaLaporan.toLocaleString('id-ID'),  sub:(total?Math.round(adaLaporan/total*100):0)+'% terisi'}
   ];
   el.innerHTML = cards.map(function(c){
     var isActive = c.action!=='reset' && cf===c.action;
@@ -4772,9 +4774,10 @@ function pmIspApplyFilter() {
     if(!chk(PIF.pmKe,      r.pmKe))             return false;
     if(PIF.search && !(r.popId+r.popName+r.namaKP+r.statusPM).toLowerCase().includes(PIF.search)) return false;
     // cardFilter
-    if(PIF.cardFilter==='tepat')    { if(r.statusPM!=='Sudah Terlaksana'||!(r.ketepatanWaktu==='Maju dari Jadwal'||r.ketepatanWaktu==='Tepat Waktu')) return false; }
-    if(PIF.cardFilter==='terlambat'){ if(r.statusPM!=='Sudah Terlaksana'||r.ketepatanWaktu!=='Lewat dari Jadwal') return false; }
-    if(PIF.cardFilter==='belum')    { if(r.statusPM==='Sudah Terlaksana') return false; }
+    if(PIF.cardFilter==='tepat')       { if(r.statusPM!=='Sudah Terlaksana'||!(r.ketepatanWaktu==='Maju dari Jadwal'||r.ketepatanWaktu==='Tepat Waktu')) return false; }
+    if(PIF.cardFilter==='terlambat')   { if(r.statusPM!=='Sudah Terlaksana'||r.ketepatanWaktu!=='Lewat dari Jadwal') return false; }
+    if(PIF.cardFilter==='belum')       { if(r.statusPM==='Sudah Terlaksana') return false; }
+    if(PIF.cardFilter==='ada-laporan') { if(!r.statusLaporan||r.statusLaporan==='—'||r.statusLaporan==='') return false; }
     return true;
   });
   pmIspRenderKPI();
@@ -4800,6 +4803,26 @@ function pmIspResetFilter() {
 }
 
 // ── RENDER TABLE ──────────────────────────────────────────
+let PMISP_SORT = { col: '', dir: 1 };
+function pmIspSortBy(col) {
+  if(PMISP_SORT.col===col) PMISP_SORT.dir*=-1;
+  else { PMISP_SORT.col=col; PMISP_SORT.dir=1; }
+  const dir=PMISP_SORT.dir;
+  PMISP_FILTERED.sort(function(a,b){
+    var va=a[col], vb=b[col];
+    if(va===null||va===undefined) va=''; if(vb===null||vb===undefined) vb='';
+    if(typeof va==='number'&&typeof vb==='number') return (va-vb)*dir;
+    return String(va).localeCompare(String(vb),'id',{numeric:true})*dir;
+  });
+  // Update arrow indicator
+  document.querySelectorAll('[id^="pmisp-sort-"]').forEach(function(el){
+    el.textContent='↕'; el.className='text-gray-300';
+  });
+  var arr=document.getElementById('pmisp-sort-'+col);
+  if(arr){ arr.textContent=dir===1?'▲':'▼'; arr.className='text-[#00288e]'; }
+  pmIspPage=1; pmIspRenderTable();
+}
+
 function pmIspRenderTable() {
   const start = (pmIspPage-1)*PMISP_PAGE_SIZE;
   const paged = PMISP_FILTERED.slice(start, start+PMISP_PAGE_SIZE);
@@ -4968,14 +4991,14 @@ function pmOspRenderKPI() {
   const close    = rows.filter(r => r.status === 'CLOSE').length;
   const progres  = rows.filter(r => r.status === 'PROGRES' || r.status === 'PROGRESS').length;
   const open     = rows.filter(r => r.status === 'OPEN').length;
-  const compliance = total > 0 ? (close / total * 100) : 0;
+  const adaLaporan = rows.filter(r => r.tglDok && r.tglDok !== '—' && r.tglDok !== '').length;
   const cf = POF.cardFilter;
   const cards = [
-    {action:'reset',   cls:'bg-white border-gray-200',   iCls:'text-gray-500',  icon:'event_note',  label:'Total WO Plan',  val:total.toLocaleString('id-ID'),    sub:'WO'},
-    {action:'close',   cls:'bg-green-50 border-green-200', iCls:'text-green-600', icon:'check_circle',label:'Close',          val:close.toLocaleString('id-ID'),    sub:(total?Math.round(close/total*100):0)+'%'},
-    {action:'progres', cls:'bg-blue-50 border-blue-200',   iCls:'text-blue-600',  icon:'autorenew',   label:'Progres',        val:progres.toLocaleString('id-ID'),  sub:(total?Math.round(progres/total*100):0)+'%'},
-    {action:'open',    cls:'bg-red-50 border-red-200',     iCls:'text-red-600',   icon:'cancel',      label:'Open',           val:open.toLocaleString('id-ID'),     sub:(total?Math.round(open/total*100):0)+'%'},
-    {action:'reset',   cls:'bg-blue-50 border-blue-200',   iCls:'text-blue-600',  icon:'trending_up', label:'PM Compliance',  val:compliance.toFixed(1)+'%',        sub:'Target ≥ 80%'}
+    {action:'reset',       cls:'bg-white border-gray-200',     iCls:'text-gray-500',  icon:'event_note',   label:'Total WO Plan',  val:total.toLocaleString('id-ID'),       sub:'WO'},
+    {action:'close',       cls:'bg-green-50 border-green-200', iCls:'text-green-600', icon:'check_circle', label:'Close',          val:close.toLocaleString('id-ID'),       sub:(total?Math.round(close/total*100):0)+'%'},
+    {action:'progres',     cls:'bg-blue-50 border-blue-200',   iCls:'text-blue-600',  icon:'autorenew',    label:'Progres',        val:progres.toLocaleString('id-ID'),     sub:(total?Math.round(progres/total*100):0)+'%'},
+    {action:'open',        cls:'bg-red-50 border-red-200',     iCls:'text-red-600',   icon:'cancel',       label:'Open',           val:open.toLocaleString('id-ID'),        sub:(total?Math.round(open/total*100):0)+'%'},
+    {action:'ada-laporan', cls:'bg-blue-50 border-blue-200',   iCls:'text-blue-600',  icon:'description',  label:'Ada Laporan',    val:adaLaporan.toLocaleString('id-ID'),  sub:(total?Math.round(adaLaporan/total*100):0)+'% terisi'}
   ];
   el.innerHTML = cards.map(function(c){
     var isActive = c.action!=='reset' && cf===c.action;
@@ -5195,9 +5218,10 @@ function pmOspApplyFilter() {
     if(!chk(POF.aging,   r.agingStatus))  return false;
     if(POF.search && !(r.noWO+r.pop+r.title+r.wilayah).toLowerCase().includes(POF.search)) return false;
     // cardFilter
-    if(POF.cardFilter==='close')   { if(r.status!=='CLOSE') return false; }
-    if(POF.cardFilter==='progres') { if(r.status!=='PROGRES'&&r.status!=='PROGRESS') return false; }
-    if(POF.cardFilter==='open')    { if(r.status!=='OPEN') return false; }
+    if(POF.cardFilter==='close')       { if(r.status!=='CLOSE') return false; }
+    if(POF.cardFilter==='progres')     { if(r.status!=='PROGRES'&&r.status!=='PROGRESS') return false; }
+    if(POF.cardFilter==='open')        { if(r.status!=='OPEN') return false; }
+    if(POF.cardFilter==='ada-laporan') { if(!r.tglDok||r.tglDok==='—'||r.tglDok==='') return false; }
     return true;
   });
   pmOspRenderKPI();
@@ -5220,6 +5244,25 @@ function pmOspResetFilter() {
   Object.keys(labels).forEach(k => { const el=document.getElementById('ms-po-'+k+'-label'); if(el) el.textContent = labels[k]; });
   const si = document.getElementById('pmosp-search'); if(si) si.value = '';
   pmOspApplyFilter();
+}
+
+let PMOSP_SORT = { col: '', dir: 1 };
+function pmOspSortBy(col) {
+  if(PMOSP_SORT.col===col) PMOSP_SORT.dir*=-1;
+  else { PMOSP_SORT.col=col; PMOSP_SORT.dir=1; }
+  const dir=PMOSP_SORT.dir;
+  PMOSP_FILTERED.sort(function(a,b){
+    var va=a[col], vb=b[col];
+    if(va===null||va===undefined) va=''; if(vb===null||vb===undefined) vb='';
+    if(typeof va==='number'&&typeof vb==='number') return (va-vb)*dir;
+    return String(va).localeCompare(String(vb),'id',{numeric:true})*dir;
+  });
+  document.querySelectorAll('[id^="pmosp-sort-"]').forEach(function(el){
+    el.textContent='↕'; el.className='text-gray-300';
+  });
+  var arr=document.getElementById('pmosp-sort-'+col);
+  if(arr){ arr.textContent=dir===1?'▲':'▼'; arr.className='text-[#00288e]'; }
+  pmOspPage=1; pmOspRenderTable();
 }
 
 function pmOspRenderTable() {
