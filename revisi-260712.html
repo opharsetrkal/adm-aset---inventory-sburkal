@@ -1371,25 +1371,22 @@ html,body   { height:100%; overflow:hidden; }
         <div class="px-4 py-3 border-b border-gray-100 flex items-start justify-between gap-2">
           <div>
             <p class="text-sm font-bold text-[#131b2e]">Alert Stok Rendah</p>
-            <p class="text-[10px] text-gray-400">Material dengan stok ≤ Estimasi Reorder Point · Safety Stock = 1× avg bulanan · Lead Time = 45 hari.</p>
+            <p class="text-[10px] text-gray-400">Per Kategori Teknik · stok ≤ Estimasi Reorder Point · Safety Stock = 1× avg bulanan · Lead Time = 45 hari.</p>
           </div>
           <span class="text-[9px] font-semibold text-orange-600 bg-orange-50 border border-orange-200 px-2 py-0.5 rounded-full whitespace-nowrap" id="s-alertCount">—</span>
         </div>
-        <div id="s-alertBody" class="overflow-x-auto custom-scrollbar">
-          <table class="w-full text-left border-collapse" style="min-width:700px">
+        <div id="s-alertBody" class="overflow-x-auto overflow-y-auto custom-scrollbar" style="max-height:320px">
+          <table class="w-full text-left border-collapse" style="min-width:600px">
             <thead class="bg-gray-50 sticky top-0"><tr>
-              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Material</th>
-              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Deskripsi</th>
-              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Kat. Teknik</th>
-              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Sloc KP</th>
-              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Stok Saat Ini</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Kategori Teknik</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Total Stok</th>
               <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Avg/Bulan</th>
               <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Est. Reorder</th>
               <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Safety Stock</th>
               <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Status</th>
             </tr></thead>
             <tbody id="s-alertTbody">
-              <tr><td colspan="9" class="p-8 text-center text-gray-400 text-xs">Memuat data…</td></tr>
+              <tr><td colspan="6" class="p-8 text-center text-gray-400 text-xs">Memuat data…</td></tr>
             </tbody>
           </table>
         </div>
@@ -1523,9 +1520,7 @@ html,body   { height:100%; overflow:hidden; }
                 <th class="px-3 py-2 text-[9px] font-bold text-gray-400 border-b border-gray-100">Sloc KP</th>
                 <th class="px-3 py-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Serap</th>
                 <th class="px-3 py-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Kembali Baik</th>
-                <th class="px-3 py-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Kembali Rusak</th>
                 <th class="px-3 py-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">% Baik</th>
-                <th class="px-3 py-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">% Rusak</th>
               </tr>
             </thead>
             <tbody id="p-rasioTbody">
@@ -1614,17 +1609,16 @@ html,body   { height:100%; overflow:hidden; }
         </div>
         <div class="px-4 pb-4">
           <p class="text-[10px] font-semibold text-gray-500 mb-2">Ringkasan Proyeksi per Kategori Teknik</p>
-          <div class="overflow-x-auto custom-scrollbar">
-            <table class="w-full text-left border-collapse" style="min-width:600px">
-              <thead class="bg-gray-50"><tr>
+          <div class="overflow-x-auto overflow-y-auto custom-scrollbar" style="max-height:280px">
+            <table class="w-full text-left border-collapse" style="min-width:500px">
+              <thead class="bg-gray-50 sticky top-0"><tr>
                 <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Kategori Teknik</th>
                 <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Avg/Bulan (Historis)</th>
                 <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Proyeksi Total Qty</th>
-                <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Proyeksi Total Nilai</th>
                 <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Periode</th>
               </tr></thead>
               <tbody id="p-proyeksiTbody">
-                <tr><td colspan="5" class="p-6 text-center text-gray-400 text-xs">Memuat…</td></tr>
+                <tr><td colspan="4" class="p-6 text-center text-gray-400 text-xs">Memuat…</td></tr>
               </tbody>
             </table>
           </div>
@@ -2953,83 +2947,70 @@ function sApplyAll() {
 }
 
 // ── ALERT STOK RENDAH ─────────────────────────────────────
-// Reorder Point = AvgMonthlyConsumption × (45/30)
-// Safety Stock  = AvgMonthlyConsumption × 1
-// Ambil data konsumsi dari P_ROWS (penyerapan GI) — cross-module
+// Grup per Kategori Teknik. Reorder Point = AvgMonthly × 1.5 (45hr), Safety Stock = AvgMonthly × 1
 function sRenderAlert(filtered) {
   const tbody = document.getElementById('s-alertTbody');
   const countEl = document.getElementById('s-alertCount');
   if(!tbody) return;
 
-  // Cek apakah P_ROWS sudah terload
   if(!P_ROWS || P_ROWS.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="9" class="p-6 text-center text-[10px] text-orange-500">Data konsumsi belum tersedia — buka modul Penyerapan Material terlebih dahulu.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" class="p-6 text-center text-[10px] text-orange-500">Data konsumsi belum tersedia — buka modul Penyerapan Material terlebih dahulu.</td></tr>';
     if(countEl) countEl.textContent = '—';
     return;
   }
 
-  // Hitung avg monthly consumption per material (hanya GI / penyerapan)
+  // Avg monthly consumption per Kategori Teknik dari GI
   const giRows = P_ROWS.filter(r => r['_type'] === 'penyerapan');
-  const consumptionMap = {}; // key: Material → { months: Set, totalQty, katTeknik }
+  const conByKat = {};
   giRows.forEach(r => {
-    const mat = r['Material'];
+    const kat = r['Kategori - Teknik'] || '(Tidak ada)';
     const qty = Math.abs(parseFloat(r['Quantity']) || 0);
-    const kat = r['Kategori - Teknik'] || '—';
-    const pd  = r['Posting Date'] || '';
-    const mk  = pd.slice(0, 7); // YYYY-MM
-    if(!mat || !mk) return;
-    if(!consumptionMap[mat]) consumptionMap[mat] = { totalQty: 0, months: new Set(), katTeknik: kat };
-    consumptionMap[mat].totalQty += qty;
-    consumptionMap[mat].months.add(mk);
+    const mk  = (r['Posting Date'] || '').slice(0, 7);
+    if(!mk) return;
+    if(!conByKat[kat]) conByKat[kat] = { totalQty: 0, months: new Set() };
+    conByKat[kat].totalQty += qty;
+    conByKat[kat].months.add(mk);
   });
 
-  // Cross dengan stok aktif (Batch = BAIK, Unrestricted > 0)
+  // Total stok per Kategori Teknik dari filtered stok aktif
   const aktif = filtered.filter(sIsAktif);
-  const LEAD_DAYS = 45;
-  const LEAD_MONTHS = LEAD_DAYS / 30;
-
-  const alerts = [];
+  const stokByKat = {};
   aktif.forEach(r => {
-    const mat = r['Material'];
-    const stok = parseFloat(r['Unrestricted']) || 0;
-    const c = consumptionMap[mat];
-    if(!c || c.months.size === 0) return; // tidak ada data konsumsi, skip
+    const kat = r['Kategori - Teknik'] || '(Tidak ada)';
+    const qty = parseFloat(r['Unrestricted']) || 0;
+    stokByKat[kat] = (stokByKat[kat] || 0) + qty;
+  });
+
+  const LEAD_MONTHS = 45 / 30;
+  const alerts = [];
+  Object.entries(stokByKat).forEach(([kat, stok]) => {
+    const c = conByKat[kat];
+    if(!c || c.months.size === 0) return;
     const avgMonthly = c.totalQty / c.months.size;
     if(avgMonthly <= 0) return;
     const reorderPoint = avgMonthly * LEAD_MONTHS;
     const safetyStock  = avgMonthly * 1;
     if(stok <= reorderPoint) {
-      alerts.push({
-        mat, desc: r['Material Description'] || '—',
-        kat: c.katTeknik,
-        sloc: r['Sloc - KP'] || '—',
-        stok, avgMonthly, reorderPoint, safetyStock,
-        critical: stok <= safetyStock
-      });
+      alerts.push({ kat, stok, avgMonthly, reorderPoint, safetyStock, critical: stok <= safetyStock });
     }
   });
 
-  // Urutkan: kritis dulu, lalu makin rendah stok relatif ke reorder
   alerts.sort((a,b) => (b.critical - a.critical) || ((a.stok/a.reorderPoint) - (b.stok/b.reorderPoint)));
-
-  if(countEl) countEl.textContent = alerts.length + ' material';
+  if(countEl) countEl.textContent = alerts.length + ' kategori';
 
   if(!alerts.length) {
-    tbody.innerHTML = '<tr><td colspan="9" class="p-6 text-center text-gray-400 text-xs">Tidak ada material di bawah estimasi reorder point.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" class="p-6 text-center text-gray-400 text-xs">Tidak ada kategori di bawah estimasi reorder point.</td></tr>';
     return;
   }
 
+  const fmt = n => Math.round(n).toLocaleString('id-ID');
   tbody.innerHTML = alerts.map(a => {
     const badge = a.critical
       ? '<span class="px-1.5 py-0.5 rounded-full bg-red-100 text-red-700 text-[9px] font-bold">Kritis</span>'
       : '<span class="px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-700 text-[9px] font-bold">Perhatian</span>';
     const rowCls = a.critical ? 'bg-red-50' : 'bg-orange-50/40';
-    const fmt = n => Math.round(n).toLocaleString('id-ID');
     return `<tr class="hover:bg-[#f2f3ff] border-b border-gray-50 ${rowCls}">
-      <td class="p-2.5 text-xs font-mono">${a.mat}</td>
-      <td class="p-2.5 text-xs max-w-[180px] overflow-hidden text-ellipsis whitespace-nowrap" title="${a.desc}">${a.desc}</td>
-      <td class="p-2.5 text-xs whitespace-nowrap">${a.kat}</td>
-      <td class="p-2.5 text-xs whitespace-nowrap">${a.sloc}</td>
+      <td class="p-2.5 text-xs font-medium">${a.kat}</td>
       <td class="p-2.5 text-xs text-right font-bold ${a.critical?'text-red-600':'text-orange-600'}">${fmt(a.stok)}</td>
       <td class="p-2.5 text-xs text-right text-gray-500">${fmt(a.avgMonthly)}</td>
       <td class="p-2.5 text-xs text-right text-gray-500">${fmt(a.reorderPoint)}</td>
@@ -3466,7 +3447,7 @@ function pRenderRasioTable() {
   })).sort((a,b)=>b.rasioB-a.rasioB);
 
   const tbody=document.getElementById('p-rasioTbody');
-  if(!rows.length){tbody.innerHTML='<tr><td colspan="7" class="p-4 text-center text-gray-400 text-xs">Tidak ada data</td></tr>';return;}
+  if(!rows.length){tbody.innerHTML='<tr><td colspan="5" class="p-4 text-center text-gray-400 text-xs">Tidak ada data</td></tr>';return;}
   tbody.innerHTML=rows.map(d=>{
     const rowCls=d.rasioB>50?'bg-red-50':'hover:bg-gray-50';
     return`<tr class="${rowCls} border-b border-gray-50 transition-colors">
@@ -3474,9 +3455,7 @@ function pRenderRasioTable() {
       <td class="px-3 py-2 text-xs">${d.slocKp}</td>
       <td class="px-3 py-2 text-xs text-right">${Math.round(d.serap).toLocaleString('id-ID')}</td>
       <td class="px-3 py-2 text-xs text-right text-green-700 font-semibold">${Math.round(d.kembaliBaik).toLocaleString('id-ID')}</td>
-      <td class="px-3 py-2 text-xs text-right text-red-600 font-semibold">${Math.round(d.kembaliRusak).toLocaleString('id-ID')}</td>
       <td class="px-3 py-2 text-xs text-right font-bold ${d.rasioB>50?'text-red-600':'text-green-600'}">${d.rasioB}%</td>
-      <td class="px-3 py-2 text-xs text-right font-bold text-orange-500">${d.rasioR}%</td>
     </tr>`;
   }).join('');
 }
@@ -3715,7 +3694,7 @@ function pRenderProyeksi(mode) {
 
   const giRows = P_ROWS.filter(r => r['_type'] === 'penyerapan');
   if(!giRows.length) {
-    tbody.innerHTML = '<tr><td colspan="5" class="p-6 text-center text-gray-400 text-xs">Tidak ada data penyerapan.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-gray-400 text-xs">Tidak ada data penyerapan.</td></tr>';
     return;
   }
 
@@ -3775,7 +3754,6 @@ function pRenderProyeksi(mode) {
       <td class="p-2.5 text-xs">${r.kat}</td>
       <td class="p-2.5 text-xs text-right font-mono">${Math.round(r.avgQty).toLocaleString('id-ID')}</td>
       <td class="p-2.5 text-xs text-right font-mono font-semibold">${Math.round(r.projQty).toLocaleString('id-ID')}</td>
-      <td class="p-2.5 text-xs text-right font-mono">${fmtRp(r.projAmt)}</td>
       <td class="p-2.5 text-xs text-right text-gray-400">${projMonths[0]||'—'} s/d ${projMonths[projMonths.length-1]||'—'}</td>
     </tr>`).join('');
 
