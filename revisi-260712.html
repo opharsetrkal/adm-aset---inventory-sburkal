@@ -1099,36 +1099,37 @@ html,body   { height:100%; overflow:hidden; }
   <div id="page-keuangan" class="page">
     <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
 
-      <!-- KPI Resume -->
-      <section>
-        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
-          <span class="material-symbols-outlined text-[12px]">payments</span> Resume Administrasi Keuangan
-        </p>
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3" id="k-kpiFinansial">
+      <!-- Resume Keuangan -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Resume Keuangan Inventory</p>
+          <p class="text-[10px] text-gray-400">Ringkasan administrasi keuangan pengiriman material.</p>
+        </div>
+        <div class="p-4 grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3" id="k-kpiFinansial">
           <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
           <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
         </div>
       </section>
 
-      <!-- Kelompok 2: Status Pekerjaan (distribusi status) -->
-      <section>
-        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
-          <span class="material-symbols-outlined text-[12px]">account_tree</span> Status Pekerjaan
-        </p>
-        <div class="grid gap-2" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))" id="k-statusCards">
+      <!-- Status Pekerjaan -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Status Pekerjaan</p>
+          <p class="text-[10px] text-gray-400">Distribusi status seluruh pekerjaan · klik card untuk filter.</p>
+        </div>
+        <div class="p-4 grid gap-2" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))" id="k-statusCards">
           <div class="skeleton rounded-xl h-20"></div><div class="skeleton rounded-xl h-20"></div>
           <div class="skeleton rounded-xl h-20"></div><div class="skeleton rounded-xl h-20"></div>
         </div>
       </section>
 
-      <!-- Kelompok 3: Status Menunggu Pembayaran (aging) -->
-      <section>
-        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
-          <span class="material-symbols-outlined text-[12px]">schedule</span>
-          Status Menunggu Pembayaran
-          <span class="text-[9px] font-normal normal-case text-gray-300 bg-gray-100 px-2 py-0.5 rounded-full ml-1">Dihitung dari Tgl AWB · hanya status Belum Dibayar</span>
-        </p>
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3" id="k-kpiAging">
+      <!-- Aging Pembayaran -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Aging Pembayaran</p>
+          <p class="text-[10px] text-gray-400">Dihitung dari Tgl AWB · hanya status Belum Dibayar.</p>
+        </div>
+        <div class="p-4 grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3" id="k-kpiAging">
           <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
           <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
         </div>
@@ -1136,9 +1137,7 @@ html,body   { height:100%; overflow:hidden; }
 
       <!-- Filter Strip — ms-dropdown, sebelum chart -->
       <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-3">
-        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
-          <span class="material-symbols-outlined text-[12px]">filter_alt</span> Filter Data
-        </p>
+        <p class="text-[10px] font-semibold text-gray-400 mb-2 flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">filter_alt</span> Filter</p>
         <div class="flex flex-wrap gap-1.5 items-center relative">
           <!-- Status ms-dropdown -->
           <div class="ms-wrap relative" id="ms-k-status">
@@ -1187,12 +1186,12 @@ html,body   { height:100%; overflow:hidden; }
         </div>
       </section>
 
-      <!-- Charts -->
+      <!-- Tren & Top Rute -->
       <section class="grid grid-cols-1 lg:grid-cols-3 gap-3">
         <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 p-4">
           <div class="flex flex-wrap justify-between items-start gap-3 mb-3">
             <div>
-              <p class="text-xs font-bold">Tren Nominal per Bulan</p>
+              <p class="text-sm font-bold text-[#131b2e]">Tren Nominal per Bulan</p>
               <p class="text-[9px] text-gray-400" id="k-trendLabel">Semua data</p>
             </div>
             <div class="flex flex-wrap items-center gap-1.5 text-[10px] no-print">
@@ -1208,7 +1207,7 @@ html,body   { height:100%; overflow:hidden; }
           <div class="h-[220px]"><canvas id="k-trendChart"></canvas></div>
         </div>
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-          <p class="text-xs font-bold mb-1">Top 3 Rute Terbanyak</p>
+          <p class="text-sm font-bold text-[#131b2e] mb-1">Top Rute Terbanyak</p>
           <p class="text-[9px] text-gray-400 mb-3">Berdasarkan jumlah pengiriman · <span class="text-[#00288e] font-semibold">klik untuk filter</span></p>
           <div class="space-y-2 mb-4" id="k-topRoutes">
             <div class="skeleton h-8 rounded-lg"></div><div class="skeleton h-8 rounded-lg"></div><div class="skeleton h-8 rounded-lg"></div>
@@ -1258,34 +1257,32 @@ html,body   { height:100%; overflow:hidden; }
   <div id="page-stok" class="page">
     <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
 
-      <!-- KPI Resume -->
-      <section>
-        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
-          <span class="material-symbols-outlined text-[12px]">package_2</span> Resume stok material
-          
-        </p>
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3" id="s-kpiResume">
+      <!-- Resume Stok -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Resume Stok Material</p>
+          <p class="text-[10px] text-gray-400">Ringkasan kondisi stok material aktif.</p>
+        </div>
+        <div class="p-4 grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3" id="s-kpiResume">
           <div class="skeleton rounded-xl h-20"></div><div class="skeleton rounded-xl h-20"></div>
           <div class="skeleton rounded-xl h-20 col-span-2 md:col-span-1"></div>
         </div>
       </section>
 
       <!-- Stok per KP -->
-      <section>
-        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
-          <span class="material-symbols-outlined text-[12px]">warehouse</span> Total Stok Material per KP
-          <span class="text-[9px] font-normal normal-case text-gray-300 ml-1">Material yang bisa digunakan · klik card untuk filter</span>
-        </p>
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2" id="s-kpiKondisi">
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Stok Material per KP</p>
+          <p class="text-[10px] text-gray-400">Material yang bisa digunakan (Unrestricted) · klik card untuk filter.</p>
+        </div>
+        <div class="p-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2" id="s-kpiKondisi">
           <div class="skeleton rounded-xl h-24 col-span-2"></div>
         </div>
       </section>
 
       <!-- Filter Strip Stok — antara kelompok 2 dan chart -->
       <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-3">
-        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
-          <span class="material-symbols-outlined text-[12px]">filter_alt</span> Filter Data
-        </p>
+        <p class="text-[10px] font-semibold text-gray-400 mb-2 flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">filter_alt</span> Filter</p>
         <div class="flex flex-wrap gap-1.5 items-center relative" id="s-filterStrip">
           <div class="ms-wrap relative" id="ms-s-slocGudang">
             <button class="ms-btn text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 flex items-center gap-1" onclick="sToggleMs('slocGudang')">
@@ -1343,17 +1340,15 @@ html,body   { height:100%; overflow:hidden; }
       </section>
 
       <!-- Stok per Gudang -->
-      <section>
-        <div class="flex flex-wrap items-center gap-2 mb-2">
-          <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
-            <span class="material-symbols-outlined text-[12px]">map</span> Stok per gudang
-          </p>
-          <span class="text-[9px] font-normal text-gray-300">— klik bar untuk filter</span>
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Stok per Gudang</p>
+          <p class="text-[10px] text-gray-400">Distribusi stok per lokasi · klik bar untuk filter.</p>
         </div>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
+        <div class="p-4 grid grid-cols-1 lg:grid-cols-3 gap-3">
           <div class="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
             <div class="flex items-center gap-4 mb-3">
-              <p class="text-xs font-bold text-[#131b2e] flex-1">Stok per Gudang</p>
+              <p class="text-xs font-bold text-[#131b2e] flex-1"></p>
               <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-[#378ADD]"></span>Regional</span>
               <span class="flex items-center gap-1 text-[10px] text-gray-500"><span class="w-3 h-2.5 rounded-sm inline-block bg-[#EF9F27]"></span>Lapangan</span>
             </div>
@@ -1405,12 +1400,13 @@ html,body   { height:100%; overflow:hidden; }
   <div id="page-penyerapan" class="page">
     <main class="pt-4 pb-4 px-3 md:px-6 w-full max-w-[1600px] mx-auto space-y-4">
 
-      <!-- Kelompok 1: Resume -->
-      <section>
-        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
-          <span class="material-symbols-outlined text-[12px]">moving</span> Resume Penyerapan Material
-        </p>
-        <div class="grid grid-cols-2 lg:grid-cols-5 gap-2 md:gap-3" id="p-kpiResume">
+      <!-- Resume Penyerapan -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Resume Penyerapan Material</p>
+          <p class="text-[10px] text-gray-400">Ringkasan penyerapan dan pengembalian material dari SAP MM.</p>
+        </div>
+        <div class="p-4 grid grid-cols-2 lg:grid-cols-5 gap-2 md:gap-3" id="p-kpiResume">
           <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
           <div class="skeleton rounded-xl h-24"></div><div class="skeleton rounded-xl h-24"></div>
           <div class="skeleton rounded-xl h-24"></div>
@@ -1419,9 +1415,7 @@ html,body   { height:100%; overflow:hidden; }
 
       <!-- Filter Strip -->
       <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-3">
-        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
-          <span class="material-symbols-outlined text-[12px]">filter_alt</span> Filter Data
-        </p>
+        <p class="text-[10px] font-semibold text-gray-400 mb-2 flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">filter_alt</span> Filter</p>
         <div class="flex flex-wrap gap-1.5 items-center relative">
           <!-- Posting Date range -->
           <div class="flex items-center gap-1 text-[10px] text-gray-500">
@@ -1512,12 +1506,10 @@ html,body   { height:100%; overflow:hidden; }
         </div>
       </section>
 
-      <!-- Kelompok 3: Chart Multi-Dimensi -->
-      <section>
-        <div class="flex flex-wrap items-center gap-2 mb-2">
-          <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
-            <span class="material-symbols-outlined text-[12px]">bar_chart</span> Analisis Penyerapan
-          </p>
+      <!-- Analisis Penyerapan -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100 flex flex-wrap items-center gap-2">
+          <p class="text-sm font-bold text-[#131b2e]">Analisis Penyerapan</p>
           <!-- Toggle dimensi bar chart -->
           <div class="flex gap-1" id="p-dimToggle">
             <button class="p-dim-btn px-2 py-0.5 text-[10px] font-bold rounded bg-[#00288e] text-white" data-dim="katTeknik">Kat. Teknik</button>
@@ -1546,20 +1538,20 @@ html,body   { height:100%; overflow:hidden; }
         </div>
       </section>
 
-      <!-- Kelompok 4: Top 5 Kat. Teknik -->
-      <section>
-        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
-          <span class="material-symbols-outlined text-[12px]">trophy</span> Top 5 Kategori Teknik Terbanyak Diserap
-          <span class="text-[9px] font-normal normal-case text-gray-300 ml-1">— klik untuk filter tabel</span>
-        </p>
-        <div class="space-y-2" id="p-top5"></div>
+      <!-- Top Kategori Teknik -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100">
+          <p class="text-sm font-bold text-[#131b2e]">Top Kategori Teknik Terbanyak Diserap</p>
+          <p class="text-[10px] text-gray-400">Klik untuk filter tabel.</p>
+        </div>
+        <div class="p-4 space-y-2" id="p-top5"></div>
       </section>
 
-      <!-- Kelompok 5: Tren Penyerapan -->
-      <section class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+      <!-- Tren Penyerapan -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-2">
           <div>
-            <p class="text-xs font-bold text-[#131b2e]">Tren Penyerapan</p>
+            <p class="text-sm font-bold text-[#131b2e]">Tren Penyerapan</p>
             <p class="text-[9px] text-gray-400" id="p-trendLabel">Semua periode</p>
           </div>
           <div class="flex gap-1 no-print">
@@ -1572,7 +1564,7 @@ html,body   { height:100%; overflow:hidden; }
 
           </div>
         </div>
-        <div style="position:relative;height:250px"><canvas id="p-trendChart"></canvas></div>
+        <div class="p-4" style="position:relative;height:250px"><canvas id="p-trendChart"></canvas></div>
       </section>
 
       <!-- Tabel Detail -->
@@ -2605,9 +2597,35 @@ function kRenderTopRoutes() {
     </div>`}).join('');
 }
 
+let K_SORT = { col: '', dir: 1 };
+function kSortBy(col) {
+  if(K_SORT.col===col) K_SORT.dir*=-1;
+  else { K_SORT.col=col; K_SORT.dir=1; }
+  const dir=K_SORT.dir;
+  K_FILTERED.sort(function(a,b){
+    var va=a[col]||'', vb=b[col]||'';
+    // Kolom numerik
+    if(col==='Nominal (Rp)'||col==='Berat (Kg)'){
+      return (parseFloat(String(va).replace(/[^0-9.-]/g,''))||0 - parseFloat(String(vb).replace(/[^0-9.-]/g,''))||0)*dir;
+    }
+    return String(va).localeCompare(String(vb),'id',{numeric:true})*dir;
+  });
+  // Update arrow
+  document.querySelectorAll('[id^="k-sort-"]').forEach(function(el){ el.textContent='↕'; el.className='text-gray-300 text-[9px]'; });
+  var arr=document.getElementById('k-sort-'+col.replace(/[^a-zA-Z0-9]/g,'-'));
+  if(arr){ arr.textContent=dir===1?'▲':'▼'; arr.className='text-[#00288e] text-[9px]'; }
+  kPage=1; kRenderTable();
+}
+
 function kRenderTable() {
   const el=document.getElementById('k-tblHead');
-  if(el)el.innerHTML='<tr><th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">#</th>'+K_HEADERS.map(h=>`<th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap">${h}</th>`).join('')+'<th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Aging</th><th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Reminder</th></tr>';
+  const sortId=function(h){ return 'k-sort-'+h.replace(/[^a-zA-Z0-9]/g,'-'); };
+  const thCls='p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap cursor-pointer hover:text-[#00288e] select-none';
+  if(el)el.innerHTML='<tr><th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">#</th>'
+    +K_HEADERS.map(h=>`<th class="${thCls}" onclick="kSortBy('${h.replace(/'/g,"\\'")}')">
+      ${h} <span id="${sortId(h)}" class="text-gray-300 text-[9px]">↕</span></th>`).join('')
+    +`<th class="${thCls}" onclick="kSortBy('__aging')">Aging <span id="k-sort---aging" class="text-gray-300 text-[9px]">↕</span></th>`
+    +'<th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">Reminder</th></tr>';
   const start=(kPage-1)*PAGE_SIZE_K;
   const paged=K_FILTERED.slice(start,start+PAGE_SIZE_K);
   const tbody=document.getElementById('k-tblBody');
@@ -2989,9 +3007,31 @@ function sRenderBrandChart(filtered) {
   });
 }
 
+let S_SORT = { col: '', dir: 1 };
+function sSortBy(col) {
+  if(S_SORT.col===col) S_SORT.dir*=-1;
+  else { S_SORT.col=col; S_SORT.dir=1; }
+  const dir=S_SORT.dir;
+  const filtered=sApplyF(S_ROWS,SF);
+  filtered.sort(function(a,b){
+    var va=a[col], vb=b[col];
+    if(va===null||va===undefined) va=''; if(vb===null||vb===undefined) vb='';
+    if(col==='Unrestricted'||col==='Value Unrestricted') return ((parseFloat(va)||0)-(parseFloat(vb)||0))*dir;
+    return String(va).localeCompare(String(vb),'id',{numeric:true})*dir;
+  });
+  document.querySelectorAll('[id^="s-sort-"]').forEach(function(el){ el.textContent='↕'; el.className='text-gray-300 text-[9px]'; });
+  var arr=document.getElementById('s-sort-'+col.replace(/[^a-zA-Z0-9]/g,'-'));
+  if(arr){ arr.textContent=dir===1?'▲':'▼'; arr.className='text-[#00288e] text-[9px]'; }
+  sPage=1; sRenderTable(filtered);
+}
+
 function sRenderTable(filtered) {
   const thead=document.getElementById('s-tblHead');
-  if(thead)thead.innerHTML='<tr><th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">#</th>'+S_COLS.map(h=>`<th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap">${h}</th>`).join('')+'</tr>';
+  const sortId=function(h){ return 's-sort-'+h.replace(/[^a-zA-Z0-9]/g,'-'); };
+  const thCls='p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap cursor-pointer hover:text-[#00288e] select-none';
+  if(thead)thead.innerHTML='<tr><th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">#</th>'
+    +S_COLS.map(h=>`<th class="${thCls}" onclick="sSortBy('${h.replace(/'/g,"\\'")}')">
+      ${h} <span id="${sortId(h)}" class="text-gray-300 text-[9px]">↕</span></th>`).join('')+'</tr>';
   const start=(sPage-1)*PAGE_SIZE_S;
   const paged=filtered.slice(start,start+PAGE_SIZE_S);
   const tbody=document.getElementById('s-tblBody');
@@ -3436,10 +3476,30 @@ const P_COL_LABELS={'Material Document':'Mat.Doc','Item':'Item','Material':'Mate
   'Material - Brand':'Brand','Kategori - Teknik':'Kat. Teknik',
   'Movement Type Text':'Movement','Posting Date':'Tgl','_type':'Tipe'};
 
+let P_SORT = { col: '', dir: 1 };
+function pSortBy(col) {
+  if(P_SORT.col===col) P_SORT.dir*=-1;
+  else { P_SORT.col=col; P_SORT.dir=1; }
+  const dir=P_SORT.dir;
+  P_FILTERED.sort(function(a,b){
+    var va=a[col], vb=b[col];
+    if(va===null||va===undefined) va=''; if(vb===null||vb===undefined) vb='';
+    if(col==='Quantity'||col==='Amount in LC') return ((parseFloat(va)||0)-(parseFloat(vb)||0))*dir;
+    return String(va).localeCompare(String(vb),'id',{numeric:true})*dir;
+  });
+  document.querySelectorAll('[id^="p-sort-"]').forEach(function(el){ el.textContent='↕'; el.className='text-gray-300 text-[9px]'; });
+  var arr=document.getElementById('p-sort-'+col.replace(/[^a-zA-Z0-9]/g,'-'));
+  if(arr){ arr.textContent=dir===1?'▲':'▼'; arr.className='text-[#00288e] text-[9px]'; }
+  pPage=1; pRenderTable();
+}
+
 function pRenderTable() {
   const thead=document.getElementById('p-tblHead');
+  const sortId=function(h){ return 'p-sort-'+h.replace(/[^a-zA-Z0-9]/g,'-'); };
+  const thCls='p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap cursor-pointer hover:text-[#00288e] select-none';
   if(thead)thead.innerHTML='<tr><th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100">#</th>'+
-    P_COLS.map(h=>`<th class="p-3 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap">${P_COL_LABELS[h]||h}</th>`).join('')+'</tr>';
+    P_COLS.map(h=>`<th class="${thCls}" onclick="pSortBy('${h.replace(/'/g,"\\'")}')">
+      ${P_COL_LABELS[h]||h} <span id="${sortId(h)}" class="text-gray-300 text-[9px]">↕</span></th>`).join('')+'</tr>';
   const start=(pPage-1)*P_PAGE_SIZE;
   const paged=P_FILTERED.slice(start,start+P_PAGE_SIZE);
   const tbody=document.getElementById('p-tblBody');
