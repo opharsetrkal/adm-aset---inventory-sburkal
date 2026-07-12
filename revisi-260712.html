@@ -3671,11 +3671,22 @@ function wigRenderResume(lms){
 function wigRenderGapAnalysis(lms){
   const canvas=document.getElementById('wig-healthChart');
   if(!canvas)return;
+  // Overlay untuk empty state — TIDAK mengganti canvas (menghapus canvas dari DOM menyebabkan bug permanen)
+  var overlay=document.getElementById('wig-healthChart-overlay');
+  if(!overlay){
+    overlay=document.createElement('div');
+    overlay.id='wig-healthChart-overlay';
+    overlay.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.92);border-radius:8px;z-index:2;';
+    canvas.parentElement.style.position='relative';
+    canvas.parentElement.appendChild(overlay);
+  }
   const withData=lms.filter(function(l){return (l.totalTarget||0)>0;});
   if(!withData.length){
-    canvas.parentElement.innerHTML='<p class="text-[10px] text-gray-400 text-center py-8">Tidak ada data pada filter ini</p>';
+    overlay.innerHTML='<p class="text-[10px] text-gray-400">Tidak ada data pada filter ini</p>';
+    overlay.style.display='flex';
     return;
   }
+  overlay.style.display='none';
   const pctData=withData.map(function(l){
     return l.totalTarget>0?parseFloat((l.totalReal/l.totalTarget*100).toFixed(1)):0;
   });
