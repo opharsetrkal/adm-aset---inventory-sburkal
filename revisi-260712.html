@@ -1612,7 +1612,7 @@ html,body   { height:100%; overflow:hidden; }
       <!-- Resume -->
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100">
-          <p class="text-sm font-bold text-[#131b2e]">Resume</p>
+          <p class="text-sm font-bold text-[#131b2e]">Resume WIG Aset</p>
           <p class="text-[10px] text-gray-400">Seberapa dekat target penguatan aset tercapai — Tahun 2026.</p>
         </div>
         <div class="p-4 grid grid-cols-2 lg:grid-cols-5 gap-3" id="wig-resume">
@@ -1626,8 +1626,8 @@ html,body   { height:100%; overflow:hidden; }
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
           <div>
-            <p class="text-sm font-bold text-[#131b2e]">Health</p>
-            <p class="text-[10px] text-gray-400">Target vs Realisasi per LM · bar = target, line = realisasi.</p>
+            <p class="text-sm font-bold text-[#131b2e]">Kondisi Target vs Realisasi</p>
+            <p class="text-[10px] text-gray-400">% pencapaian per LM (realisasi / target tahunan 2026) · bar = target, line = realisasi.</p>
           </div>
           <div class="flex items-center gap-3 text-[10px] text-gray-500">
             <span class="flex items-center gap-1"><span class="w-3 h-2.5 rounded-sm inline-block bg-[#378ADD]"></span>Target</span>
@@ -1640,8 +1640,8 @@ html,body   { height:100%; overflow:hidden; }
       <!-- Analysis -->
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100">
-          <p class="text-sm font-bold text-[#131b2e]">Analysis</p>
-          <p class="text-[10px] text-gray-400">Kontributor per LM dan progress semester vs minggu berjalan.</p>
+          <p class="text-sm font-bold text-[#131b2e]">Analisis</p>
+          <p class="text-[10px] text-gray-400">Kontributor per LM dan progres tahun 2026 vs target minggu berjalan.</p>
         </div>
         <div class="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div class="border border-gray-100 rounded-xl overflow-hidden">
@@ -1649,7 +1649,7 @@ html,body   { height:100%; overflow:hidden; }
             <div id="wig-kontributorPerLM" class="p-3 space-y-1.5 max-h-72 overflow-y-auto custom-scrollbar"></div>
           </div>
           <div class="border border-gray-100 rounded-xl overflow-hidden">
-            <div class="px-3 py-2 bg-gray-50 border-b border-gray-100"><p class="text-xs font-bold">Progress Semester vs Minggu Berjalan</p><p class="text-[9px] text-gray-400">Per LM</p></div>
+            <div class="px-3 py-2 bg-gray-50 border-b border-gray-100"><p class="text-xs font-bold">Progres Tahun 2026 vs Minggu Berjalan</p><p class="text-[9px] text-gray-400">Per LM</p></div>
             <div id="wig-progressCompare" class="p-3 space-y-2.5 max-h-72 overflow-y-auto custom-scrollbar"></div>
           </div>
         </div>
@@ -1659,7 +1659,7 @@ html,body   { height:100%; overflow:hidden; }
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100">
           <p class="text-sm font-bold text-[#131b2e]">Tindak Lanjut Urgent</p>
-          <p class="text-[10px] text-gray-400">LM dengan statusMinggu Off Track — progress target minggu berjalan per KP.</p>
+          <p class="text-[10px] text-gray-400">LM yang belum mencapai target minggu berjalan — diurutkan dari pencapaian terendah.</p>
         </div>
         <div class="overflow-x-auto custom-scrollbar">
           <table class="w-full text-left border-collapse" style="min-width:980px">
@@ -1677,16 +1677,18 @@ html,body   { height:100%; overflow:hidden; }
         <div class="p-3 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
           <div>
             <p class="text-sm font-bold">Detail Data WIG Aset</p>
-            <p class="text-[10px] text-gray-400">Target & Realisasi 2026 per KP · klik header WIG/LM untuk sort</p>
+            <p class="text-[10px] text-gray-400" id="wig-detail-mode-label">Target & Realisasi Tahunan 2026 per KP</p>
           </div>
-          <input type="text" id="wig-search" oninput="wigApplyFilter()" placeholder="Cari LM / Inisiatif…" class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 w-44">
+          <div class="flex items-center gap-2 no-print">
+            <div class="flex gap-1 border border-gray-200 rounded-lg p-0.5 bg-gray-50">
+              <button id="wig-toggle-tahunan" onclick="wigSetMode('tahunan')" class="px-3 py-1 text-[10px] font-bold rounded bg-[#00288e] text-white">Tahunan</button>
+              <button id="wig-toggle-mingguan" onclick="wigSetMode('mingguan')" class="px-3 py-1 text-[10px] font-bold rounded text-gray-500 hover:bg-white">Mingguan</button>
+            </div>
+            <input type="text" id="wig-search" oninput="wigApplyFilter()" placeholder="Cari LM / Inisiatif…" class="text-[10px] h-7 px-2 border border-gray-200 rounded-lg bg-[#f2f3ff] text-gray-600 w-44">
         </div>
         <div class="overflow-x-auto custom-scrollbar">
-          <table class="w-full text-left border-collapse" style="min-width:1600px">
-            <thead class="bg-gray-50 sticky top-0">
-              <tr><th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap cursor-pointer hover:text-[#00288e]" onclick="wigSortBy('wigNama')">WIG</th><th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap cursor-pointer hover:text-[#00288e]" onclick="wigSortBy('nama')">LM</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">BPN</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalBar</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalSel</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalTeng</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="3">KalTim</th><th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50" colspan="3">SBU Total</th><th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center whitespace-nowrap">Status</th></tr>
-              <tr><th class="p-2 border-b border-gray-200"></th><th class="p-2 border-b border-gray-200"></th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">Target</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">Real</th><th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">%</th><th class="p-2 border-b border-gray-200"></th></tr>
-            </thead>
+          <table class="w-full text-left border-collapse" style="min-width:1200px">
+            <thead id="wig-tblHead"></thead>
             <tbody id="wig-tblBody"><tr><td colspan="20" class="p-10 text-center text-gray-400 text-xs">Memuat data…</td></tr></tbody>
           </table>
         </div>
@@ -3520,16 +3522,66 @@ document.addEventListener('DOMContentLoaded',()=>{
 // ══════════════════════════════════════════════════════════
 let WIG_ALL_DATA=null, WIG_LMS=[], WIG_FILTERED=[], WIG_ACTIVE_KEY=null;
 let WIG_SORT={col:'pencapaian',dir:-1};
+let WIG_MODE='tahunan'; // 'tahunan' | 'mingguan'
 
-const WIG_COLS=[
-  {key:'wigNama',label:'WIG'},
-  {key:'nama',label:'LM / Inisiatif'},
-  {key:'totalTarget',label:'Target',num:true},
-  {key:'totalReal',label:'Realisasi',num:true},
-  {key:'pencapaian',label:'Pencapaian',num:true},
-  {key:'status',label:'Status'},
-  {key:'pctMinggu',label:'% Minggu',num:true}
-];
+function wigSetMode(mode){
+  WIG_MODE=mode;
+  ['tahunan','mingguan'].forEach(function(m){
+    var btn=document.getElementById('wig-toggle-'+m);
+    if(!btn)return;
+    btn.className=m===mode
+      ?'px-3 py-1 text-[10px] font-bold rounded bg-[#00288e] text-white'
+      :'px-3 py-1 text-[10px] font-bold rounded text-gray-500 hover:bg-white';
+  });
+  var lbl=document.getElementById('wig-detail-mode-label');
+  if(lbl)lbl.textContent=mode==='tahunan'
+    ?'Target & Realisasi Tahunan 2026 per KP'
+    :'Target Mingguan Berjalan per KP';
+  wigRenderTableHead();
+  wigRenderTable();
+}
+
+function wigRenderTableHead(){
+  var thead=document.getElementById('wig-tblHead');
+  if(!thead)return;
+  var KPS=['BPN','KalBar','KalSel','KalTeng','KalTim'];
+  var isTah=WIG_MODE==='tahunan';
+  var colSpan=isTah?3:1;
+  // Baris 1: WIG, LM, per-KP header, SBU Total, Status
+  var row1='<tr class="bg-gray-50 sticky top-0">'
+    +'<th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap cursor-pointer hover:text-[#00288e]" onclick="wigSortBy(\'wigNama\')">WIG</th>'
+    +'<th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap cursor-pointer hover:text-[#00288e]" onclick="wigSortBy(\'nama\')">LM</th>';
+  KPS.forEach(function(kp){
+    row1+='<th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="'+colSpan+'">'+kp+'</th>';
+  });
+  var sbuColspan=isTah?3:1;
+  row1+='<th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50" colspan="'+sbuColspan+'">SBU Total</th>';
+  if(isTah)row1+='<th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center whitespace-nowrap">Status</th>';
+  row1+='</tr>';
+  // Baris 2: sub-header kolom
+  var row2='<tr class="bg-gray-50 sticky top-0">'
+    +'<th class="p-2 border-b border-gray-200"></th>'
+    +'<th class="p-2 border-b border-gray-200"></th>';
+  KPS.forEach(function(){
+    if(isTah){
+      row2+='<th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th>'
+        +'<th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th>'
+        +'<th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th>';
+    } else {
+      row2+='<th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target Minggu</th>';
+    }
+  });
+  if(isTah){
+    row2+='<th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">Target</th>'
+      +'<th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">Real</th>'
+      +'<th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">%</th>'
+      +'<th class="p-2 border-b border-gray-200"></th>';
+  } else {
+    row2+='<th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">Total Minggu</th>';
+  }
+  row2+='</tr>';
+  thead.innerHTML=row1+row2;
+}
 
 async function wigLoadData(){
   if(loading.wig)return;loading.wig=true;
@@ -3563,6 +3615,7 @@ function wigApplyFilter(){
   wigRenderKontributorPerLM(WIG_LMS);
   wigRenderProgressCompare(WIG_LMS);
   wigRenderPriority(WIG_LMS);
+  wigRenderTableHead();
   wigRenderTable();
 }
 
@@ -3597,27 +3650,32 @@ function wigRenderResume(lms){
 function wigRenderGapAnalysis(lms){
   const canvas=document.getElementById('wig-healthChart');
   if(!canvas)return;
-  const withData=lms.filter(function(l){return (l.totalTarget||0)>0||(l.totalReal||0)>0;});
+  const withData=lms.filter(function(l){return (l.totalTarget||0)>0;});
   if(!withData.length){
     canvas.parentElement.innerHTML='<p class="text-[10px] text-gray-400 text-center py-8">Belum ada data target / realisasi</p>';
     return;
   }
+  // Normalisasi ke % pencapaian — sumbu Y setara untuk semua LM terlepas magnitude nilai
+  const pctData=withData.map(function(l){
+    return l.totalTarget>0?parseFloat((l.totalReal/l.totalTarget*100).toFixed(1)):0;
+  });
   rebuildChart('wig-healthChart',{
     data:{
       labels:withData.map(function(l){return l.nama.replace(' — ',' - ');}),
       datasets:[
-        {type:'bar',label:'Target 2026',data:withData.map(function(l){return l.totalTarget||0;}),backgroundColor:'rgba(55,138,221,0.7)',borderColor:'#378ADD',borderWidth:1,borderRadius:3,yAxisID:'y'},
-        {type:'line',label:'Realisasi',data:withData.map(function(l){return l.totalReal||0;}),borderColor:'#1D9E75',backgroundColor:'transparent',borderWidth:2,pointRadius:4,pointBackgroundColor:'#1D9E75',tension:0.2,yAxisID:'y'}
+        {type:'bar',label:'Target (100%)',data:withData.map(function(){return 100;}),backgroundColor:'rgba(55,138,221,0.2)',borderColor:'#378ADD',borderWidth:1,borderRadius:3,yAxisID:'y'},
+        {type:'line',label:'Realisasi (%)',data:pctData,borderColor:'#1D9E75',backgroundColor:'transparent',borderWidth:2,pointRadius:4,pointBackgroundColor:pctData.map(function(v){return v>=100?'#1D9E75':v>=80?'#f97316':'#ef4444';}),tension:0.2,yAxisID:'y'}
       ]
     },
     options:{
       responsive:true,maintainAspectRatio:false,
       plugins:{
         legend:{display:false},
-        tooltip:{callbacks:{label:function(ctx){return ' '+ctx.dataset.label+': '+Math.round(ctx.parsed.y).toLocaleString('id-ID');}}}
+        tooltip:{callbacks:{label:function(ctx){return ' '+ctx.dataset.label+': '+ctx.parsed.y+'%';}}}
       },
       scales:{
-        y:{beginAtZero:true,ticks:{callback:function(v){return v>=1000?Math.round(v/1000)+'K':v;},font:{size:9}}},
+        y:{beginAtZero:true,max:120,ticks:{callback:function(v){return v+'%';},font:{size:9}},
+          grid:{color:function(ctx){return ctx.tick.value===100?'rgba(55,138,221,0.5)':'rgba(0,0,0,0.05)';}}},
         x:{ticks:{font:{size:9},maxRotation:30}}
       }
     }
@@ -3658,10 +3716,12 @@ function wigRenderProgressCompare(lms){
   el.innerHTML=lms.map(function(l){
     const pctSem=((l.pctSbu||0)*100).toFixed(1);
     const pctMing=((l.pctMinggu||0)*100).toFixed(1);
+    const clsSem=parseFloat(pctSem)>=100?'bg-green-500':parseFloat(pctSem)>=80?'bg-orange-400':'bg-red-500';
+    const clsMing=parseFloat(pctMing)>=100?'bg-green-500':parseFloat(pctMing)>=80?'bg-orange-400':'bg-red-500';
     return '<div>'
       +'<p class="text-[10px] font-medium text-gray-700 mb-1">'+l.nama+'</p>'
-      +'<div class="flex items-center gap-2 mb-1"><span class="text-[9px] text-gray-400 w-14">Semester</span><div class="flex-1 bg-gray-100 rounded-full h-1.5"><div class="h-1.5 rounded-full bg-[#00288e]" style="width:'+Math.min(100,pctSem)+'%"></div></div><span class="text-[9px] font-bold w-12 text-right">'+pctSem+'%</span></div>'
-      +'<div class="flex items-center gap-2"><span class="text-[9px] text-gray-400 w-14">Minggu</span><div class="flex-1 bg-gray-100 rounded-full h-1.5"><div class="h-1.5 rounded-full bg-orange-400" style="width:'+Math.min(100,pctMing)+'%"></div></div><span class="text-[9px] font-bold w-12 text-right">'+pctMing+'%</span></div>'
+      +'<div class="flex items-center gap-2 mb-1"><span class="text-[9px] text-gray-400 w-16">Tahun 2026</span><div class="flex-1 bg-gray-100 rounded-full h-1.5"><div class="h-1.5 rounded-full '+clsSem+'" style="width:'+Math.min(100,pctSem)+'%"></div></div><span class="text-[9px] font-bold w-12 text-right">'+pctSem+'%</span></div>'
+      +'<div class="flex items-center gap-2"><span class="text-[9px] text-gray-400 w-16">Minggu ini</span><div class="flex-1 bg-gray-100 rounded-full h-1.5"><div class="h-1.5 rounded-full '+clsMing+'" style="width:'+Math.min(100,pctMing)+'%"></div></div><span class="text-[9px] font-bold w-12 text-right">'+pctMing+'%</span></div>'
       +'</div>';
   }).join('');
 }
@@ -3734,22 +3794,32 @@ function wigSortBy(col){
   if(WIG_SORT.col===col)WIG_SORT.dir*=-1;else{WIG_SORT.col=col;WIG_SORT.dir=1;}
   wigSortApply();wigRenderTable();
 }
-function wigRenderTableHead(){}  // header sudah di HTML (static dengan double row)
 function wigRenderTable(){
-  wigRenderTableHead();
   const tbody=document.getElementById('wig-tblBody');
   if(!tbody)return;
-  if(!WIG_FILTERED.length){tbody.innerHTML='<tr><td colspan="20" class="p-8 text-center text-gray-400 text-xs">Tidak ada data</td></tr>';return;}
+  var isTah=WIG_MODE==='tahunan';
+  var colspan=isTah?22:8; // 2 fixed + 5KP*(3 or 1) + SBU*(3 or 1) + status(1 or 0)
+  if(!WIG_FILTERED.length){tbody.innerHTML='<tr><td colspan="'+colspan+'" class="p-8 text-center text-gray-400 text-xs">Tidak ada data</td></tr>';return;}
   tbody.innerHTML=WIG_FILTERED.map(function(l){
-    const stBadge=l.status==='✅'?'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-green-100 text-green-700">On Track</span>'
-      :l.status==='❌'?'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-red-100 text-red-700">Off Track</span>'
-      :'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-gray-100 text-gray-500">—</span>';
-    return '<tr class="hover:bg-[#f2f3ff] cursor-pointer transition-colors border-b border-gray-50" onclick="wigSelectLm('+l.wig+','+l.lm+')">'
-      +'<td class="p-2 text-[9px] text-gray-500 whitespace-nowrap max-w-[160px] overflow-hidden text-ellipsis" title="'+l.wigNama+'">'+l.wigNama+'</td>'
-      +'<td class="p-2 text-[9px] font-semibold text-[#00288e] whitespace-nowrap">'+l.nama+'</td>'
-      +wigKpCols(l.kpData,false)
-      +wigSbuTotal(l,false)
-      +'<td class="p-2 text-center">'+stBadge+'</td></tr>';
+    if(isTah){
+      const stBadge=l.status==='✅'?'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-green-100 text-green-700">On Track</span>'
+        :l.status==='❌'?'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-red-100 text-red-700">Off Track</span>'
+        :'<span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-gray-100 text-gray-500">—</span>';
+      return '<tr class="hover:bg-[#f2f3ff] cursor-pointer transition-colors border-b border-gray-50" onclick="wigSelectLm('+l.wig+','+l.lm+')">'
+        +'<td class="p-2 text-[9px] text-gray-500 whitespace-nowrap max-w-[160px] overflow-hidden text-ellipsis" title="'+l.wigNama+'">'+l.wigNama+'</td>'
+        +'<td class="p-2 text-[9px] font-semibold text-[#00288e] whitespace-nowrap">'+l.nama+'</td>'
+        +wigKpCols(l.kpData,false)
+        +wigSbuTotal(l,false)
+        +'<td class="p-2 text-center">'+stBadge+'</td></tr>';
+    } else {
+      // Mode mingguan: cuma tampilkan target minggu per KP + SBU Total
+      const mingBadge=l.statusMinggu==='✅'?'text-green-600':'text-red-600';
+      return '<tr class="hover:bg-[#f2f3ff] cursor-pointer transition-colors border-b border-gray-50" onclick="wigSelectLm('+l.wig+','+l.lm+')">'
+        +'<td class="p-2 text-[9px] text-gray-500 whitespace-nowrap max-w-[160px] overflow-hidden text-ellipsis" title="'+l.wigNama+'">'+l.wigNama+'</td>'
+        +'<td class="p-2 text-[9px] font-semibold text-[#00288e] whitespace-nowrap">'+l.nama+' <span class="'+mingBadge+'">'+(l.statusMinggu||'')+'</span></td>'
+        +wigKpCols(l.kpData,true)
+        +wigSbuTotal(l,true)+'</tr>';
+    }
   }).join('');
 }
 
