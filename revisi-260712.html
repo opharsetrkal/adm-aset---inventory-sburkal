@@ -1225,6 +1225,39 @@ html,body   { height:100%; overflow:hidden; }
         <div class="h-[220px]"><canvas id="k-mitraChart"></canvas></div>
       </section>
 
+      <!-- Proyeksi Biaya Pengiriman -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <p class="text-sm font-bold text-[#131b2e]">Proyeksi Biaya Pengiriman Material</p>
+            <p class="text-[10px] text-gray-400">Moving average dari historis nominal · <span class="text-orange-500 font-semibold">estimasi, bukan anggaran resmi</span></p>
+          </div>
+          <div class="flex gap-1 border border-gray-200 rounded-lg p-0.5 bg-gray-50 no-print">
+            <button id="kproj-btn-2026" onclick="kRenderProyeksi('2026')" class="px-3 py-1 text-[10px] font-bold rounded bg-[#00288e] text-white">Sisa 2026</button>
+            <button id="kproj-btn-2027" onclick="kRenderProyeksi('2027')" class="px-3 py-1 text-[10px] font-bold rounded text-gray-500 hover:bg-white">2027</button>
+          </div>
+        </div>
+        <div class="p-4">
+          <p class="text-[9px] text-gray-400 mb-3" id="k-projLabel">—</p>
+          <div style="position:relative;height:220px"><canvas id="k-proyeksiChart"></canvas></div>
+        </div>
+        <div class="px-4 pb-4">
+          <div class="overflow-x-auto overflow-y-auto custom-scrollbar" style="max-height:240px">
+            <table class="w-full text-left border-collapse" style="min-width:400px">
+              <thead class="bg-gray-50 sticky top-0"><tr>
+                <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Bulan</th>
+                <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Proyeksi Nominal (Rp)</th>
+                <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Proyeksi Jumlah Kiriman</th>
+              </tr></thead>
+              <tbody id="k-proyeksiTbody">
+                <tr><td colspan="3" class="p-6 text-center text-gray-400 text-xs">Memuat…</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-[9px] text-gray-300 mt-2">* Menggunakan moving average sederhana dari seluruh data historis yang tersedia. Tidak memperhitungkan perubahan volume atau kontrak mendatang.</p>
+        </div>
+      </section>
+
       <!-- Tabel -->
       <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden" id="k-tableSection">
         <div class="p-3 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
@@ -1389,6 +1422,36 @@ html,body   { height:100%; overflow:hidden; }
               <tr><td colspan="6" class="p-8 text-center text-gray-400 text-xs">Memuat data…</td></tr>
             </tbody>
           </table>
+        </div>
+      </section>
+
+      <!-- Stok Kabel FOC -->
+      <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between gap-2">
+          <div>
+            <p class="text-sm font-bold text-[#131b2e]">Stok Kabel FOC (Non-DW)</p>
+            <p class="text-[10px] text-gray-400">Klasifikasi per panjang · Kategori Teknik = FOC, kecuali DW · per baris (Material × Batch × Sloc).</p>
+          </div>
+          <span class="text-[9px] font-semibold text-blue-600 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full whitespace-nowrap" id="s-kabelCount">—</span>
+        </div>
+        <div class="overflow-x-auto overflow-y-auto custom-scrollbar" style="max-height:320px">
+          <table class="w-full text-left border-collapse" style="min-width:700px">
+            <thead class="bg-gray-50 sticky top-0"><tr>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Material</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Deskripsi</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Batch</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">Sloc KP</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-right">Qty (Unrestricted)</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100">UoM</th>
+              <th class="p-2.5 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center">Kelas Panjang</th>
+            </tr></thead>
+            <tbody id="s-kabelTbody">
+              <tr><td colspan="7" class="p-8 text-center text-gray-400 text-xs">Memuat data…</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="px-4 py-3 border-t border-gray-100">
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="s-kabelSummary"></div>
         </div>
       </section>
 
@@ -2410,6 +2473,7 @@ function kApplyFilters() {
   kRenderTrendChart();
   kRenderMitraChart();
   kRenderAgingChart();
+  kRenderProyeksi(K_PROJ_MODE);
   kUpdateLabel();
   kPage=1; kRenderTable();
 }
@@ -2674,6 +2738,102 @@ function kSortBy(col) {
   var arr=document.getElementById('k-sort-'+col.replace(/[^a-zA-Z0-9]/g,'-'));
   if(arr){ arr.textContent=dir===1?'▲':'▼'; arr.className='text-[#00288e] text-[9px]'; }
   kPage=1; kRenderTable();
+}
+
+// ── PROYEKSI BIAYA PENGIRIMAN ─────────────────────────────
+let K_PROJ_MODE = '2026';
+
+function kRenderProyeksi(mode) {
+  mode = mode || K_PROJ_MODE;
+  K_PROJ_MODE = mode;
+  ['2026','2027'].forEach(function(m){
+    var btn = document.getElementById('kproj-btn-'+m);
+    if(btn) btn.className = 'px-3 py-1 text-[10px] font-bold rounded '
+      + (m===mode ? 'bg-[#00288e] text-white' : 'text-gray-500 hover:bg-white');
+  });
+
+  var tbody  = document.getElementById('k-proyeksiTbody');
+  var labelEl = document.getElementById('k-projLabel');
+  if(!tbody) return;
+
+  // Gunakan SEMUA K_ROWS (bukan K_FILTERED) sebagai baseline historis yang tidak bias filter
+  var histRows = K_ROWS.filter(function(r){ return r['Tgl AWB']; });
+  if(!histRows.length){
+    tbody.innerHTML = '<tr><td colspan="3" class="p-6 text-center text-gray-400 text-xs">Tidak ada data historis.</td></tr>';
+    return;
+  }
+
+  // Agregasi per bulan: nominal dan jumlah kiriman
+  var byMonth = {};
+  histRows.forEach(function(r){
+    var mk = monthKey(r['Tgl AWB']);
+    if(!mk) return;
+    if(!byMonth[mk]) byMonth[mk] = { nom: 0, count: 0 };
+    byMonth[mk].nom   += parseFloat(r['Nominal (Rp)']) || 0;
+    byMonth[mk].count += 1;
+  });
+
+  var monthKeys = Object.keys(byMonth).sort();
+  var nMonths = monthKeys.length || 1;
+  var avgNom   = monthKeys.reduce(function(s,k){ return s + byMonth[k].nom; }, 0) / nMonths;
+  var avgCount = monthKeys.reduce(function(s,k){ return s + byMonth[k].count; }, 0) / nMonths;
+
+  // Bulan proyeksi
+  var today = new Date();
+  var curYear = today.getFullYear();
+  var curMonth = today.getMonth() + 1;
+  var projMonths = [];
+  if(mode === '2026') {
+    for(var m = curMonth + 1; m <= 12; m++)
+      projMonths.push(curYear + '-' + String(m).padStart(2,'0'));
+    if(!projMonths.length) projMonths = [curYear + '-' + String(curMonth).padStart(2,'0')];
+  } else {
+    for(var m = 1; m <= 12; m++)
+      projMonths.push('2027-' + String(m).padStart(2,'0'));
+  }
+
+  var NAMA_BULAN_ID = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agt','Sep','Okt','Nov','Des'];
+  var labels = projMonths.map(function(mk){
+    var parts = mk.split('-');
+    return NAMA_BULAN_ID[parseInt(parts[1])-1]+' '+parts[0];
+  });
+
+  if(labelEl) labelEl.textContent = (mode==='2026'
+    ? 'Proyeksi sisa 2026 ('+projMonths.length+' bulan ke depan)'
+    : 'Proyeksi 2027 (12 bulan)')
+    + ' · baseline dari '+nMonths+' bulan historis · avg Rp '+fmtRp(avgNom)+'/bulan';
+
+  tbody.innerHTML = projMonths.map(function(mk, i){
+    return '<tr class="hover:bg-[#f2f3ff] border-b border-gray-50">'
+      +'<td class="p-2.5 text-xs">'+labels[i]+'</td>'
+      +'<td class="p-2.5 text-xs text-right font-mono font-semibold">'+fmtRp(avgNom)+'</td>'
+      +'<td class="p-2.5 text-xs text-right font-mono">'+Math.round(avgCount).toLocaleString('id-ID')+'</td>'
+      +'</tr>';
+  }).join('');
+
+  rebuildChart('k-proyeksiChart', {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Proyeksi Nominal',
+        data: projMonths.map(function(){ return Math.round(avgNom); }),
+        backgroundColor: 'rgba(55,138,221,0.7)',
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: function(ctx){ return ' '+fmtRp(ctx.parsed.y); } } }
+      },
+      scales: {
+        y: { beginAtZero: true, ticks: { callback: function(v){ return fmtRp(v); }, font: { size: 9 } } },
+        x: { ticks: { font: { size: 9 } }, grid: { display: false } }
+      }
+    }
+  });
 }
 
 function kRenderTable() {
@@ -2942,6 +3102,7 @@ function sApplyAll() {
   sRenderGudangChart(filtered);
   sRenderBrandChart(filtered);
   sRenderAlert(filtered);
+  sRenderKabel(filtered);
   sUpdateLabel(filtered);
   sPage=1;sRenderTable(filtered);
 }
@@ -3018,6 +3179,103 @@ function sRenderAlert(filtered) {
       <td class="p-2.5 text-center">${badge}</td>
     </tr>`;
   }).join('');
+}
+
+// ── STOK KABEL FOC (NON-DW) ───────────────────────────────
+// Kategori Teknik mengandung 'FOC' tapi TIDAK mengandung 'DW'
+// Klasifikasi panjang dari nilai Unrestricted per baris (UoM = M/KM)
+const KABEL_BANDS = [
+  { label: '> 4000',      min: 4000, max: Infinity },
+  { label: '3000 – 4000', min: 3000, max: 4000 },
+  { label: '1000 – 3000', min: 1000, max: 3000 },
+  { label: '500 – 1000',  min: 500,  max: 1000 },
+  { label: '100 – 500',   min: 100,  max: 500 },
+  { label: '< 100',       min: 0,    max: 100 },
+];
+const KABEL_BAND_CLS = [
+  'bg-blue-100 text-blue-800',
+  'bg-blue-50 text-blue-700',
+  'bg-green-50 text-green-700',
+  'bg-orange-50 text-orange-700',
+  'bg-yellow-50 text-yellow-700',
+  'bg-gray-100 text-gray-500',
+];
+
+function kabelBand(qty) {
+  for(var i=0; i<KABEL_BANDS.length; i++){
+    if(qty >= KABEL_BANDS[i].min && qty < KABEL_BANDS[i].max) return i;
+  }
+  return KABEL_BANDS.length - 1;
+}
+
+function sRenderKabel(filtered) {
+  var tbody   = document.getElementById('s-kabelTbody');
+  var countEl = document.getElementById('s-kabelCount');
+  var summaryEl = document.getElementById('s-kabelSummary');
+  if(!tbody) return;
+
+  // Filter: Kategori Teknik mengandung 'FOC', tidak mengandung 'DW', Batch = BAIK, Unrestricted > 0
+  var rows = filtered.filter(function(r){
+    var kat = (r['Kategori - Teknik'] || '').toUpperCase();
+    if(!kat.includes('FOC')) return false;
+    if(kat.includes('DW')) return false;
+    if(!sIsAktif(r)) return false;
+    return true;
+  });
+
+  if(countEl) countEl.textContent = rows.length + ' baris';
+
+  if(!rows.length){
+    tbody.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-gray-400 text-xs">Tidak ada data kabel FOC (non-DW).</td></tr>';
+    if(summaryEl) summaryEl.innerHTML = '';
+    return;
+  }
+
+  // Urutkan: band panjang tertinggi dulu, lalu qty terbesar
+  rows = rows.slice().sort(function(a,b){
+    var qa = parseFloat(a['Unrestricted'])||0;
+    var qb = parseFloat(b['Unrestricted'])||0;
+    var ba = kabelBand(qa), bb = kabelBand(qb);
+    if(ba !== bb) return ba - bb;
+    return qb - qa;
+  });
+
+  // Render tabel
+  tbody.innerHTML = rows.map(function(r){
+    var qty  = parseFloat(r['Unrestricted'])||0;
+    var bi   = kabelBand(qty);
+    var band = KABEL_BANDS[bi];
+    var cls  = KABEL_BAND_CLS[bi];
+    return '<tr class="hover:bg-[#f2f3ff] border-b border-gray-50">'
+      +'<td class="p-2.5 text-xs font-mono">'+(r['Material']||'—')+'</td>'
+      +'<td class="p-2.5 text-xs max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap" title="'+(r['Material Description']||'')+'">'+(r['Material Description']||'—')+'</td>'
+      +'<td class="p-2.5 text-xs">'+(r['Batch']||'—')+'</td>'
+      +'<td class="p-2.5 text-xs">'+(r['Sloc - KP']||'—')+'</td>'
+      +'<td class="p-2.5 text-xs text-right font-bold font-mono">'+Math.round(qty).toLocaleString('id-ID')+'</td>'
+      +'<td class="p-2.5 text-xs">'+(r['Base Unit of Measure']||'—')+'</td>'
+      +'<td class="p-2.5 text-center"><span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold '+cls+'">'+band.label+'</span></td>'
+      +'</tr>';
+  }).join('');
+
+  // Summary per band
+  var bandCount = KABEL_BANDS.map(function(){ return { count:0, totalQty:0 }; });
+  rows.forEach(function(r){
+    var qty = parseFloat(r['Unrestricted'])||0;
+    var bi  = kabelBand(qty);
+    bandCount[bi].count++;
+    bandCount[bi].totalQty += qty;
+  });
+  if(summaryEl) {
+    summaryEl.innerHTML = KABEL_BANDS.map(function(b, i){
+      if(!bandCount[i].count) return '';
+      var cls = KABEL_BAND_CLS[i];
+      return '<div class="rounded-lg border p-2 text-center">'
+        +'<p class="text-[8px] font-bold uppercase text-gray-400 mb-0.5">'+b.label+' M</p>'
+        +'<p class="text-sm font-black text-[#131b2e]">'+bandCount[i].count+'</p>'
+        +'<p class="text-[9px] text-gray-400">'+Math.round(bandCount[i].totalQty).toLocaleString('id-ID')+' M</p>'
+        +'</div>';
+    }).join('');
+  }
 }
 
 function sUpdateLabel(filtered) {
