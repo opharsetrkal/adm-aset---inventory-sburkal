@@ -1661,7 +1661,7 @@ html,body   { height:100%; overflow:hidden; }
       <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-100">
           <p class="text-sm font-bold text-[#131b2e]">Tindak Lanjut Urgent</p>
-          <p class="text-[10px] text-gray-400">LM yang belum mencapai target minggu berjalan — diurutkan dari pencapaian terendah.</p>
+          <p class="text-[10px] font-semibold text-red-500" id="wig-priority-subtitle">LM yang belum mencapai target minggu berjalan — diurutkan dari pencapaian terendah.</p>
         </div>
         <div class="overflow-x-auto custom-scrollbar">
           <table class="w-full text-left border-collapse" style="min-width:980px">
@@ -3620,13 +3620,14 @@ function wigApplyFilter(){
     return (l.nama+' '+l.wigNama).toLowerCase().includes(q);
   });
   wigSortApply();
-  wigRenderResume(WIG_LMS); // resume selalu dari semua data (tidak ikut search)
-  wigRenderGapAnalysis(WIG_LMS);
-  wigRenderKontributorPerLM(WIG_LMS);
-  wigRenderProgressCompare(WIG_LMS);
-  wigRenderPriority(WIG_LMS);
+  wigRenderResume(WIG_LMS);        // card resume tetap dari semua data — angka total tidak berubah saat filter aktif
+  wigRenderGapAnalysis(WIG_FILTERED);
+  wigRenderKontributorPerLM(WIG_FILTERED);
+  wigRenderProgressCompare(WIG_FILTERED);
+  wigRenderPriority(WIG_FILTERED);
   wigRenderTableHead();
   wigRenderTable();
+  wigUpdatePrioritySubtitle();
 }
 
 function wigRenderResume(lms){
@@ -3817,6 +3818,23 @@ function wigSbuTotal(lm, useWeekly){
       +'<td class="p-2 text-[9px] text-right bg-blue-50 font-semibold">'+r.toLocaleString('id-ID')+'</td>'
       +'<td class="p-2 text-[9px] text-right bg-blue-50 font-bold '+pCls+'">'+p+(t>0?'%':'')+'</td>';
   }
+}
+
+// Hitung ISO week number dari tanggal (ISO 8601: Senin = hari pertama, minggu ke-1 = minggu yang mengandung Kamis pertama tahun itu)
+function wigISOWeek(date){
+  var d=new Date(Date.UTC(date.getFullYear(),date.getMonth(),date.getDate()));
+  var day=d.getUTCDay()||7; // Minggu=7
+  d.setUTCDate(d.getUTCDate()+4-day);
+  var yearStart=new Date(Date.UTC(d.getUTCFullYear(),0,1));
+  return Math.ceil((((d-yearStart)/86400000)+1)/7);
+}
+
+function wigUpdatePrioritySubtitle(){
+  var el=document.getElementById('wig-priority-subtitle');
+  if(!el)return;
+  var noMinggu=wigISOWeek(new Date());
+  var offCount=WIG_FILTERED.filter(function(l){return l.statusMinggu==='❌';}).length;
+  el.textContent='LM yang belum mencapai target minggu berjalan ke-'+noMinggu+' ('+offCount+' LM) — diurutkan dari pencapaian terendah.';
 }
 
 function wigRenderPriority(lms){
