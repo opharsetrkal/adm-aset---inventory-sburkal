@@ -639,7 +639,7 @@ html,body   { height:100%; overflow:hidden; }
       <!-- ══════════════════ KONTEN ISP ══════════════════ -->
       <div id="pm-content-isp">
 
-        <!-- 1. RESUME PM ISP -->
+        <!-- Resume PM ISP -->
         <section class="mb-4">
           <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
             <span class="material-symbols-outlined text-[12px]">construction</span> 1. Resume PM ISP
@@ -651,10 +651,10 @@ html,body   { height:100%; overflow:hidden; }
           </div>
         </section>
 
-        <!-- 2-3-4. COMPLIANCE / KETEPATAN / PER KP -->
+        <!-- Compliance / Ketepatan / Per KP -->
         <section class="grid grid-cols-1 lg:grid-cols-3 gap-3 mb-4">
           <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-            <p class="text-xs font-bold mb-1 flex items-center gap-1"><span class="text-gray-300">2.</span> Compliance PM ISP</p>
+            <p class="text-xs font-bold mb-1 flex items-center gap-1">Compliance PM ISP</p>
             <p class="text-[9px] text-gray-400 mb-3">Selesai Tepat Waktu vs Terlambat vs Belum PM</p>
             <div class="relative" style="height:190px">
               <canvas id="pmisp-complianceDonut"></canvas>
@@ -666,7 +666,7 @@ html,body   { height:100%; overflow:hidden; }
             <div class="space-y-1 mt-3" id="pmisp-complianceLegend"></div>
           </div>
           <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-            <p class="text-xs font-bold mb-1 flex items-center gap-1"><span class="text-gray-300">3.</span> Aging Keterlambatan</p>
+            <p class="text-xs font-bold mb-1 flex items-center gap-1">Aging Keterlambatan</p>
             <p class="text-[9px] text-gray-400 mb-3">Sebaran hari terlambat (Tgl Real − Tgl Plan)</p>
             <div class="relative" style="height:190px">
               <canvas id="pmisp-agingDonut"></canvas>
@@ -678,22 +678,22 @@ html,body   { height:100%; overflow:hidden; }
             <div class="space-y-1 mt-3" id="pmisp-agingLegend"></div>
           </div>
           <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-            <p class="text-xs font-bold mb-1 flex items-center gap-1"><span class="text-gray-300">4.</span> Compliance per KP</p>
+            <p class="text-xs font-bold mb-1 flex items-center gap-1">Compliance per KP</p>
             <p class="text-[9px] text-gray-400 mb-3">Bar = Total POP · Garis = Compliance (%) · klik bar untuk filter</p>
             <div style="position:relative;height:220px"><canvas id="pmisp-kpChart"></canvas></div>
           </div>
         </section>
 
-        <!-- 5-6-7. TREND / PRIORITY / BREAKDOWN -->
+        <!-- Tren / Tindak Lanjut / Breakdown -->
         <section class="grid grid-cols-1 lg:grid-cols-12 gap-3 mb-4">
           <div class="lg:col-span-4 bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-            <p class="text-xs font-bold mb-1 flex items-center gap-1"><span class="text-gray-300">5.</span> Trend PM Compliance (%)</p>
+            <p class="text-xs font-bold mb-1 flex items-center gap-1">Tren PM Compliance (%)</p>
             <p class="text-[9px] text-gray-400 mb-3">Per bulan, dari Tgl Real (data historis)</p>
             <div style="position:relative;height:190px"><canvas id="pmisp-trendChart"></canvas></div>
           </div>
           <div class="lg:col-span-4 bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col">
             <div class="p-3 border-b border-gray-100">
-              <p class="text-xs font-bold flex items-center gap-1"><span class="text-gray-300">6.</span> Priority Action (Top 5)</p>
+              <p class="text-xs font-bold flex items-center gap-1">Tindak Lanjut Urgent (Top 5)</p>
               <p class="text-[9px] text-gray-400">Belum PM, paling lewat dari Tgl Plan</p>
             </div>
             <div class="overflow-x-auto custom-scrollbar flex-1">
@@ -710,7 +710,7 @@ html,body   { height:100%; overflow:hidden; }
             </div>
           </div>
           <div class="lg:col-span-4 bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-            <p class="text-xs font-bold mb-1 flex items-center gap-1"><span class="text-gray-300">7.</span> PM by Kategori POP</p>
+            <p class="text-xs font-bold mb-1 flex items-center gap-1">PM by Kategori POP</p>
             <p class="text-[9px] text-gray-400 mb-3">Breakdown dari pop_type (fallback kategori lokasi)</p>
             <div id="pmisp-jenisBreakdown" class="space-y-2"></div>
           </div>
@@ -733,10 +733,10 @@ html,body   { height:100%; overflow:hidden; }
           </div>
         </section>
 
-        <!-- 8. Tabel ISP -->
+        <!-- Detail Tabel ISP -->
         <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div class="p-3 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
-            <div><p class="text-sm font-bold">8. Detail Laporan PM ISP</p><p class="text-[10px] text-gray-400" id="pmisp-filterLabel">Menampilkan semua data</p></div>
+            <div><p class="text-sm font-bold">Detail Laporan PM ISP</p><p class="text-[10px] text-gray-400" id="pmisp-filterLabel">Menampilkan semua data</p></div>
             <button onclick="pmIspExportCSV()" class="flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-semibold border border-gray-200 rounded hover:bg-gray-50 no-print"><span class="material-symbols-outlined text-[13px]">download</span> Ekspor CSV</button>
           </div>
           <div class="overflow-x-auto custom-scrollbar">
@@ -767,7 +767,7 @@ html,body   { height:100%; overflow:hidden; }
       <!-- ══════════════════ KONTEN OSP ══════════════════ -->
       <div id="pm-content-osp" class="hidden">
 
-        <!-- 1. RESUME PM OSP -->
+        <!-- Resume PM OSP -->
         <section class="mb-4">
           <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
             <span class="material-symbols-outlined text-[12px]">cable</span> 1. Resume PM OSP
@@ -779,10 +779,10 @@ html,body   { height:100%; overflow:hidden; }
           </div>
         </section>
 
-        <!-- 2-3-4. COMPLIANCE / AGING / PER WILAYAH -->
+        <!-- Compliance / Aging / Per Wilayah -->
         <section class="grid grid-cols-1 lg:grid-cols-3 gap-3 mb-4">
           <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-            <p class="text-xs font-bold mb-1 flex items-center gap-1"><span class="text-gray-300">2.</span> Compliance PM OSP</p>
+            <p class="text-xs font-bold mb-1 flex items-center gap-1">Compliance PM OSP</p>
             <p class="text-[9px] text-gray-400 mb-3">Close vs Progres vs Open</p>
             <div class="relative" style="height:190px">
               <canvas id="pmosp-complianceDonut"></canvas>
@@ -794,7 +794,7 @@ html,body   { height:100%; overflow:hidden; }
             <div class="space-y-1 mt-3" id="pmosp-complianceLegend"></div>
           </div>
           <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-            <p class="text-xs font-bold mb-1 flex items-center gap-1"><span class="text-gray-300">3.</span> Aging Laporan</p>
+            <p class="text-xs font-bold mb-1 flex items-center gap-1">Aging Laporan</p>
             <p class="text-[9px] text-gray-400 mb-3">Sebaran hari (Tgl Dok − Tgl PM), WO dengan Tgl Dok terisi</p>
             <div class="relative" style="height:190px">
               <canvas id="pmosp-agingDonut"></canvas>
@@ -806,22 +806,22 @@ html,body   { height:100%; overflow:hidden; }
             <div class="space-y-1 mt-3" id="pmosp-agingLegend"></div>
           </div>
           <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-            <p class="text-xs font-bold mb-1 flex items-center gap-1"><span class="text-gray-300">4.</span> Compliance per Wilayah</p>
+            <p class="text-xs font-bold mb-1 flex items-center gap-1">Compliance per Wilayah</p>
             <p class="text-[9px] text-gray-400 mb-3">Bar = Total WO · Garis = Compliance (%) · klik bar untuk filter</p>
             <div style="position:relative;height:220px"><canvas id="pmosp-wilayahChart"></canvas></div>
           </div>
         </section>
 
-        <!-- 5-6-7. TREND / PRIORITY / BREAKDOWN -->
+        <!-- Tren / Tindak Lanjut / Breakdown -->
         <section class="grid grid-cols-1 lg:grid-cols-12 gap-3 mb-4">
           <div class="lg:col-span-4 bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-            <p class="text-xs font-bold mb-1 flex items-center gap-1"><span class="text-gray-300">5.</span> Trend PM Compliance (%)</p>
+            <p class="text-xs font-bold mb-1 flex items-center gap-1">Tren PM Compliance (%)</p>
             <p class="text-[9px] text-gray-400 mb-3">Per bulan (field Bulan/Tahun)</p>
             <div style="position:relative;height:190px"><canvas id="pmosp-trendChart"></canvas></div>
           </div>
           <div class="lg:col-span-4 bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col">
             <div class="p-3 border-b border-gray-100">
-              <p class="text-xs font-bold flex items-center gap-1"><span class="text-gray-300">6.</span> Priority Action (Top 5)</p>
+              <p class="text-xs font-bold flex items-center gap-1">Tindak Lanjut Urgent (Top 5)</p>
               <p class="text-[9px] text-gray-400">Status Open/Progres, paling lama sejak Tgl PM</p>
             </div>
             <div class="overflow-x-auto custom-scrollbar flex-1">
@@ -838,7 +838,7 @@ html,body   { height:100%; overflow:hidden; }
             </div>
           </div>
           <div class="lg:col-span-4 bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-            <p class="text-xs font-bold mb-1 flex items-center gap-1"><span class="text-gray-300">7.</span> PM by Tim Pelaksana</p>
+            <p class="text-xs font-bold mb-1 flex items-center gap-1">PM by Tim Pelaksana</p>
             <p class="text-[9px] text-gray-400 mb-3">Substitusi "Jenis Pekerjaan" — field tsb tidak tersedia di data OSP</p>
             <div id="pmosp-jenisBreakdown" class="space-y-2"></div>
           </div>
@@ -859,10 +859,10 @@ html,body   { height:100%; overflow:hidden; }
           </div>
         </section>
 
-        <!-- 8. Tabel OSP -->
+        <!-- Detail Tabel OSP -->
         <section class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div class="p-3 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2">
-            <div><p class="text-sm font-bold">8. Detail Laporan PM OSP</p><p class="text-[10px] text-gray-400" id="pmosp-filterLabel">Menampilkan semua data</p></div>
+            <div><p class="text-sm font-bold">Detail Laporan PM OSP</p><p class="text-[10px] text-gray-400" id="pmosp-filterLabel">Menampilkan semua data</p></div>
             <button onclick="pmOspExportCSV()" class="flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-semibold border border-gray-200 rounded hover:bg-gray-50 no-print"><span class="material-symbols-outlined text-[13px]">download</span> Ekspor CSV</button>
           </div>
           <div class="overflow-x-auto custom-scrollbar">
@@ -3530,6 +3530,8 @@ let WIG_STATUS_FILTER=''; // ''|'ontrack'|'offtrack'
 function wigCardClick(type){
   WIG_STATUS_FILTER = WIG_STATUS_FILTER===type ? '' : type;
   wigApplyFilter();
+  // Re-render resume card agar badge 'aktif' ikut update — resume selalu dari WIG_LMS
+  wigRenderResume(WIG_LMS);
 }
 
 function wigSetMode(mode){
@@ -3671,7 +3673,7 @@ function wigRenderGapAnalysis(lms){
   if(!canvas)return;
   const withData=lms.filter(function(l){return (l.totalTarget||0)>0;});
   if(!withData.length){
-    canvas.parentElement.innerHTML='<p class="text-[10px] text-gray-400 text-center py-8">Belum ada data target / realisasi</p>';
+    canvas.parentElement.innerHTML='<p class="text-[10px] text-gray-400 text-center py-8">Tidak ada data pada filter ini</p>';
     return;
   }
   const pctData=withData.map(function(l){
@@ -4438,7 +4440,17 @@ document.addEventListener('DOMContentLoaded', () => {
 let PMISP_ROWS = [], PMISP_FILTERED = [], pmIspPage = 1;
 let PMISP_CACHE = null;
 const PMISP_PAGE_SIZE = 15;
-const PIF = { bulan:[], kp:[], pic:[], statusPM:[], statusLap:[], ketepatan:[], pmKe:[], search:'' };
+const PIF = { bulan:[], kp:[], pic:[], statusPM:[], statusLap:[], ketepatan:[], pmKe:[], search:'', cardFilter:'' };
+
+function pmIspCardClick(type){
+  PIF.cardFilter = PIF.cardFilter===type ? '' : type;
+  if(PIF.cardFilter){
+    PIF.bulan=[];PIF.kp=[];PIF.pic=[];PIF.statusPM=[];PIF.statusLap=[];PIF.ketepatan=[];PIF.pmKe=[];
+    document.querySelectorAll('[id^="ms-pi-"] input[type=checkbox]').forEach(function(cb){cb.checked=false;});
+    document.querySelectorAll('[id^="ms-pi-"]').forEach(function(w){w.classList.remove('ms-active');});
+  }
+  pmIspApplyFilter();
+}
 
 const PMISP_KET_COLOR = {
   'Maju dari Jadwal':  { badge:'bg-green-100 text-green-700', row:'' },
@@ -4530,33 +4542,26 @@ function pmIspRenderKPI() {
   const terlambat   = sudahRows.filter(r => r.ketepatanWaktu === 'Lewat dari Jadwal').length;
   const belumPM     = rows.filter(r => r.statusPM !== 'Sudah Terlaksana').length;
   const compliance  = total > 0 ? (tepatWaktu / total * 100) : 0;
-
-  el.innerHTML = `
-    <div class="rounded-xl border p-4 shadow-sm bg-white border-gray-200">
-      <p class="text-[9px] font-bold uppercase mb-1 text-gray-500 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">event_note</span>Total PM Plan</p>
-      <p class="text-2xl font-black text-[#131b2e]">${total.toLocaleString('id-ID')}</p>
-      <p class="text-[9px] mt-0.5 text-gray-400">POP</p>
-    </div>
-    <div class="rounded-xl border p-4 shadow-sm bg-green-50 border-green-200">
-      <p class="text-[9px] font-bold uppercase mb-1 text-green-600 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">check_circle</span>Selesai Tepat Waktu</p>
-      <p class="text-2xl font-black text-green-700">${tepatWaktu.toLocaleString('id-ID')}</p>
-      <p class="text-[9px] mt-0.5 text-green-500">${total?Math.round(tepatWaktu/total*100):0}%</p>
-    </div>
-    <div class="rounded-xl border p-4 shadow-sm bg-orange-50 border-orange-200">
-      <p class="text-[9px] font-bold uppercase mb-1 text-orange-600 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">schedule</span>Selesai Terlambat</p>
-      <p class="text-2xl font-black text-orange-700">${terlambat.toLocaleString('id-ID')}</p>
-      <p class="text-[9px] mt-0.5 text-orange-400">${total?Math.round(terlambat/total*100):0}%</p>
-    </div>
-    <div class="rounded-xl border p-4 shadow-sm bg-red-50 border-red-200">
-      <p class="text-[9px] font-bold uppercase mb-1 text-red-600 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">cancel</span>Belum PM</p>
-      <p class="text-2xl font-black text-red-700">${belumPM.toLocaleString('id-ID')}</p>
-      <p class="text-[9px] mt-0.5 text-red-400">${total?Math.round(belumPM/total*100):0}%</p>
-    </div>
-    <div class="rounded-xl border p-4 shadow-sm bg-blue-50 border-blue-200">
-      <p class="text-[9px] font-bold uppercase mb-1 text-blue-600 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">trending_up</span>PM Compliance</p>
-      <p class="text-2xl font-black text-blue-700">${compliance.toFixed(1)}%</p>
-      <p class="text-[9px] mt-0.5 text-blue-400">Target ≥ 80%</p>
-    </div>`;
+  const cf = PIF.cardFilter;
+  const cards = [
+    {action:'reset', cls:'bg-white border-gray-200', iCls:'text-gray-500', iClsBg:'', icon:'event_note', label:'Total PM Plan', val:total.toLocaleString('id-ID'), sub:'POP'},
+    {action:'tepat', cls:'bg-green-50 border-green-200', iCls:'text-green-600', iClsBg:'', icon:'check_circle', label:'Selesai Tepat Waktu', val:tepatWaktu.toLocaleString('id-ID'), sub:(total?Math.round(tepatWaktu/total*100):0)+'%'},
+    {action:'terlambat', cls:'bg-orange-50 border-orange-200', iCls:'text-orange-600', iClsBg:'', icon:'schedule', label:'Selesai Terlambat', val:terlambat.toLocaleString('id-ID'), sub:(total?Math.round(terlambat/total*100):0)+'%'},
+    {action:'belum', cls:'bg-red-50 border-red-200', iCls:'text-red-600', iClsBg:'', icon:'cancel', label:'Belum PM', val:belumPM.toLocaleString('id-ID'), sub:(total?Math.round(belumPM/total*100):0)+'%'},
+    {action:'reset', cls:'bg-blue-50 border-blue-200', iCls:'text-blue-600', iClsBg:'', icon:'trending_up', label:'PM Compliance', val:compliance.toFixed(1)+'%', sub:'Target ≥ 80%'}
+  ];
+  el.innerHTML = cards.map(function(c){
+    var isActive = c.action!=='reset' && cf===c.action;
+    var activeCls = isActive ? ' ring-2 ring-[#00288e] ring-offset-1' : '';
+    var onclick = c.action==='reset'
+      ? 'onclick="PIF.cardFilter=\'\';pmIspApplyFilter()"'
+      : 'onclick="pmIspCardClick(\''+c.action+'\')"';
+    return '<div class="rounded-xl border p-4 shadow-sm cursor-pointer hover:shadow-md transition-shadow select-none'+activeCls+' '+c.cls+'" '+onclick+'>'
+      +'<p class="text-[9px] font-bold uppercase mb-1 '+c.iCls+' flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">'+c.icon+'</span>'+c.label
+      +(isActive?'<span class="ml-auto text-[8px] font-bold text-[#00288e] bg-blue-50 px-1 rounded">aktif</span>':'')+'</p>'
+      +'<p class="text-2xl font-black" style="color:inherit">'+c.val+'</p>'
+      +'<p class="text-[9px] mt-0.5 opacity-60">'+c.sub+'</p></div>';
+  }).join('');
 }
 
 // ── DONUT: COMPLIANCE (Tepat / Terlambat / Belum PM) ───────
@@ -4733,6 +4738,7 @@ function pmIspMsChange(key) {
   const menu = document.getElementById('ms-pi-'+key+'-menu');
   if(!menu) return;
   PIF[key] = [...menu.querySelectorAll('input:checked')].map(el => el.value);
+  PIF.cardFilter = ''; // reset cardFilter saat checkbox aktif
   const lbl  = document.getElementById('ms-pi-'+key+'-label');
   const wrap = document.getElementById('ms-pi-'+key);
   const labels = { bulan:'Bulan (Tgl Real)', kp:'KP (Regional)', pic:'PIC Laporan', statusPM:'Status PM', statusLap:'Status Laporan', ketepatan:'Ketepatan', pmKe:'PM ke-' };
@@ -4754,6 +4760,10 @@ function pmIspApplyFilter() {
     if(!chk(PIF.ketepatan, r.ketepatanWaktu))   return false;
     if(!chk(PIF.pmKe,      r.pmKe))             return false;
     if(PIF.search && !(r.popId+r.popName+r.namaKP+r.statusPM).toLowerCase().includes(PIF.search)) return false;
+    // cardFilter
+    if(PIF.cardFilter==='tepat')    { if(r.statusPM!=='Sudah Terlaksana'||!(r.ketepatanWaktu==='Maju dari Jadwal'||r.ketepatanWaktu==='Tepat Waktu')) return false; }
+    if(PIF.cardFilter==='terlambat'){ if(r.statusPM!=='Sudah Terlaksana'||r.ketepatanWaktu!=='Lewat dari Jadwal') return false; }
+    if(PIF.cardFilter==='belum')    { if(r.statusPM==='Sudah Terlaksana') return false; }
     return true;
   });
   pmIspRenderKPI();
@@ -4861,7 +4871,17 @@ function pmIspExportCSV() {
 let PMOSP_ROWS = [], PMOSP_FILTERED = [], pmOspPage = 1;
 let PMOSP_CACHE = null;
 const PMOSP_PAGE_SIZE = 15;
-const POF = { bulan:[], wilayah:[], pic:[], status:[], aging:[], search:'' };
+const POF = { bulan:[], wilayah:[], pic:[], status:[], aging:[], search:'', cardFilter:'' };
+
+function pmOspCardClick(type){
+  POF.cardFilter = POF.cardFilter===type ? '' : type;
+  if(POF.cardFilter){
+    POF.bulan=[];POF.wilayah=[];POF.pic=[];POF.status=[];POF.aging=[];
+    document.querySelectorAll('[id^="ms-po-"] input[type=checkbox]').forEach(function(cb){cb.checked=false;});
+    document.querySelectorAll('[id^="ms-po-"]').forEach(function(w){w.classList.remove('ms-active');});
+  }
+  pmOspApplyFilter();
+}
 
 const PMOSP_AGING_COLOR = {
   'Cepat':         { badge:'bg-green-100 text-green-700', row:'' },
@@ -4938,33 +4958,26 @@ function pmOspRenderKPI() {
   const progres  = rows.filter(r => r.status === 'PROGRES' || r.status === 'PROGRESS').length;
   const open     = rows.filter(r => r.status === 'OPEN').length;
   const compliance = total > 0 ? (close / total * 100) : 0;
-
-  el.innerHTML = `
-    <div class="rounded-xl border p-4 shadow-sm bg-white border-gray-200">
-      <p class="text-[9px] font-bold uppercase mb-1 text-gray-500 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">event_note</span>Total WO Plan</p>
-      <p class="text-2xl font-black text-[#131b2e]">${total.toLocaleString('id-ID')}</p>
-      <p class="text-[9px] mt-0.5 text-gray-400">WO</p>
-    </div>
-    <div class="rounded-xl border p-4 shadow-sm bg-green-50 border-green-200">
-      <p class="text-[9px] font-bold uppercase mb-1 text-green-600 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">check_circle</span>Close</p>
-      <p class="text-2xl font-black text-green-700">${close.toLocaleString('id-ID')}</p>
-      <p class="text-[9px] mt-0.5 text-green-500">${total?Math.round(close/total*100):0}%</p>
-    </div>
-    <div class="rounded-xl border p-4 shadow-sm bg-blue-50 border-blue-200">
-      <p class="text-[9px] font-bold uppercase mb-1 text-blue-600 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">autorenew</span>Progres</p>
-      <p class="text-2xl font-black text-blue-700">${progres.toLocaleString('id-ID')}</p>
-      <p class="text-[9px] mt-0.5 text-blue-400">${total?Math.round(progres/total*100):0}%</p>
-    </div>
-    <div class="rounded-xl border p-4 shadow-sm bg-red-50 border-red-200">
-      <p class="text-[9px] font-bold uppercase mb-1 text-red-600 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">cancel</span>Open</p>
-      <p class="text-2xl font-black text-red-700">${open.toLocaleString('id-ID')}</p>
-      <p class="text-[9px] mt-0.5 text-red-400">${total?Math.round(open/total*100):0}%</p>
-    </div>
-    <div class="rounded-xl border p-4 shadow-sm bg-blue-50 border-blue-200">
-      <p class="text-[9px] font-bold uppercase mb-1 text-blue-600 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">trending_up</span>PM Compliance</p>
-      <p class="text-2xl font-black text-blue-700">${compliance.toFixed(1)}%</p>
-      <p class="text-[9px] mt-0.5 text-blue-400">Target ≥ 80%</p>
-    </div>`;
+  const cf = POF.cardFilter;
+  const cards = [
+    {action:'reset',   cls:'bg-white border-gray-200',   iCls:'text-gray-500',  icon:'event_note',  label:'Total WO Plan',  val:total.toLocaleString('id-ID'),    sub:'WO'},
+    {action:'close',   cls:'bg-green-50 border-green-200', iCls:'text-green-600', icon:'check_circle',label:'Close',          val:close.toLocaleString('id-ID'),    sub:(total?Math.round(close/total*100):0)+'%'},
+    {action:'progres', cls:'bg-blue-50 border-blue-200',   iCls:'text-blue-600',  icon:'autorenew',   label:'Progres',        val:progres.toLocaleString('id-ID'),  sub:(total?Math.round(progres/total*100):0)+'%'},
+    {action:'open',    cls:'bg-red-50 border-red-200',     iCls:'text-red-600',   icon:'cancel',      label:'Open',           val:open.toLocaleString('id-ID'),     sub:(total?Math.round(open/total*100):0)+'%'},
+    {action:'reset',   cls:'bg-blue-50 border-blue-200',   iCls:'text-blue-600',  icon:'trending_up', label:'PM Compliance',  val:compliance.toFixed(1)+'%',        sub:'Target ≥ 80%'}
+  ];
+  el.innerHTML = cards.map(function(c){
+    var isActive = c.action!=='reset' && cf===c.action;
+    var activeCls = isActive ? ' ring-2 ring-[#00288e] ring-offset-1' : '';
+    var onclick = c.action==='reset'
+      ? 'onclick="POF.cardFilter=\'\';pmOspApplyFilter()"'
+      : 'onclick="pmOspCardClick(\''+c.action+'\')"';
+    return '<div class="rounded-xl border p-4 shadow-sm cursor-pointer hover:shadow-md transition-shadow select-none'+activeCls+' '+c.cls+'" '+onclick+'>'
+      +'<p class="text-[9px] font-bold uppercase mb-1 '+c.iCls+' flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">'+c.icon+'</span>'+c.label
+      +(isActive?'<span class="ml-auto text-[8px] font-bold text-[#00288e] bg-blue-50 px-1 rounded">aktif</span>':'')+'</p>'
+      +'<p class="text-2xl font-black" style="color:inherit">'+c.val+'</p>'
+      +'<p class="text-[9px] mt-0.5 opacity-60">'+c.sub+'</p></div>';
+  }).join('');
 }
 
 // ── DONUT: COMPLIANCE (Close / Progres / Open) ─────────────
@@ -5151,6 +5164,7 @@ function pmOspMsChange(key) {
   const menu = document.getElementById('ms-po-'+key+'-menu');
   if(!menu) return;
   POF[key] = [...menu.querySelectorAll('input:checked')].map(el => el.value);
+  POF.cardFilter = ''; // reset cardFilter saat checkbox aktif
   const lbl  = document.getElementById('ms-po-'+key+'-label');
   const wrap = document.getElementById('ms-po-'+key);
   const labels = { bulan:'Bulan', wilayah:'Wilayah (Regional)', pic:'Petugas (PIC)', status:'Status', aging:'Aging' };
@@ -5169,6 +5183,10 @@ function pmOspApplyFilter() {
     if(!chk(POF.status,  r.status))       return false;
     if(!chk(POF.aging,   r.agingStatus))  return false;
     if(POF.search && !(r.noWO+r.pop+r.title+r.wilayah).toLowerCase().includes(POF.search)) return false;
+    // cardFilter
+    if(POF.cardFilter==='close')   { if(r.status!=='CLOSE') return false; }
+    if(POF.cardFilter==='progres') { if(r.status!=='PROGRES'&&r.status!=='PROGRESS') return false; }
+    if(POF.cardFilter==='open')    { if(r.status!=='OPEN') return false; }
     return true;
   });
   pmOspRenderKPI();
