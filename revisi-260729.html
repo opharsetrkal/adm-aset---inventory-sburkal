@@ -2811,6 +2811,7 @@ function kRenderIoChart() {
     }
   });
 }
+function kRenderAgingChart() {
   const ag={normal:0,r1:0,r2:0};
   K_FILTERED.forEach(r=>{ if(r['Status']==='Paid')return; const d=calcAging(r['Tgl AWB'],r['Status']); if(d>14)ag.r2++;else if(d>=8)ag.r1++;else ag.normal++; });
   rebuildChart('k-agingChart',{type:'bar',data:{labels:['Normal','Perhatian','Kritis'],datasets:[{data:[ag.normal,ag.r1,ag.r2],backgroundColor:['#3b82f6','#f97316','#ef4444'],borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1,font:{size:9}}}}}});
