@@ -2162,6 +2162,11 @@ function buildPagination(containerId, currentPg, total, pageSize, goFn) {
 }
 
 
+// ── Debounce helper ───────────────────────────────────────
+function debounce(fn, ms) {
+  var t; return function(){ clearTimeout(t); t=setTimeout(fn,ms); };
+}
+
 // ══════════════════════════════════════════════════════════
 // MODULE: HOME (prefix: home)
 // Cache-based summary dari semua modul
@@ -2463,7 +2468,7 @@ function kApplyFilters() {
     if(KF.reminderArr&&KF.reminderArr.length&&!KF.reminderArr.includes(rem))return false;
     if(KF.rute&&rute!==KF.rute)return false;
     if(KF.jenisArr&&KF.jenisArr.length&&!KF.jenisArr.includes(String(r['IO/PRK']||'').trim()))return false;
-    if(q&&!JSON.stringify(r).toLowerCase().includes(q))return false;
+    if(q){var ks=K_HEADERS.map(function(h){return String(r[h]||'');}).join('|').toLowerCase();if(!ks.includes(q))return false;}
     return true;
   });
   const nom=K_FILTERED.reduce((s,r)=>s+(parseFloat(r['Nominal (Rp)'])||0),0);
@@ -2729,7 +2734,9 @@ function kSortBy(col) {
     var va=a[col]||'', vb=b[col]||'';
     // Kolom numerik
     if(col==='Nominal (Rp)'||col==='Berat (Kg)'){
-      return (parseFloat(String(va).replace(/[^0-9.-]/g,''))||0 - parseFloat(String(vb).replace(/[^0-9.-]/g,''))||0)*dir;
+      var na=parseFloat(String(va).replace(/[^0-9.-]/g,''))||0;
+      var nb=parseFloat(String(vb).replace(/[^0-9.-]/g,''))||0;
+      return (na-nb)*dir;
     }
     return String(va).localeCompare(String(vb),'id',{numeric:true})*dir;
   });
@@ -2968,7 +2975,7 @@ const sApplyF=(rows,f)=>{
     if(!sChk(f.tglUpdate ||[],r['Tgl Update']))return false;
     if(f.cardKp    &&r['Sloc - KP']     !==f.cardKp)return false;
     if(f.cardGudang&&r['Sloc - Gudang'] !==f.cardGudang)return false;
-    if(q&&!JSON.stringify(r).toLowerCase().includes(q))return false;
+    if(q){var sk=S_COLS.map(function(c){return String(r[c]||'');}).join('|').toLowerCase();if(!sk.includes(q))return false;}
     return true;
   });
 };
@@ -3097,6 +3104,7 @@ function sResetAllFilters() {
 
 function sApplyAll() {
   const filtered=sApplyF(S_ROWS,SF);
+  S_SORTED_CACHE=sSortApply(filtered);
   sRenderResume(filtered);
   sRenderKpiKondisi(filtered);
   sRenderGudangChart(filtered);
@@ -3104,7 +3112,7 @@ function sApplyAll() {
   sRenderAlert(filtered);
   sRenderKabel(filtered);
   sUpdateLabel(filtered);
-  sPage=1;sRenderTable(filtered);
+  sPage=1;sRenderTable(S_SORTED_CACHE);
 }
 
 // ── ALERT STOK RENDAH ─────────────────────────────────────
@@ -3400,17 +3408,25 @@ function sRenderBrandChart(filtered) {
 }
 
 let S_SORT = { col: '', dir: 1 };
-function sSortBy(col) {
-  if(S_SORT.col===col) S_SORT.dir*=-1;
-  else { S_SORT.col=col; S_SORT.dir=1; }
-  const dir=S_SORT.dir;
-  const filtered=sApplyF(S_ROWS,SF);
-  filtered.sort(function(a,b){
+let S_SORTED_CACHE = null; // cache sorted filtered result
+
+function sSortApply(filtered) {
+  if(!S_SORT.col) return filtered;
+  var col=S_SORT.col, dir=S_SORT.dir;
+  return filtered.slice().sort(function(a,b){
     var va=a[col], vb=b[col];
     if(va===null||va===undefined) va=''; if(vb===null||vb===undefined) vb='';
     if(col==='Unrestricted'||col==='Value Unrestricted') return ((parseFloat(va)||0)-(parseFloat(vb)||0))*dir;
     return String(va).localeCompare(String(vb),'id',{numeric:true})*dir;
   });
+}
+
+function sSortBy(col) {
+  if(S_SORT.col===col) S_SORT.dir*=-1;
+  else { S_SORT.col=col; S_SORT.dir=1; }
+  const dir=S_SORT.dir;
+  const filtered=sSortApply(sApplyF(S_ROWS,SF));
+  S_SORTED_CACHE=filtered;
   document.querySelectorAll('[id^="s-sort-"]').forEach(function(el){ el.textContent='↕'; el.className='text-gray-300 text-[9px]'; });
   var arr=document.getElementById('s-sort-'+col.replace(/[^a-zA-Z0-9]/g,'-'));
   if(arr){ arr.textContent=dir===1?'▲':'▼'; arr.className='text-[#00288e] text-[9px]'; }
@@ -3451,7 +3467,7 @@ function sRenderTable(filtered) {
   document.getElementById('s-totalInfo').textContent=filtered.length.toLocaleString('id-ID');
 }
 
-function sGoPage(p){sPage=Math.max(1,Math.min(p,Math.ceil(sApplyF(S_ROWS,SF).length/PAGE_SIZE_S)||1));sRenderTable(sApplyF(S_ROWS,SF));}
+function sGoPage(p){var d=S_SORTED_CACHE||sSortApply(sApplyF(S_ROWS,SF));sPage=Math.max(1,Math.min(p,Math.ceil(d.length/PAGE_SIZE_S)||1));sRenderTable(d);}
 
 function sExportCSV(){
   const filtered=sApplyF(S_ROWS,SF);
@@ -3466,6 +3482,22 @@ function sExportCSV(){
 // INIT
 // ══════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded',()=>{
+  // Debounce search inputs
+  var debSearch=[
+    {id:'k-search',fn:function(){KF.search=document.getElementById('k-search').value;KF.activeCardFilter='';kApplyFilters();}},
+    {id:'s-search',fn:function(){SF.search=document.getElementById('s-search').value;SF.cardKp='';SF.cardGudang='';sApplyAll();}},
+    {id:'p-search',fn:function(){PF.dateFrom=document.getElementById('p-dateFrom').value;PF.dateTo=document.getElementById('p-dateTo').value;PF.search=document.getElementById('p-search').value;PF.top5KatTeknik='';pApplyAll();}},
+    {id:'wig-search',fn:wigApplyFilter},
+    {id:'doktek-search',fn:doktekApplyFilter},
+    {id:'pmisp-search',fn:pmIspApplyFilter},
+    {id:'har-spr-search',fn:function(){harApplyFilter('spr');}},
+    {id:'har-spp-search',fn:function(){harApplyFilter('spp');}},
+  ];
+  debSearch.forEach(function(d){
+    var el=document.getElementById(d.id);
+    if(el){var deb=debounce(d.fn,220);el.removeAttribute('oninput');el.addEventListener('input',deb);}
+  });
+
   // Restore page dari hash atau default ke home
   const validPages = Object.keys(PAGE_CONFIG);
   const hash = location.hash.replace('#','');
@@ -3609,7 +3641,7 @@ function pApplyFilter(rows) {
     if(!pChk(PF.katTeknik, r['Kategori - Teknik']))  return false;
     if(!pChk(PF.katSap,    r['Kategori - SAP']))     return false;
     if(PF.top5KatTeknik&&r['Kategori - Teknik']!==PF.top5KatTeknik)return false;
-    if(q&&!JSON.stringify(r).toLowerCase().includes(q))return false;
+    if(q){var pk=P_COLS.map(function(c){return String(r[c]||'');}).join('|').toLowerCase();if(!pk.includes(q))return false;}
     return true;
   });
 }
@@ -4122,7 +4154,7 @@ function wigRenderTableHead(){
   if(!thead)return;
   var KPS=['BPN','KalBar','KalSel','KalTeng','KalTim'];
   var isTah=WIG_MODE==='tahunan';
-  var colSpan=isTah?3:1;
+  var colSpan=isTah?4:1;
   // Baris 1: WIG, LM, per-KP header, SBU Total, Status
   var row1='<tr class="bg-gray-50 sticky top-0">'
     +'<th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 whitespace-nowrap cursor-pointer hover:text-[#00288e]" onclick="wigSortBy(\'wigNama\')">WIG</th>'
@@ -4130,7 +4162,7 @@ function wigRenderTableHead(){
   KPS.forEach(function(kp){
     row1+='<th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50/40" colspan="'+colSpan+'">'+kp+'</th>';
   });
-  var sbuColspan=isTah?3:1;
+  var sbuColspan=isTah?4:1;
   row1+='<th class="p-2 text-[9px] font-bold text-[#00288e] border-b border-gray-100 text-right whitespace-nowrap bg-blue-50" colspan="'+sbuColspan+'">SBU Total</th>';
   if(isTah)row1+='<th class="p-2 text-[9px] font-bold text-gray-400 border-b border-gray-100 text-center whitespace-nowrap">Status</th>';
   row1+='</tr>';
@@ -4142,7 +4174,8 @@ function wigRenderTableHead(){
     if(isTah){
       row2+='<th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target</th>'
         +'<th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Real</th>'
-        +'<th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th>';
+        +'<th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">%</th>'
+        +'<th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Sisa</th>';
     } else {
       row2+='<th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50/40">Target Minggu</th>';
     }
@@ -4151,6 +4184,7 @@ function wigRenderTableHead(){
     row2+='<th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">Target</th>'
       +'<th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">Real</th>'
       +'<th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">%</th>'
+      +'<th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">Sisa</th>'
       +'<th class="p-2 border-b border-gray-200"></th>';
   } else {
     row2+='<th class="p-1.5 text-[8px] text-gray-400 border-b border-gray-200 text-right bg-blue-50">Total Minggu</th>';
@@ -4376,9 +4410,12 @@ function wigKpCols(kpData, useWeekly){
       var t=kp?kp.target:0, r=kp?kp.real:0;
       var p=t>0?(r/t*100).toFixed(1):'—';
       var pC=t>0?(parseFloat(p)>=100?'text-green-600':parseFloat(p)>=80?'text-orange-500':'text-red-600'):'text-gray-300';
+      var sisa=t-r;
+      var sisaC=sisa<=0?'text-green-600':'text-orange-600';
       cols+='<td class="p-2 text-[9px] text-right bg-blue-50/20">'+(t?t.toLocaleString('id-ID'):'—')+'</td>';
       cols+='<td class="p-2 text-[9px] text-right bg-blue-50/20 font-semibold">'+(r?r.toLocaleString('id-ID'):'0')+'</td>';
       cols+='<td class="p-2 text-[9px] text-right bg-blue-50/20 font-bold '+pC+'">'+p+(t>0?'%':'')+'</td>';
+      cols+='<td class="p-2 text-[9px] text-right bg-blue-50/20 font-semibold '+sisaC+'">'+(t?sisa.toLocaleString('id-ID'):'—')+'</td>';
     }
   });
   return cols;
@@ -4393,9 +4430,12 @@ function wigSbuTotal(lm, useWeekly){
     var t=lm.totalTarget||0, r=lm.totalReal||0;
     var p=t>0?(r/t*100).toFixed(1):'—';
     var pCls=t>0?(parseFloat(p)>=100?'text-green-600':parseFloat(p)>=80?'text-orange-500':'text-red-600'):'text-gray-300';
+    var sisSbu=t-r;
+    var sisSbuC=sisSbu<=0?'text-green-600':'text-orange-600';
     return '<td class="p-2 text-[9px] text-right bg-blue-50 font-semibold">'+(t?t.toLocaleString('id-ID'):'—')+'</td>'
       +'<td class="p-2 text-[9px] text-right bg-blue-50 font-semibold">'+r.toLocaleString('id-ID')+'</td>'
-      +'<td class="p-2 text-[9px] text-right bg-blue-50 font-bold '+pCls+'">'+p+(t>0?'%':'')+'</td>';
+      +'<td class="p-2 text-[9px] text-right bg-blue-50 font-bold '+pCls+'">'+p+(t>0?'%':'')+'</td>'
+      +'<td class="p-2 text-[9px] text-right bg-blue-50 font-semibold '+sisSbuC+'">'+(t?sisSbu.toLocaleString('id-ID'):'—')+'</td>';
   }
 }
 
@@ -4449,7 +4489,7 @@ function wigRenderTable(){
   const tbody=document.getElementById('wig-tblBody');
   if(!tbody)return;
   var isTah=WIG_MODE==='tahunan';
-  var colspan=isTah?22:8; // 2 fixed + 5KP*(3 or 1) + SBU*(3 or 1) + status(1 or 0)
+  var colspan=isTah?27:8; // 2 fixed + 5KP*(4 or 1) + SBU*(4 or 1) + status(1 or 0)
   if(!WIG_FILTERED.length){tbody.innerHTML='<tr><td colspan="'+colspan+'" class="p-8 text-center text-gray-400 text-xs">Tidak ada data</td></tr>';return;}
   tbody.innerHTML=WIG_FILTERED.map(function(l){
     if(isTah){
@@ -4813,7 +4853,7 @@ function doktekApplyFilter() {
     if(!chk(DF.keterangan, r.acluan))    return false;
     if(!chk(DF.sla,        r.slaStatus)) return false;
     if(!chk(DF.tahun,      r.tahun))     return false;
-    if(DF.search && !JSON.stringify(r).toLowerCase().includes(DF.search)) return false;
+    if(DF.search){var dk=[r.service_id,r.pa_number,r.customer,r.namaKP,r.namaPTL,r.vendor,r.terminating,r.acluan].map(function(v){return String(v||'');}).join('|').toLowerCase();if(!dk.includes(DF.search))return false;}
     return true;
   });
   doktekApplySort();
@@ -5336,7 +5376,7 @@ function pmIspApplyFilter() {
     if(!chk(PIF.statusLap, r.statusLaporan))    return false;
     if(!chk(PIF.ketepatan, r.ketepatanWaktu))   return false;
     if(!chk(PIF.pmKe,      r.pmKe))             return false;
-    if(PIF.search && !(r.popId+r.popName+r.namaKP+r.statusPM).toLowerCase().includes(PIF.search)) return false;
+    if(PIF.search && !([r.popId,r.popName,r.namaKP,r.statusPM,r.picLaporan].join('|').toLowerCase()).includes(PIF.search)) return false;
     // cardFilter
     if(PIF.cardFilter==='tepat')       { if(r.statusPM!=='Sudah Terlaksana'||!(r.ketepatanWaktu==='Maju dari Jadwal'||r.ketepatanWaktu==='Tepat Waktu')) return false; }
     if(PIF.cardFilter==='terlambat')   { if(r.statusPM!=='Sudah Terlaksana'||r.ketepatanWaktu!=='Lewat dari Jadwal') return false; }
