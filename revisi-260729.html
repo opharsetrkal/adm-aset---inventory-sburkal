@@ -275,6 +275,19 @@ html,body   { height:100%; overflow:hidden; }
             <p class="text-sm font-bold text-[#00288e]">INVENTORY</p>
           </div>
           <div class="p-4 space-y-3">
+            <!-- Keuangan card — urutan sesuai sidebar -->
+            <div class="cf rounded-xl border border-gray-200 p-3 hover:border-[#00288e] transition-colors" onclick="navigateTo('keuangan')">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px] text-[#00288e]">account_balance</span>
+                  <p class="text-[10px] font-bold">Monitoring Keuangan Inventory</p>
+                </div>
+                <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
+              </div>
+              <div id="home-keuangan-content">
+                <div class="flex gap-2"><div class="skeleton h-10 rounded-lg flex-1"></div><div class="skeleton h-10 rounded-lg flex-1"></div></div>
+              </div>
+            </div>
             <!-- Stok card -->
             <div class="cf rounded-xl border border-gray-200 p-3 hover:border-[#00288e] transition-colors" onclick="navigateTo('stok')">
               <div class="flex items-center justify-between mb-2">
@@ -298,19 +311,6 @@ html,body   { height:100%; overflow:hidden; }
                 <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
               </div>
               <div id="home-penyerapan-content">
-                <div class="flex gap-2"><div class="skeleton h-10 rounded-lg flex-1"></div><div class="skeleton h-10 rounded-lg flex-1"></div></div>
-              </div>
-            </div>
-            <!-- Keuangan card -->
-            <div class="cf rounded-xl border border-gray-200 p-3 hover:border-[#00288e] transition-colors" onclick="navigateTo('keuangan')">
-              <div class="flex items-center justify-between mb-2">
-                <div class="flex items-center gap-2">
-                  <span class="material-symbols-outlined text-[16px] text-[#00288e]">account_balance</span>
-                  <p class="text-[10px] font-bold">Monitoring Keuangan Inventory</p>
-                </div>
-                <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
-              </div>
-              <div id="home-keuangan-content">
                 <div class="flex gap-2"><div class="skeleton h-10 rounded-lg flex-1"></div><div class="skeleton h-10 rounded-lg flex-1"></div></div>
               </div>
             </div>
@@ -1223,6 +1223,17 @@ html,body   { height:100%; overflow:hidden; }
       <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
         <p class="text-xs font-bold mb-4">Nominal per Mitra</p>
         <div class="h-[220px]"><canvas id="k-mitraChart"></canvas></div>
+      </section>
+
+      <!-- Nominal per IO/PRK -->
+      <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <p class="text-xs font-bold">Penggunaan Anggaran per IO/PRK</p>
+            <p class="text-[9px] text-gray-400">Nominal total per kode IO/PRK · ikut filter aktif · klik bar untuk filter</p>
+          </div>
+        </div>
+        <div class="h-[220px]"><canvas id="k-ioChart"></canvas></div>
       </section>
 
       <!-- Proyeksi Biaya Pengiriman -->
@@ -2196,11 +2207,12 @@ async function homeLoadData() {
 
   try {
     // Fetch paralel semua API
-    const [rWig, rStok, rSerap, rKeu] = await Promise.allSettled([
+    const [rWig, rStok, rSerap, rKeu, rHar] = await Promise.allSettled([
       fetch(API_WIG + '?mode=summary').then(r=>r.json()).catch(()=>null),
       fetch(API_STOK).then(r=>r.json()).catch(()=>null),
       fetch(API_PENYERAPAN).then(r=>r.json()).catch(()=>null),
       fetch(API_KEUANGAN).then(r=>r.json()).catch(()=>null),
+      fetch(API_HAR + '?mode=home-summary').then(r=>r.json()).catch(()=>null),
     ]);
 
     const data = {
@@ -2208,6 +2220,7 @@ async function homeLoadData() {
       stok:      rStok.value,
       serap:     rSerap.value,
       keuangan:  rKeu.value,
+      har:       rHar.value,
     };
 
     // Simpan ke cache
@@ -2237,7 +2250,52 @@ function homeRefresh() {
 }
 
 function homeRender(data) {
-  // WIG summary
+  // ── HAR: SPR summary ────────────────────────────────────
+  const sprEl = document.getElementById('home-spr-content');
+  if(sprEl) {
+    const h = data.har;
+    if(h?.ok && h.spr) {
+      const s = h.spr;
+      sprEl.innerHTML = `
+        <div class="grid grid-cols-2 gap-2">
+          <div class="bg-blue-50 rounded-lg p-2">
+            <p class="text-[9px] text-blue-600 font-bold">Total SPR</p>
+            <p class="text-lg font-black text-blue-800">${(s.total||0).toLocaleString('id-ID')}</p>
+          </div>
+          <div class="bg-${(s.critical||0)>0?'red':'gray'}-50 rounded-lg p-2">
+            <p class="text-[9px] text-${(s.critical||0)>0?'red':'gray'}-500 font-bold">Critical</p>
+            <p class="text-lg font-black text-${(s.critical||0)>0?'red':'gray'}-700">${(s.critical||0)}</p>
+          </div>
+        </div>`;
+    } else {
+      // fallback: gunakan K_ROWS jika HAR API tidak return spr
+      sprEl.innerHTML = '<p class="text-[9px] text-gray-300 text-center py-2">—</p>';
+    }
+  }
+
+  // ── HAR: SPP summary ────────────────────────────────────
+  const sppEl = document.getElementById('home-spp-content');
+  if(sppEl) {
+    const h = data.har;
+    if(h?.ok && h.spp) {
+      const s = h.spp;
+      sppEl.innerHTML = `
+        <div class="grid grid-cols-2 gap-2">
+          <div class="bg-blue-50 rounded-lg p-2">
+            <p class="text-[9px] text-blue-600 font-bold">Total SPP</p>
+            <p class="text-lg font-black text-blue-800">${(s.total||0).toLocaleString('id-ID')}</p>
+          </div>
+          <div class="bg-${(s.criticalSla||0)>0?'red':'gray'}-50 rounded-lg p-2">
+            <p class="text-[9px] text-${(s.criticalSla||0)>0?'red':'gray'}-500 font-bold">Critical SLA</p>
+            <p class="text-lg font-black text-${(s.criticalSla||0)>0?'red':'gray'}-700">${(s.criticalSla||0)}</p>
+          </div>
+        </div>`;
+    } else {
+      sppEl.innerHTML = '<p class="text-[9px] text-gray-300 text-center py-2">—</p>';
+    }
+  }
+
+  // ── ASET: WIG summary ───────────────────────────────────
   const wigEl = document.getElementById('home-wig-content');
   if(wigEl && data.wig?.ok) {
     const { onTrack, offTrack, totalLm } = data.wig;
@@ -2245,22 +2303,42 @@ function homeRender(data) {
       <div class="grid grid-cols-3 gap-2">
         <div class="bg-green-50 rounded-lg p-2 text-center">
           <p class="text-[9px] text-green-600 font-bold">On Track</p>
-          <p class="text-lg font-black text-green-700">${onTrack}</p>
+          <p class="text-lg font-black text-green-700">${onTrack||0}</p>
         </div>
         <div class="bg-red-50 rounded-lg p-2 text-center">
           <p class="text-[9px] text-red-600 font-bold">Off Track</p>
-          <p class="text-lg font-black text-red-700">${offTrack}</p>
+          <p class="text-lg font-black text-red-700">${offTrack||0}</p>
         </div>
         <div class="bg-gray-50 rounded-lg p-2 text-center">
           <p class="text-[9px] text-gray-500 font-bold">Total LM</p>
-          <p class="text-lg font-black text-gray-700">${totalLm}</p>
+          <p class="text-lg font-black text-gray-700">${totalLm||0}</p>
         </div>
       </div>`;
   } else if(wigEl) {
-    wigEl.innerHTML = '<p class="text-[9px] text-gray-400 text-center py-2">Gagal memuat</p>';
+    wigEl.innerHTML = '<p class="text-[9px] text-gray-300 text-center py-2">—</p>';
   }
 
-  // Stok summary
+  // ── INVENTORY: Keuangan summary (urutan sidebar: Keuangan → Stok → Penyerapan) ──
+  const keuEl = document.getElementById('home-keuangan-content');
+  if(keuEl && data.keuangan?.ok) {
+    const s = data.keuangan.summary||{};
+    const rows = data.keuangan.allRows||data.keuangan.rows||[];
+    keuEl.innerHTML = `
+      <div class="grid grid-cols-2 gap-2">
+        <div class="bg-orange-50 rounded-lg p-2">
+          <p class="text-[9px] text-orange-600 font-bold">Outstanding</p>
+          <p class="text-sm font-black text-orange-700">${fmtRp(s.globalOutstanding||0)}</p>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-100 p-2">
+          <p class="text-[9px] text-gray-500 font-bold">Transaksi</p>
+          <p class="text-sm font-black text-gray-700">${rows.length.toLocaleString('id-ID')}</p>
+        </div>
+      </div>`;
+  } else if(keuEl) {
+    keuEl.innerHTML = '<p class="text-[9px] text-gray-300 text-center py-2">—</p>';
+  }
+
+  // ── INVENTORY: Stok summary ─────────────────────────────
   const stokEl = document.getElementById('home-stok-content');
   if(stokEl && data.stok?.ok) {
     const rows = data.stok.rows||[];
@@ -2282,10 +2360,10 @@ function homeRender(data) {
         </div>
       </div>`;
   } else if(stokEl) {
-    stokEl.innerHTML = '<p class="text-[9px] text-gray-400 text-center py-2">Gagal memuat</p>';
+    stokEl.innerHTML = '<p class="text-[9px] text-gray-300 text-center py-2">—</p>';
   }
 
-  // Penyerapan summary
+  // ── INVENTORY: Penyerapan summary ──────────────────────
   const seEl = document.getElementById('home-penyerapan-content');
   if(seEl && data.serap?.ok) {
     const rows = data.serap.rows||[];
@@ -2305,27 +2383,7 @@ function homeRender(data) {
         </div>
       </div>`;
   } else if(seEl) {
-    seEl.innerHTML = '<p class="text-[9px] text-gray-400 text-center py-2">Gagal memuat</p>';
-  }
-
-  // Keuangan summary
-  const keuEl = document.getElementById('home-keuangan-content');
-  if(keuEl && data.keuangan?.ok) {
-    const s = data.keuangan.summary||{};
-    const rows = data.keuangan.allRows||data.keuangan.rows||[];
-    keuEl.innerHTML = `
-      <div class="grid grid-cols-2 gap-2">
-        <div class="bg-orange-50 rounded-lg p-2">
-          <p class="text-[9px] text-orange-600 font-bold">Outstanding</p>
-          <p class="text-sm font-black text-orange-700">${fmtRp(s.globalOutstanding||0)}</p>
-        </div>
-        <div class="bg-white rounded-lg border border-gray-100 p-2">
-          <p class="text-[9px] text-gray-500 font-bold">Transaksi</p>
-          <p class="text-sm font-black text-gray-700">${rows.length.toLocaleString('id-ID')}</p>
-        </div>
-      </div>`;
-  } else if(keuEl) {
-    keuEl.innerHTML = '<p class="text-[9px] text-gray-400 text-center py-2">Gagal memuat</p>';
+    seEl.innerHTML = '<p class="text-[9px] text-gray-300 text-center py-2">—</p>';
   }
 }
 
@@ -2477,6 +2535,7 @@ function kApplyFilters() {
   kRenderStatusCards();
   kRenderTrendChart();
   kRenderMitraChart();
+  kRenderIoChart();
   kRenderAgingChart();
   kRenderProyeksi(K_PROJ_MODE);
   kUpdateLabel();
@@ -2699,7 +2758,59 @@ function kRenderMitraChart() {
   });
 }
 
-function kRenderAgingChart() {
+function kRenderIoChart() {
+  const byIO={},byIOCount={};
+  K_FILTERED.forEach(r=>{
+    const io=String(r['IO/PRK']||'').trim();
+    if(!io)return;
+    byIO[io]=(byIO[io]||0)+(parseFloat(r['Nominal (Rp)'])||0);
+    byIOCount[io]=(byIOCount[io]||0)+1;
+  });
+  const sorted=Object.entries(byIO).sort((a,b)=>b[1]-a[1]).slice(0,15);
+  if(!sorted.length){
+    const el=document.getElementById('k-ioChart');
+    if(el&&el.parentElement)el.parentElement.innerHTML='<p class="text-[10px] text-gray-400 text-center py-12">Tidak ada data IO/PRK</p>';
+    return;
+  }
+  const labels=sorted.map(e=>e[0]);
+  rebuildChart('k-ioChart',{type:'bar',
+    data:{labels,datasets:[
+      {label:'Nominal (Rp)',data:sorted.map(e=>e[1]),backgroundColor:'rgba(127,119,221,0.65)',borderColor:'rgba(127,119,221,1)',borderWidth:1,borderRadius:3,maxBarThickness:20},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{
+          label:ctx=>{
+            const io=labels[ctx.dataIndex];
+            return[
+              ' Nominal: '+fmtRpFull(ctx.parsed.x),
+              ' Transaksi: '+(byIOCount[io]||0)+' pengiriman'
+            ];
+          }
+        }}
+      },
+      scales:{
+        x:{beginAtZero:true,ticks:{callback:v=>fmtRp(v),font:{size:9}}},
+        y:{ticks:{font:{size:9},crossAlign:'far'}}
+      },
+      onClick(evt,els){
+        if(!els.length)return;
+        const io=labels[els[0].index];
+        // Toggle IO/PRK filter
+        if(KF.jenisArr.includes(io)){KF.jenisArr=KF.jenisArr.filter(j=>j!==io);}
+        else{KF.jenisArr=[...KF.jenisArr,io];}
+        const menu=document.getElementById('ms-k-jenis-menu');
+        if(menu)menu.querySelectorAll('input').forEach(cb=>{cb.checked=KF.jenisArr.includes(cb.value);});
+        const lbl=document.getElementById('ms-k-jenis-label'),wrap=document.getElementById('ms-k-jenis');
+        if(lbl)lbl.textContent=KF.jenisArr.length?'IO/PRK ('+KF.jenisArr.length+')':'IO/PRK';
+        if(wrap)wrap.classList.toggle('ms-active',KF.jenisArr.length>0);
+        KF.activeCardFilter='';
+        kApplyFilters();
+      }
+    }
+  });
+}
   const ag={normal:0,r1:0,r2:0};
   K_FILTERED.forEach(r=>{ if(r['Status']==='Paid')return; const d=calcAging(r['Tgl AWB'],r['Status']); if(d>14)ag.r2++;else if(d>=8)ag.r1++;else ag.normal++; });
   rebuildChart('k-agingChart',{type:'bar',data:{labels:['Normal','Perhatian','Kritis'],datasets:[{data:[ag.normal,ag.r1,ag.r2],backgroundColor:['#3b82f6','#f97316','#ef4444'],borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1,font:{size:9}}}}}});
@@ -5255,8 +5366,8 @@ function pmIspRenderKPChart() {
   const labels = sorted.map(e=>e[0]);
   rebuildChart('pmisp-kpChart', {
     data:{ labels, datasets:[
-      { type:'bar',  label:'Total POP',   data:sorted.map(e=>e[1].total), backgroundColor:'rgba(0,40,142,0.75)', borderRadius:3, yAxisID:'y' },
-      { type:'line', label:'Compliance (%)', data:sorted.map(e=>e[1].total?Math.round(e[1].tepat/e[1].total*100):0), borderColor:'#1D9E75', backgroundColor:'transparent', borderWidth:2, pointRadius:4, pointBackgroundColor:'#1D9E75', tension:0.2, yAxisID:'y2' },
+      { type:'bar',  label:'Total POP',   data:sorted.map(e=>e[1].total), backgroundColor:'rgba(55,138,221,0.5)', borderColor:'rgba(55,138,221,0.8)', borderWidth:1, borderRadius:3, yAxisID:'y' },
+      { type:'line', label:'Compliance (%)', data:sorted.map(e=>e[1].total?Math.round(e[1].tepat/e[1].total*100):0), borderColor:'#E24B4A', backgroundColor:'transparent', borderWidth:2.5, pointRadius:5, pointBackgroundColor:'#E24B4A', pointBorderColor:'#fff', pointBorderWidth:2, tension:0.2, yAxisID:'y2' },
     ]},
     options:{ responsive:true, maintainAspectRatio:false,
       plugins:{ legend:{ position:'top', labels:{ font:{size:9}, usePointStyle:true, pointStyle:'circle' } } },
@@ -6216,7 +6327,7 @@ function harSprRenderTrend(agg){
   }
   if(wrap&&!document.getElementById('hspr-trendChart')){wrap.innerHTML='<canvas id="hspr-trendChart"></canvas>';}
   rebuildChart('hspr-trendChart',{data:{labels:mt.map(function(m){return monthLabel(m.month);}),datasets:[
-    {type:'bar',label:'Jumlah SPR',data:mt.map(function(m){return m.count;}),backgroundColor:'#378ADD',borderRadius:3,yAxisID:'y'},
+    {type:'bar',label:'Jumlah SPR',data:mt.map(function(m){return m.count;}),backgroundColor:'rgba(55,138,221,0.5)',borderRadius:3,yAxisID:'y'},
     {type:'line',label:'Nilai Nominal',data:mt.map(function(m){return m.nominal;}),borderColor:'#1D9E75',backgroundColor:'transparent',tension:0.3,yAxisID:'y2'}
   ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:9},usePointStyle:true,pointStyle:'circle'}}},scales:{y:{type:'linear',position:'left',beginAtZero:true,ticks:{stepSize:1,font:{size:9}}},y2:{type:'linear',position:'right',beginAtZero:true,grid:{drawOnChartArea:false},ticks:{callback:function(v){return fmtRp(v);},font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
 }
@@ -6548,7 +6659,7 @@ function harSppRenderTrend(agg){
   }
   if(wrap&&!document.getElementById('hspp-trendChart')){wrap.innerHTML='<canvas id="hspp-trendChart"></canvas>';}
   rebuildChart('hspp-trendChart',{data:{labels:mt.map(function(m){return monthLabel(m.month);}),datasets:[
-    {type:'bar',label:'Jumlah SPP',data:mt.map(function(m){return m.count;}),backgroundColor:'#378ADD',borderRadius:3,yAxisID:'y'},
+    {type:'bar',label:'Jumlah SPP',data:mt.map(function(m){return m.count;}),backgroundColor:'rgba(55,138,221,0.5)',borderRadius:3,yAxisID:'y'},
     {type:'line',label:'Nilai Pekerjaan',data:mt.map(function(m){return m.nominal;}),borderColor:'#1D9E75',backgroundColor:'transparent',tension:0.3,yAxisID:'y2'}
   ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:9},usePointStyle:true,pointStyle:'circle'}}},scales:{y:{type:'linear',position:'left',beginAtZero:true,ticks:{stepSize:1,font:{size:9}}},y2:{type:'linear',position:'right',beginAtZero:true,grid:{drawOnChartArea:false},ticks:{callback:function(v){return fmtRp(v);},font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
 }
