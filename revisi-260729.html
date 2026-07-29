@@ -259,12 +259,26 @@ html,body   { height:100%; overflow:hidden; }
                 <div class="flex gap-2"><div class="skeleton h-10 rounded-lg flex-1"></div><div class="skeleton h-10 rounded-lg flex-1"></div><div class="skeleton h-10 rounded-lg flex-1"></div></div>
               </div>
             </div>
-            <!-- Coming soon -->
-            <div class="rounded-xl border border-dashed border-gray-200 p-3 opacity-50 cursor-not-allowed"><div class="flex items-center justify-between"><p class="text-[10px] font-medium text-gray-400">PM ISP</p><span class="text-[8px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">Coming Soon</span></div></div>
-            <div class="rounded-xl border border-dashed border-gray-200 p-3 opacity-50 cursor-not-allowed"><div class="flex items-center justify-between"><p class="text-[10px] font-medium text-gray-400">PM OSP</p><span class="text-[8px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">Coming Soon</span></div></div>
-            <div class="rounded-xl border border-dashed border-gray-200 p-3 opacity-50 cursor-not-allowed"><div class="flex items-center justify-between"><p class="text-[10px] font-medium text-gray-400">Doktek Backlog</p><span class="text-[8px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">Coming Soon</span></div></div>
-            <div class="cf rounded-xl border border-gray-200 p-3 hover:border-[#00288e] transition-colors" onclick="navigateTo('wig')"><div class="flex items-center justify-between"><p class="text-[10px] font-medium text-[#131b2e]">SID Backbone</p><span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span></div></div>
-            <div class="cf rounded-xl border border-gray-200 p-3 hover:border-[#00288e] transition-colors" onclick="navigateTo('wig')"><div class="flex items-center justify-between"><p class="text-[10px] font-medium text-[#131b2e]">Uplink OLT</p><span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span></div></div>
+            <!-- Doktek card -->
+            <div class="cf rounded-xl border border-gray-200 p-3 hover:border-[#00288e] transition-colors" onclick="navigateTo('doktek')">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px] text-[#00288e]">folder_open</span>
+                  <p class="text-[10px] font-bold">Kendala Doktek</p>
+                </div>
+                <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
+              </div>
+            </div>
+            <!-- PM ISP card -->
+            <div class="cf rounded-xl border border-gray-200 p-3 hover:border-[#00288e] transition-colors" onclick="navigateTo('pm_isp')">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px] text-[#00288e]">construction</span>
+                  <p class="text-[10px] font-bold">Laporan PM</p>
+                </div>
+                <span class="material-symbols-outlined text-[14px] text-gray-300">chevron_right</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1219,21 +1233,21 @@ html,body   { height:100%; overflow:hidden; }
         </div>
       </section>
 
-      <!-- Nominal per Mitra -->
+      <!-- Nominal per Mitra & Penggunaan per IO/PRK — sejajar -->
       <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-        <p class="text-xs font-bold mb-4">Nominal per Mitra</p>
-        <div class="h-[220px]"><canvas id="k-mitraChart"></canvas></div>
-      </section>
-
-      <!-- Nominal per IO/PRK -->
-      <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-        <div class="flex items-center justify-between mb-3">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
-            <p class="text-xs font-bold">Penggunaan Anggaran per IO/PRK</p>
-            <p class="text-[9px] text-gray-400">Nominal total per kode IO/PRK · ikut filter aktif · klik bar untuk filter</p>
+            <p class="text-xs font-bold mb-3">Nominal per Mitra</p>
+            <div class="h-[220px]"><canvas id="k-mitraChart"></canvas></div>
+          </div>
+          <div>
+            <div class="flex items-start justify-between mb-1">
+              <p class="text-xs font-bold">Penggunaan Anggaran per IO/PRK</p>
+            </div>
+            <p class="text-[9px] text-gray-400 mb-2">Nominal total per kode IO/PRK · ikut filter aktif · klik bar untuk filter</p>
+            <div class="h-[220px]"><canvas id="k-ioChart"></canvas></div>
           </div>
         </div>
-        <div class="h-[220px]"><canvas id="k-ioChart"></canvas></div>
       </section>
 
       <!-- Proyeksi Biaya Pengiriman -->
