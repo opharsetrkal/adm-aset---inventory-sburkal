@@ -1923,7 +1923,7 @@ const PAGE_CONFIG = {
 // Lazy load state — data hanya di-fetch saat pertama kali modul dibuka
 const loaded  = { home:false, har_spr:false, har_spp:false, keuangan:false, stok:false, penyerapan:false, wig:false, doktek:false, pm_isp:false, pm_osp:false };
 const loading = { home:false, har_spr:false, har_spp:false, keuangan:false, stok:false, penyerapan:false, wig:false, doktek:false, pm_isp:false, pm_osp:false };
-let currentPage = 'keuangan';
+let currentPage = 'home';
 
 function navigateTo(page) {
   // Update URL hash
@@ -2938,6 +2938,15 @@ function harExportCSV(tab){
     var a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8;'}));a.download='spp_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
   }
 }
+
+// Boot default: kalau URL tanpa hash, masuk ke Home
+document.addEventListener('DOMContentLoaded', function() {
+  var hash = location.hash.replace('#','');
+  var validPages = Object.keys(PAGE_CONFIG);
+  var initPage = validPages.includes(hash) ? hash : 'home';
+  navigateTo(initPage);
+  if (!hash) history.replaceState(null, '', '#home');
+});
 
 </script>
 </body>
